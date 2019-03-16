@@ -1,0 +1,174 @@
+<div
+  class="application"
+  [ngClass]="{
+    'closed-nav': isMenuClosed,
+    'overlay-nav': isOverlayMenuMode,
+    'small-nav': isMenuCollapsed,
+    'small-nav-mode': isSmallMenuMode,
+    'fixed-header': isFixedHeader
+  }"
+>
+  <header class="d-flex justify-content-start align-items-center">
+    <div
+      class="menu"
+      (click)="isMenuClosed = !isMenuClosed; onSideNavModeChange()"
+    >
+      <i class="material-icons">menu</i>
+    </div>
+    <div class="search input-group">
+      <input type="text" class="form-control pr-2 py-0" placeholder="Search" />
+      <div class="input-group-append">
+        <i class="material-icons pr-2">search</i>
+      </div>
+    </div>
+    <div class="ml-auto d-flex justify-content-start align-items-center">
+      <img
+        class="user-avatar d-none d-md-block"
+        src="/assets/images/avatars/avatar-1.png"
+      />
+      <div class="user-name d-none d-md-block">John Collins</div>
+      <div
+        ngbDropdown
+        class="dropdown-no-toggle dropdown-bounce"
+        placement="bottom-right"
+      >
+        <i class="material-icons px-4" ngbDropdownToggle>keyboard_arrow_down</i>
+        <div ngbDropdownMenu class="dropdown-menu">
+          <div
+            class="dropdown-header d-flex justify-content-end align-items-center"
+          >
+            <img
+              class="user-avatar"
+              src="/assets/images/avatars/avatar-1.png"
+            />
+            <div class="user-name">John Collins</div>
+            <i class="material-icons pl-4">keyboard_arrow_up</i>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Messages</a>
+          <a class="dropdown-item" href="#">Profile</a>
+          <a class="dropdown-item" href="#">Options</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item d-flex justify-content-end" href="#">
+            <span>Logout</span>
+            <i class="material-icons ml-auto">exit_to_app</i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="main-content">
+    <div
+      [ngClass]="{
+        'container-fluid': !isBoxedLayout,
+        container: isBoxedLayout
+      }"
+      [@routerTransition]="getState(outlet)"
+    >
+      <router-outlet #outlet="outlet"></router-outlet>
+    </div>
+  </div>
+  <div class="side-nav">
+    <div
+      class="back-btn"
+      (click)="isMenuClosed = !isMenuClosed; onSideNavModeChange()"
+    >
+      <i class="material-icons">navigate_before</i>
+    </div>
+    <div class="logo">
+      <a href="/">SOFU</a>
+    </div>
+    <div class="user-info">
+      <img src="/assets/images/avatars/avatar-1.png" />
+      <div>
+        <div class="name">John Collins</div>
+        <div class="status">online</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <px-gdn-multimenu
+      class="menu"
+      [menuModel]="menuModel"
+      [smallMenu]="isSmallMenuMode"
+      (collapse)="isMenuCollapsed = $event"
+    ></px-gdn-multimenu>
+  </div>
+</div>
+<div
+  class="card options-panel options-closed"
+  [class.options-closed]="isOptionsClosed"
+>
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <h5 class="card-title ">
+        Options
+      </h5>
+      <i
+        class="material-icons options-close-btn"
+        (click)="isOptionsClosed = !isOptionsClosed"
+        >close</i
+      >
+    </div>
+    <div class="d-flex align-items-center mb-2">
+      <div class="px-gdn-toggle">
+        <input
+          id="toggle-boxed"
+          type="checkbox"
+          [ngModel]="isBoxedLayout"
+          (change)="toggleBoxed()"
+        />
+        <label for="toggle-boxed" class="label-default"></label>
+      </div>
+      <div class="pl-3">
+        <label class="mb-0" for="toggle-boxed">Boxed</label>
+      </div>
+    </div>
+    <div class="d-flex align-items-center mb-2">
+      <div class="px-gdn-toggle">
+        <input
+          id="toggle-compact"
+          type="checkbox"
+          [ngModel]="isSmallMenuMode"
+          (change)="toggleCompactMenu()"
+        />
+        <label for="toggle-compact" class="label-default"></label>
+      </div>
+      <div class="pl-3">
+        <label class="mb-0" for="toggle-compact">Compact sidenav</label>
+      </div>
+    </div>
+    <div class="d-flex align-items-center mb-2">
+      <div class="px-gdn-toggle">
+        <input
+          id="toggle-overlay"
+          type="checkbox"
+          [ngModel]="isOverlayMenuMode"
+          (change)="toggleOverlayMode()"
+        />
+        <label for="toggle-overlay" class="label-default"></label>
+      </div>
+      <div class="pl-3">
+        <label class="mb-0" for="toggle-overlay">Sidenav overlay</label>
+      </div>
+    </div>
+    <div class="d-flex align-items-center">
+      <div class="px-gdn-toggle">
+        <input
+          id="toggle-fixed"
+          type="checkbox"
+          [ngModel]="isFixedHeader"
+          (change)="toggleFixedHeader()"
+        />
+        <label for="toggle-fixed" class="label-default"></label>
+      </div>
+      <div class="pl-3">
+        <label class="mb-0" for="toggle-fixed">Fixed header</label>
+      </div>
+    </div>
+  </div>
+  <i
+    class="material-icons options-open-btn"
+    (click)="isOptionsClosed = !isOptionsClosed"
+    >settings</i
+  >
+</div>

@@ -1,0 +1,9 @@
+.form-control {
+  padding: $input-btn-padding-y 20px;
+}
+.custom-file-label {
+  &:after {
+    background: linear-gradient(56deg, $primary-color 0%, $primary-color-2 100%);
+    border: none;
+  }
+}

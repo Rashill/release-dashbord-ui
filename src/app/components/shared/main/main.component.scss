@@ -1,0 +1,254 @@
+@import './../../../../styles/elevation';
+@import './../../../../styles/variables';
+
+:host {
+  .application {
+    height: 100%;
+    padding-left: 250px;
+    transition: padding-left 0.3s ease;
+    &.small-nav {
+      .side-nav {
+        width: 95px;
+        .logo {
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+        }
+        .user-info {
+          .name,
+          .status {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+        }
+        .divider {
+          opacity: 0;
+        }
+      }
+    }
+    &.small-nav-mode {
+      padding-left: 95px;
+    }
+    &.overlay-nav {
+      padding-left: 0;
+    }
+    &.closed-nav {
+      padding-left: 0;
+      .side-nav {
+        transform: translateX(-110%);
+      }
+    }
+    &.fixed-header {
+      header {
+        position: fixed;
+        left: 250px;
+        right: 0;
+        transition: left 0.3s ease;
+      }
+      .main-content {
+        padding-top: 91px;
+      }
+      &.small-nav-mode {
+        header {
+          left: 95px;
+        }
+      }
+      &.closed-nav {
+        header {
+          left: 0;
+        }
+      }
+    }
+    @media screen and (max-width: 400px) {
+      overflow-x: hidden;
+    }
+    .side-nav {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 250px;
+      background: linear-gradient(
+        60deg,
+        $primary-color-2 0%,
+        $primary-color 100%
+      );
+      transition: width 0.3s ease, transform 0.3s ease;
+      z-index: 2001;
+      @include mat-elevation(24);
+      .back-btn {
+        position: absolute;
+        left: 25px;
+        top: 25px;
+        cursor: pointer;
+        .material-icons {
+          font-size: 30px;
+          color: #ffffff;
+        }
+      }
+      .logo {
+        text-align: center;
+        line-height: 80px;
+        padding-bottom: 15px;
+        transition: opacity 0.3s ease;
+        a {
+          text-decoration: inherit;
+          font-family: Raleway, sans-serif;
+          letter-spacing: 0.05em;
+          font-size: 30px;
+          color: #fefefe;
+          font-weight: 300;
+        }
+      }
+      .user-info {
+        color: #ffffff;
+        padding-left: 100px;
+        position: relative;
+        height: 55px;
+        img {
+          position: absolute;
+          width: 55px;
+          height: 55px;
+          left: 23px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+        .name {
+          font-size: 18px;
+          white-space: nowrap;
+          transition: opacity 0.3s ease;
+        }
+        .status {
+          transition: opacity 0.3s ease;
+        }
+      }
+      .divider {
+        height: 2px;
+        background-color: rgba(#000000, 0.08);
+        margin-top: 25px;
+        margin-bottom: 10px;
+        transition: opacity 0.3s ease;
+      }
+      .menu {
+        height: calc(100% - 192px);
+      }
+    }
+    header {
+      background-color: #ffffff;
+      height: 75px;
+      z-index: 2001;
+      @include mat-elevation(4);
+      .menu {
+        padding: 0 35px;
+        i {
+          color: rgba(#000000, 0.38);
+          cursor: pointer;
+        }
+      }
+      .search {
+        max-width: 200px;
+        height: 40px;
+        border: 1px solid rgba(#000000, 0.12);
+        border-radius: 20px;
+        z-index: 0;
+        .form-control {
+          border: none !important;
+          background-color: transparent;
+          line-height: 40px;
+          box-shadow: none !important;
+        }
+        i {
+          color: rgba(#000000, 0.18);
+          cursor: pointer;
+          line-height: 38px;
+        }
+      }
+      .user-avatar {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+      }
+      .dropdown-menu {
+        left: -150px;
+        &.show {
+          top: -27px !important;
+        }
+        .dropdown-header {
+          height: 55px;
+          i:hover {
+            color: $primary-color;
+            transition: color 0.2s ease;
+          }
+        }
+      }
+    }
+    .main-content {
+      min-height: calc(100% - 75px);
+      min-width: 225px;
+      padding: 16px 17px;
+      @media screen and (max-width: 500px) {
+        padding: 16px 0;
+      }
+      > div {
+        height: 100%;
+      }
+    }
+  }
+  .options-panel {
+    position: fixed;
+    right: 0;
+    top: 140px;
+    overflow: hidden;
+    max-height: 180px;
+    max-width: 200px;
+    transition: max-height 0.3s ease, max-width 0.3s ease;
+    z-index: 2001;
+    @include mat-elevation(5);
+    .card-body {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.2s ease 0.3s;
+      .options-close-btn {
+        color: $primary-color;
+        cursor: pointer;
+      }
+    }
+    .options-open-btn {
+      position: absolute;
+      top: 9px;
+      right: 7px;
+      color: $primary-color;
+      cursor: pointer;
+      animation: rotate 3s linear;
+      animation-iteration-count: infinite;
+      animation-fill-mode: forwards;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+    }
+    &.options-closed {
+      max-width: 40px;
+      max-height: 40px;
+      transition: max-height 0.3s ease 0.1s, max-width 0.3s ease 0.1s;
+      .card-body {
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.1s ease, visibility 0s linear 0.1s;
+      }
+      .options-open-btn {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease 0.3s;
+      }
+    }
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

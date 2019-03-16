@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'variables';
+@import '~bootstrap/scss/bootstrap';
+@import '~font-awesome/scss/font-awesome';
+@import '~simple-line-icons/scss/simple-line-icons';
+@import 'typography';
+@import 'elevation';
+@import 'components/dropdown';
+@import 'components/card';
+@import 'components/buttons';
+@import 'components/forms';
+@import 'components/icons';
+@import 'components/inputs';
+@import 'components/tabs';
+@import 'components/gallery';
+@import 'components/lists';
+@import 'components/rating';
+@import 'components/toggle';
+@import 'components/table';
+@import 'components/tooltip';
+@import 'components/progress';
+@import 'utils/utils';
+
+@include all-utils()
+
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+}
+//Angular router components
+router-outlet ~ * {
+  display: block;
+  height: 100%;
+  min-height: 100%;
+  position: relative;
+}
