@@ -2,6 +2,8 @@
 
 <!-- This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.1.3. -->
 
+This project uses [Sofu Admin Template](https://themeforest.net/item/sofu-angular-5-bootstrap-4-admin-template/21363343) by Themeforest
+
 ## Installation
 
 Install node on your machine.
