@@ -1,0 +1,29 @@
+<h2>
+    Release Timeline
+</h2>
+<dx-scheduler
+  [dataSource]="stages"
+  [views]='["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"]'
+  currentView="timelineWeek"
+  [firstDayOfWeek]="1"
+  [startDayHour]="8"
+  [endDayHour]="23"
+  [cellDuration]="614400"
+  [groups]="['line']"
+  [currentDate]="currentDate"
+  [showCurrentTimeIndicator] = True
+  [height]="400">
+  <dxi-resource
+      fieldExpr="ownerId"
+      [allowMultiple]="true"
+      [dataSource]="features"
+      label="Owner"
+      [useColorAsDefault]="true"
+  ></dxi-resource>
+  <dxi-resource
+      fieldExpr="line"
+      [allowMultiple]="false"
+      [dataSource]="lines"
+      label="Line"
+  ></dxi-resource>
+</dx-scheduler>

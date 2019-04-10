@@ -5,6 +5,8 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { MainComponent } from './components/shared/main/main.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 import { HomeComponent } from './components/home/home.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
 
 import { AuthGuard } from '../guards/auth.guard';
 
@@ -13,9 +15,11 @@ const appRoutes: Routes = [
     path: '',
     component: MainComponent,
     children: [
+      {path: 'dashboard', component: DashboardComponent},
+      {path: 'ngtimeline', component: NgTimelineComponent},
       {
         path: '',
-        component: HomeComponent
+        component: HomeComponent,
       }
     ]
   },
@@ -23,6 +27,7 @@ const appRoutes: Routes = [
   // { path: 'signup', component: SignupComponent },
   // { path: 'forgot-password', component: ForgotPasswordComponent },
   // { path: 'reset-password', component: ResetPasswordComponent },
+  
   {
     path: '404',
     component: NotFoundPageComponent,
