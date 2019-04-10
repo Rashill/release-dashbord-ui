@@ -34,7 +34,6 @@
     "d3": "^5.8.2",
     "datamaps": "^0.5.8",
     "devextreme": "18.2.5",
-    "devextreme-angular": "^18.2.7",
     "echarts": "^3.7.1",
     "font-awesome": "^4.7.0",
     "hammerjs": "^2.0.8",

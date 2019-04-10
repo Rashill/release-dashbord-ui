@@ -30,8 +30,6 @@ import { AuthService } from './services/auth.service';
 
 import { ShowAuthedDirective } from './directives/showAuthed.directive';
 import { ShowIfAdminDirective } from './directives/showIfAdmin.directive';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { DxSchedulerModule } from 'devextreme-angular';
 import { VisModule } from 'ngx-vis';
 
 import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
@@ -55,7 +53,6 @@ export function createTranslateLoader(http: HttpClient) {
     MainComponent,
     NotFoundPageComponent,
     HomeComponent,
-    DashboardComponent,
     NgTimelineComponent
   ],
   imports: [
@@ -71,7 +68,6 @@ export function createTranslateLoader(http: HttpClient) {
     BrowserAnimationsModule,
     HttpClientModule,
     NgxGraphModule,
-    DxSchedulerModule,
     VisModule
   ],
   providers: [
