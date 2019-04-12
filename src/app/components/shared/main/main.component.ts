@@ -27,307 +27,31 @@ export class MainComponent implements OnInit {
   menuModel = [
     {
       title: 'Dashboard',
-      routerUrl: '/main/dashboard',
+      routerUrl: '/',
       iconClass: 'material-icons',
       iconCode: 'dashboard'
     },
     {
-      title: 'Basics',
+      title: 'Teams',
       iconClass: 'material-icons',
-      iconCode: 'format_color_text',
+      iconCode: 'group',
       children: [
         {
-          title: 'Typography',
-          routerUrl: '/main/typography'
-        },
-        {
-          title: 'Icons',
-          routerUrl: '/main/icons'
+          title: 'Create',
+          routerUrl: '/teams/typography'
         }
       ]
     },
     {
-      title: 'Layout',
+      title: 'Release Settings',
       iconClass: 'material-icons',
-      iconCode: 'view_list',
+      iconCode: 'settings',
       children: [
         {
-          title: 'Cards',
-          routerUrl: '/main/cards'
-        },
-        {
-          title: 'Lists',
-          routerUrl: '/main/lists'
-        },
-        {
-          title: 'Tabs',
-          routerUrl: '/main/tabs'
-        },
-        {
-          title: 'Accordion',
-          routerUrl: '/main/accordion'
-        },
-        {
-          title: 'Grid',
-          routerUrl: '/main/grid'
+          title: 'Checklist',
+          routerUrl: '/teams/typography'
         }
       ]
-    },
-    {
-      title: 'Components',
-      iconClass: 'material-icons',
-      iconCode: 'view_module',
-      children: [
-        {
-          title: 'Tooltip',
-          routerUrl: '/main/tooltip'
-        },
-        {
-          title: 'Dropdown',
-          routerUrl: '/main/dropdown'
-        },
-        {
-          title: 'Table',
-          routerUrl: '/main/table'
-        },
-        {
-          title: 'Datepicker',
-          routerUrl: '/main/datepicker'
-        },
-        {
-          title: 'Timepicker',
-          routerUrl: '/main/timepicker'
-        },
-        {
-          title: 'Rating',
-          routerUrl: '/main/rating'
-        },
-        {
-          title: 'Pagination',
-          routerUrl: '/main/pagination'
-        },
-        {
-          title: 'Modal',
-          routerUrl: '/main/modal'
-        },
-        {
-          title: 'Popover',
-          routerUrl: '/main/popover'
-        },
-        {
-          title: 'Progress bar',
-          routerUrl: '/main/progressbar'
-        },
-        {
-          title: 'Badge',
-          routerUrl: '/main/badge'
-        },
-        {
-          title: 'Other',
-          routerUrl: '/main/other'
-        }
-      ]
-    },
-    {
-      title: 'Forms',
-      iconClass: 'material-icons',
-      iconCode: 'subject',
-      children: [
-        {
-          title: 'Buttons',
-          routerUrl: '/main/buttons'
-        },
-        {
-          title: 'Inputs',
-          routerUrl: '/main/form-elements'
-        }
-      ]
-    },
-    {
-      title: 'User pages',
-      iconClass: 'material-icons',
-      iconCode: 'person',
-      children: [
-        {
-          title: 'Login',
-          routerUrl: '/login'
-        },
-        {
-          title: 'Sing up',
-          routerUrl: '/register'
-        },
-        {
-          title: 'Profile',
-          routerUrl: '/main/profile'
-        },
-        {
-          title: 'Coming soon',
-          routerUrl: '/coming-soon'
-        },
-        {
-          title: 'Maintenance',
-          routerUrl: '/maintenance'
-        },
-        {
-          title: 'Not found',
-          routerUrl: '/404'
-        }
-      ]
-    },
-    {
-      title: 'E-commerce',
-      iconClass: 'material-icons',
-      iconCode: 'shopping_cart',
-      children: [
-        {
-          title: 'Products',
-          routerUrl: '/main/products'
-        },
-        {
-          title: 'Product page',
-          routerUrl: '/main/product-details'
-        },
-        {
-          title: 'Cart',
-          routerUrl: '/main/cart'
-        },
-        {
-          title: 'Pricing Tables',
-          routerUrl: '/main/pricing-tables'
-        },
-        {
-          title: 'Contacts',
-          routerUrl: '/main/contact'
-        }
-      ]
-    },
-    {
-      title: 'Extra',
-      iconClass: 'material-icons',
-      iconCode: 'work',
-      children: [
-        {
-          title: 'Grid table',
-          routerUrl: '/main/component-table'
-        },
-        {
-          title: 'Slider',
-          routerUrl: '/main/slider'
-        },
-        {
-          title: 'Tree',
-          routerUrl: '/main/tree'
-        },
-        {
-          title: 'Gallery',
-          routerUrl: '/main/gallery'
-        },
-        {
-          title: 'Editor',
-          routerUrl: '/main/editor'
-        },
-        {
-          title: 'Drag & Drop',
-          routerUrl: '/main/drag'
-        },
-        {
-          title: 'Multi language',
-          routerUrl: '/main/translate'
-        },
-        {
-          title: 'Scroll',
-          routerUrl: '/main/scroll'
-        }
-      ]
-    },
-    {
-      title: 'Charts',
-      iconClass: 'material-icons',
-      iconCode: 'assessment',
-      children: [
-        {
-          title: 'Line charts',
-          routerUrl: '/main/linechart'
-        },
-        {
-          title: 'Bar charts',
-          routerUrl: '/main/barchart'
-        },
-        {
-          title: 'Pie charts',
-          routerUrl: '/main/piechart'
-        },
-        {
-          title: 'Bubble charts',
-          routerUrl: '/main/bubblechart'
-        },
-        {
-          title: 'Heatmap',
-          routerUrl: '/main/heatmap'
-        },
-        {
-          title: 'Radar',
-          routerUrl: '/main/radar'
-        }
-      ]
-    },
-    {
-      title: 'Maps',
-      iconClass: 'material-icons',
-      iconCode: 'place',
-      children: [
-        {
-          title: 'Google Maps',
-          routerUrl: '/main/google-map'
-        },
-        {
-          title: 'Data Maps',
-          routerUrl: '/main/data-maps'
-        }
-      ]
-    },
-    {
-      title: 'Label',
-      count: 10,
-      iconClass: 'material-icons',
-      iconCode: 'label',
-      routerUrl: '',
-      children: []
-    },
-    {
-      title: 'Multilevel',
-      iconClass: 'material-icons',
-      iconCode: 'clear_all',
-      children: [
-        {
-          title: 'Level 1',
-          children: [
-            {
-              title: 'Level 2'
-            },
-            {
-              title: 'Level 2'
-            },
-            {
-              title: 'Level 2'
-            }
-          ]
-        },
-        {
-          title: 'Level 1'
-        },
-        {
-          title: 'Level 1'
-        }
-      ]
-    },
-    {
-      title: 'Buy Sofu',
-      iconClass: 'material-icons',
-      iconCode: 'star',
-      externalUrl:
-        'https://themeforest.net/item/sofu-angular-5-bootstrap-4-admin-template/21363343',
-      children: []
     }
   ];
 
