@@ -1085,7 +1085,7 @@
         },
         "load-json-file": {
           "version": "2.0.0",
-          "resolved": "https://registry.npmjs.org/load-json-file/-/load-json-file-2.0.0.tgz",
+          "resolved": "http://registry.npmjs.org/load-json-file/-/load-json-file-2.0.0.tgz",
           "integrity": "sha1-eUfkIUmvgNaWy/eXvKq8/h/inKg=",
           "dev": true,
           "requires": {
@@ -1141,7 +1141,7 @@
         },
         "pify": {
           "version": "2.3.0",
-          "resolved": "https://registry.npmjs.org/pify/-/pify-2.3.0.tgz",
+          "resolved": "http://registry.npmjs.org/pify/-/pify-2.3.0.tgz",
           "integrity": "sha1-7RQaasBDqEnqWISY59yosVMw6Qw=",
           "dev": true
         },
@@ -1862,6 +1862,34 @@
       "resolved": "https://registry.npmjs.org/amdefine/-/amdefine-1.0.1.tgz",
       "integrity": "sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=",
       "dev": true
+    },
+    "angular-calendar": {
+      "version": "0.27.2",
+      "resolved": "https://registry.npmjs.org/angular-calendar/-/angular-calendar-0.27.2.tgz",
+      "integrity": "sha512-5V/5hfRiCY3/tRdertdIGnEgSaumWyt6OWXUifGL6YLJE1FVD35umG+bopdPhJFzylflbb5P1EIC3Sw/UkOh4g==",
+      "requires": {
+        "angular-draggable-droppable": "^4.2.0",
+        "angular-resizable-element": "^3.2.4",
+        "calendar-utils": "^0.3.0",
+        "positioning": "^1.4.0",
+        "tslib": "^1.9.0"
+      }
+    },
+    "angular-draggable-droppable": {
+      "version": "4.2.0",
+      "resolved": "https://registry.npmjs.org/angular-draggable-droppable/-/angular-draggable-droppable-4.2.0.tgz",
+      "integrity": "sha512-Kod9Lxj8JonnxdI0MlVyy2vb+1RirR1EOaTF2I0OPSus51OE7mMjUMql9SwYEhq3PIJdnpTHiT+/KbqklTtZVw==",
+      "requires": {
+        "tslib": "^1.9.0"
+      }
+    },
+    "angular-resizable-element": {
+      "version": "3.2.4",
+      "resolved": "https://registry.npmjs.org/angular-resizable-element/-/angular-resizable-element-3.2.4.tgz",
+      "integrity": "sha512-Qd/WRTaJgmDJoeWzmK0F52I3X0nLtFPirmsVC2ceic4EQ/3X2yYFCOWgCtH+PvMZct6Whoky3OQLqCpFXQsKHQ==",
+      "requires": {
+        "tslib": "^1.9.0"
+      }
     },
     "angular-tree-component": {
       "version": "7.2.1",
@@ -2761,6 +2789,23 @@
         "union-value": "^1.0.0",
         "unset-value": "^1.0.0"
       }
+    },
+    "cache-loader": {
+      "version": "1.2.5",
+      "resolved": "https://registry.npmjs.org/cache-loader/-/cache-loader-1.2.5.tgz",
+      "integrity": "sha512-enWKEQ4kO3YreDFd7AtVRjtJBmNiqh/X9hVDReu0C4qm8gsGmySkwuWtdc+N5O+vq5FzxL1mIZc30NyXCB7o/Q==",
+      "dev": true,
+      "requires": {
+        "loader-utils": "^1.1.0",
+        "mkdirp": "^0.5.1",
+        "neo-async": "^2.5.0",
+        "schema-utils": "^0.4.2"
+      }
+    },
+    "calendar-utils": {
+      "version": "0.3.0",
+      "resolved": "https://registry.npmjs.org/calendar-utils/-/calendar-utils-0.3.0.tgz",
+      "integrity": "sha512-TXXiGhQLayvV6BtpmrxbcbI0l6/pvmHIIpXWb0/oGBWvL3NZ17X5wp3vSeZbQrfLe+p8FumMfQvwz+LFt6GGgQ=="
     },
     "callsite": {
       "version": "1.0.0",
@@ -3793,11 +3838,18 @@
         }
       }
     },
+<<<<<<< HEAD
     "date-format": {
       "version": "2.0.0",
       "resolved": "https://registry.npmjs.org/date-format/-/date-format-2.0.0.tgz",
       "integrity": "sha512-M6UqVvZVgFYqZL1SfHsRGIQSz3ZL+qgbsV5Lp1Vj61LZVYuEwcMXYay7DRDtYs2HQQBK5hQtQ0fD9aEJ89V0LA==",
       "dev": true
+=======
+    "date-fns": {
+      "version": "1.30.1",
+      "resolved": "https://registry.npmjs.org/date-fns/-/date-fns-1.30.1.tgz",
+      "integrity": "sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw=="
+>>>>>>> master
     },
     "date-now": {
       "version": "0.1.4",
@@ -5664,7 +5716,7 @@
         },
         "minimist": {
           "version": "0.0.10",
-          "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.10.tgz",
+          "resolved": "http://registry.npmjs.org/minimist/-/minimist-0.0.10.tgz",
           "integrity": "sha1-3j+YVD2/lggr5IrRoMfNqDYwHc8=",
           "dev": true
         },
@@ -8449,6 +8501,11 @@
           "dev": true
         }
       }
+    },
+    "positioning": {
+      "version": "1.4.0",
+      "resolved": "https://registry.npmjs.org/positioning/-/positioning-1.4.0.tgz",
+      "integrity": "sha512-LbN+mgAXtcDdN46xMJ3yZwjndqqYJODaO5qKmU+MVMu5tL3K2dlm1Qha/zh1k2JAFym5HDaZpnPfO4gr91VTRw=="
     },
     "posix-character-classes": {
       "version": "0.1.1",
