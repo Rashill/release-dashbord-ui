@@ -6,6 +6,7 @@ import { MainComponent } from './components/shared/main/main.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 import { HomeComponent } from './components/home/home.component';
 import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
+import { RDTableComponent } from './components/rd-table/rd-table.component';
 
 import { AuthGuard } from '../guards/auth.guard';
 
@@ -17,6 +18,10 @@ const appRoutes: Routes = [
       {
         path: 'ngtimeline',
          component: NgTimelineComponent
+      },
+      {
+        path: 'table',
+         component: RDTableComponent
       },
       {
         path: '',

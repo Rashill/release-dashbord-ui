@@ -31,8 +31,11 @@ import { AuthService } from './services/auth.service';
 import { ShowAuthedDirective } from './directives/showAuthed.directive';
 import { ShowIfAdminDirective } from './directives/showIfAdmin.directive';
 import { VisModule } from 'ngx-vis';
+import { TableModule } from 'ngx-easy-table';
 
 import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
+import { RDTableComponent } from './components/rd-table/rd-table.component';
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -53,7 +56,8 @@ export function createTranslateLoader(http: HttpClient) {
     MainComponent,
     NotFoundPageComponent,
     HomeComponent,
-    NgTimelineComponent
+    NgTimelineComponent,
+    RDTableComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +72,8 @@ export function createTranslateLoader(http: HttpClient) {
     BrowserAnimationsModule,
     HttpClientModule,
     NgxGraphModule,
-    VisModule
+    VisModule,
+    TableModule
   ],
   providers: [
     ResizeService,

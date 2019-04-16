@@ -1,0 +1,82 @@
+{{message}}
+<div class="card" >
+    <div class="card-body" >
+      <!-- action bar -->
+      <div class="col-12">
+          <button *ngIf="opt_obj.create" (click)="openModal(content, 'Create')" id="add-row-button" class="btn  btn-primary px-4 mb-3 mr-1">Add</button>
+          <button *ngIf="opt_obj.update" (click)="openModal(content, 'Update')" [disabled]="selectedRecords.size != 1" id="add-row-button" class="btn btn-primary px-4 mb-3 mr-1">Edit</button>
+          <button *ngIf="opt_obj.delete" (click)="openModal(content, 'Delete')" id="add-row-button" [disabled]="selectedRecords.size == 0" class="btn btn-warning px-4 mb-3 mr-5">Delete</button>
+          <button *ngIf="opt_obj.csv" (click)="exportToCSV()" id="add-row-button" class="btn  btn-primary px-4 mb-3 mr-1">Export to CSV</button>
+          <button *ngIf="opt_obj.pdf" (click)="exportToPDF()" id="add-row-button" class="btn  btn-primary px-4 mb-3 mr-3">Export to PDF</button>
+      </div>
+      <!-- end of action bar -->
+      <div class="col-12">
+        <div class="">
+          <!-- Table element-->
+          <ngx-table
+            #table
+            [configuration]="configuration"
+            [data]="data"
+            [columns]="schema"
+            (event)="triggerAChangeEvent($event)">
+          </ngx-table>
+          <!-- End of table elements-->
+        </div>
+      </div>
+  </div>
+</div>
+
+<!-- Modal-->
+  <ng-template #content let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{content.title}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- form area -->
+        <form *ngIf="content.operation === 'Create' || content.operation === 'Update'">
+          <div class="form-group" *ngFor="let attr of schema">
+            <div *ngIf="(attr.create!=false && content.operation == 'Create') || (attr.update!=false && content.operation =='Update')">
+              <label for="{{attr.key}}">{{attr.title}}</label>
+              <div class="input-group">
+                <!-- drop down control-->
+                <select *ngIf="attr.options !== undefined" id="{{attr.key}}" name="{{attr.key}}" 
+                        class="form-control" [multiple]="attr.type==='multiple'">
+                    <option *ngFor="let option of attr.options" value="{{option}}" 
+                    [selected]="content.record[attr.key] === option">{{option}}</option>
+                </select>
+                <!-- checkbox control-->
+                <div *ngIf="attr.type === 'checkbox'" class="custom-control custom-checkbox px-gdn-checkbox-1">
+                    <input type="checkbox" [checked]="content.record[attr.key]" class="custom-control-input ml-3" 
+                        id="{{attr.key}}" name="{{attr.key}}" value="{{content.record[attr.key]}}"/>
+                    <label class="custom-control-label ml-3" for="{{attr.key}}"></label>
+                </div>
+                <!-- you can add more controls after this line and include the oposite conditon in the text contorl part -->
+                <!-- text control -->
+                <input *ngIf="attr.options === undefined && attr.type !== 'checkbox'"
+                      id="{{attr.key}}" name="{{attr.key}}" type="{{attr.type}}" class="form-control"
+                      placeholder="{{attr.description||attr.title}}" value="{{content.record[attr.key]}}"/>
+              </div>
+              <div id="{{attr.key}}_error"></div>
+            </div>
+          </div>
+        </form>
+        <!-- end form area -->
+        <form *ngIf="content.operation === 'Delete'">
+          <h4>Are you sure to delete? (Total: {{content.records.length}})</h4>
+          <ul *ngFor="let record of content.records">
+            <li>{{opt_obj.pKey}}: {{record[opt_obj.pKey]}}</li>
+          </ul>
+        </form>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-info" (click)="modal.close()">{{content.closeLabel}}</button>
+          <button type="button" class="btn btn-primary" (click)="save(content.operation, content.rowIndex)">{{content.saveLabel}}</button>
+      </div>
+    </ng-template>
+  <!-- end of Modal-->
+
+
+  <!-- To do: inline edit/delete -->

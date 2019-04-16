@@ -23,7 +23,8 @@
               "node_modules/devextreme/dist/css/dx.common.css",
               "node_modules/devextreme/dist/css/dx.light.css",
               "src/styles/styles.scss",
-              "node_modules/vis/dist/vis.css"
+              "node_modules/vis/dist/vis.css",
+              "node_modules/ngx-easy-table/style.scss"
             ],
             "scripts": ["node_modules/vis/dist/vis.min.js" ]
           },
