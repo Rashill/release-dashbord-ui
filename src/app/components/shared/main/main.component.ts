@@ -8,7 +8,7 @@ import { ResizeService } from './../../../services/resize.service';
 import { routerTransition } from './../../../../utils/page.animation';
 import { AuthService } from './../../../services/auth.service';
 import { Router } from '@angular/router';
-
+import { ActivatedRoute } from '@angular/router';
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 @Component({
@@ -69,6 +69,7 @@ export class MainComponent implements OnInit {
 
   constructor(
     private resizeService: ResizeService,
+    private route: ActivatedRoute,
     private authService: AuthService,
     private router: Router
   ) {
@@ -105,23 +106,6 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService
-    .auth()
-    .pipe(
-      map(res => res) // or any other operator
-    )
-    .subscribe(
-      res => {
-        console.log('response', res)
-        console.log('URL',res.url)
-        window.location.href = res.url
-      },
-      error => {
-        this.error = true;
-        console.error('Error!', error);
-        return throwError(error); // Angular 5/RxJS 5.5
-      }
-    );
   }
 
   /**

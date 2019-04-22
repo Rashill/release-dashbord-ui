@@ -25,8 +25,13 @@ export class AuthService {
     return this.http.post<any>('/api/v1/users', user);
   }
 
-  auth() {
+  authURL() {
     return this.http.get<any>('/api/v1/auth');
+  }
+
+  auth(auth) {
+    console.log(auth)
+    return this.http.post<any>('/api/v1/auth',auth);
   }
 
   //   forgotPassword(email) {
