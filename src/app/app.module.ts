@@ -29,6 +29,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { HomeComponent } from './components/home/home.component';
+import { AuthGuard } from '../guards/auth.guard';
 
 import { AuthService } from './services/auth.service';
 

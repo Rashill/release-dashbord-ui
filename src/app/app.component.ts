@@ -27,45 +27,45 @@ export class AppComponent {
           let oauth_verifier = this.route.snapshot.queryParamMap.get('oauth_verifier');
           var auth = { "oauth_token": oauth_token, "oauth_verifier": oauth_verifier };
 
-          if (localStorage.getItem("Token")) {
-            localStorage.clear()
-            console.log(localStorage.getItem("Token"))
-          }
-          else if (oauth_verifier == null) {
-            this.authService
-              .authURL()
-              .pipe(
-                map(res => res) // or any other operator
-              )
-              .subscribe(
-                res => {
-                  console.log('URL', res.url)
-                  window.location.href = res.url 
-                  return
-                },
-                error => {
-                  this.error = true;
-                  console.error('Error!', error);
-                  return throwError(error); // Angular 5/RxJS 5.5
-                });
-          }
-          else {
-            this.authService
-              .auth({ "oauth_token": oauth_token, "oauth_verifier": oauth_verifier }
-              )
-              .pipe(
-                map(res => res) // or any other operator
-              )
-              .subscribe(
-                res => {
-                  localStorage.setItem("Token", res.token)
-                },
-                error => {
-                  this.error = true;
-                  console.error('Error!', error);
-                  return throwError(error); // Angular 5/RxJS 5.5
-                });
-          }
+          // if (localStorage.getItem("Token")) {
+          //   localStorage.clear()
+          //   console.log(localStorage.getItem("Token"))
+          // }
+          // else if (oauth_verifier == null) {
+          //   this.authService
+          //     .authURL()
+          //     .pipe(
+          //       map(res => res) // or any other operator
+          //     )
+          //     .subscribe(
+          //       res => {
+          //         console.log('URL', res.url)
+          //         window.location.href = res.url 
+          //         return
+          //       },
+          //       error => {
+          //         this.error = true;
+          //         console.error('Error!', error);
+          //         return throwError(error); // Angular 5/RxJS 5.5
+          //       });
+          // }
+          // else {
+          //   this.authService
+          //     .auth({ "oauth_token": oauth_token, "oauth_verifier": oauth_verifier }
+          //     )
+          //     .pipe(
+          //       map(res => res) // or any other operator
+          //     )
+          //     .subscribe(
+          //       res => {
+          //         localStorage.setItem("Token", res.token)
+          //       },
+          //       error => {
+          //         this.error = true;
+          //         console.error('Error!', error);
+          //         return throwError(error); // Angular 5/RxJS 5.5
+          //       });
+          // }
 
         })
       }

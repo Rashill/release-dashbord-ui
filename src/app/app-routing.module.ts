@@ -13,15 +13,18 @@ const appRoutes: Routes = [
   {
     path: '',
     component: MainComponent,
+    
     children: [
       {
         path: 'ngtimeline',
-         component: NgTimelineComponent
+         component: NgTimelineComponent,
+         canActivate : [AuthGuard],
       },
       {
         path: '',
         component: HomeComponent,
       }
+      
     ]
   },
   { path: 'login', component: LoginPageComponent },
