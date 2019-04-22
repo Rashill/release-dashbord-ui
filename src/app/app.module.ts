@@ -77,7 +77,11 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     NgxGraphModule,
     VisModule,
-    TableModule
+    TableModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    })
   ],
   providers: [
     ResizeService,
