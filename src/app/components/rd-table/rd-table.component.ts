@@ -308,7 +308,7 @@ export class RDTableComponent implements OnInit {
 
 
 /**
- * Export to CSV function
+ * Export to CSV function ()
  * It deals with json data
  */
   exportToCSV() {
