@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { AuthComponent } from './components/auth/auth.component';
+import { CreateReleaseComponent } from './components/create-release/create-release.component';
+
 
 import { MainComponent } from './components/shared/main/main.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
@@ -25,12 +27,16 @@ const appRoutes: Routes = [
       {
         path: '',
         component: HomeComponent,
+      },
+      {
+        path: 'release/create',
+        component: CreateReleaseComponent,
       }
-      
     ]
   },
   { path: 'login', component: LoginPageComponent },
   { path: 'auth', component: AuthComponent },
+
   // { path: 'signup', component: SignupComponent },
   // { path: 'forgot-password', component: ForgotPasswordComponent },
   // { path: 'reset-password', component: ResetPasswordComponent },

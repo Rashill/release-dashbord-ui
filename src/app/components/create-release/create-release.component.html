@@ -1,0 +1,103 @@
+<div class="container mb-5">
+  <div class="card mx-auto">
+    <div class="card-body">
+      <div class="card-title text-center mb-5">
+        <h2>Create Release</h2>
+      </div>
+      <div class="alert alert-danger" *ngIf="error">
+        You have entered wrong details
+      </div>
+      <form novalidate [formGroup]="createForm" (ngSubmit)="onSubmit()">
+        <div class="form-group ">
+          <label for="releasename">Release Name</label>
+          <input type="text" class="form-control" formControlName="releasename" [(ngModel)]="release.releasename"
+            placeholder="Release Name" />
+        </div>
+        <div class="form-group">
+          <label for="Type">Release Type</label>
+          <select class="form-control" id="type" required formControlName='type' [(ngModel)]="release.type" name="type">
+            <option value="OOC" selected>OOC</option>
+            <option value="ER">ER</option>
+            <option value="HF">Hot Fix</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="Description">Description</label>
+          <input type="text" class="form-control" formControlName="description" [(ngModel)]="release.description"
+            placeholder="Description" />
+        </div>
+
+        <div class="form-group">
+          <label for="releasedate">Release Date</label>
+          <input type="date" text="picker" class="form-control" formControlName="releasedate"
+            [(ngModel)]="release.releasedate" />
+        </div>
+        <div class="form-group">
+          <label for="devstart">Dev/Test Start Date</label>
+          <input type="date" text="picker" class="form-control" formControlName="devstart"
+            [(ngModel)]="release.devstart" />
+        </div>
+        <div class="form-group">
+          <label for="devfinish">Dev/Test Finish Date</label>
+          <input type="date" text="picker" class="form-control" formControlName="devfinish"
+            [(ngModel)]="release.devfinish" />
+        </div>
+        <div class="form-group">
+          <label for="refreshDate">Potential Code Refresh Date</label>
+          <input type="date" text="refreshDate" class="form-control" formControlName="refreshDate"
+            [(ngModel)]="release.refreshDate" />
+        </div>
+        <div class="form-group" *ngIf="release.type == 'ER'">
+          <label for="regressionDeploy">Regression Deploy Date</label>
+          <input type="date" text="regressionDeploy" class="form-control" formControlName="regressionDeploy"
+            [(ngModel)]="release.regressionDeploy" />
+        </div>
+        <div class="form-group">
+          <label for="regressionStart">Regression Start Date</label>
+          <input type="date" text="regressionStart" class="form-control" formControlName="regressionStart"
+            [(ngModel)]="release.regressionStart" />
+        </div>
+        <div class="form-group">
+          <label for="regressionEnd">Regression End Date</label>
+          <input type="date" text="regressionEnd" class="form-control" formControlName="regressionEnd"
+            [(ngModel)]="release.regressionEnd" />
+        </div>
+        <div class="form-group" *ngIf="release.type == 'ER'">
+          <label for="cabDate">CAB</label>
+          <input type="date" class="form-control" formControlName="cabDate" [(ngModel)]="release.cabDate"
+            placeholder="CIO2" />
+        </div>
+        <div class="form-group">
+          <label for="testenvironment">Test Environment</label>
+          <input type="text" class="form-control" formControlName="testenvironment"
+            [(ngModel)]="release.testenvironment" placeholder="CIO2" />
+        </div>
+        <div class="form-group">
+          <label for="regenvironment">Regression Environment</label>
+          <input type="text" class="form-control" formControlName="regenvironment" [(ngModel)]="release.regenvironment"
+            placeholder="LAB03" />
+        </div>
+        <div class="form-group">
+          <label for="sitecore">Site Core</label>
+          <input type="text" class="form-control" formControlName="sitecore" [(ngModel)]="release.sitecore"
+            placeholder="C5261" />
+        </div>
+        <div class="form-group">
+          <label for="biztalk">Biz Talk</label>
+          <input type="text" class="form-control" formControlName="biztalk" [(ngModel)]="release.biztalk"
+            placeholder="C5410" />
+        </div>
+        <div class="form-group">
+            <label for="devsupport">Dev Support</label>
+            <input type="text" class="form-control" formControlName="devsupport" [(ngModel)]="release.devsupport"
+              placeholder="James" />
+          </div>
+        <div class="mt-5 text-center">
+          <button type="submit" class="btn btn-lg px-gdn-btn-outline card-bg">
+            Create
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
