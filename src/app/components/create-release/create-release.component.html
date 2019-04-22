@@ -9,8 +9,8 @@
       </div>
       <form novalidate [formGroup]="createForm" (ngSubmit)="onSubmit()">
         <div class="form-group ">
-          <label for="releasename">Release Name</label>
-          <input type="text" class="form-control" formControlName="releasename" [(ngModel)]="release.releasename"
+          <label for="name">Release Name</label>
+          <input type="text" class="form-control" formControlName="name" [(ngModel)]="release.name"
             placeholder="Release Name" />
         </div>
         <div class="form-group">
@@ -18,7 +18,7 @@
           <select class="form-control" id="type" required formControlName='type' [(ngModel)]="release.type" name="type">
             <option value="OOC" selected>OOC</option>
             <option value="ER">ER</option>
-            <option value="HF">Hot Fix</option>
+            <option value="Hot Fix">Hot Fix</option>
           </select>
         </div>
         <div class="form-group">
@@ -28,14 +28,14 @@
         </div>
 
         <div class="form-group">
-          <label for="releasedate">Release Date</label>
-          <input type="date" text="picker" class="form-control" formControlName="releasedate"
-            [(ngModel)]="release.releasedate" />
+          <label for="releaseDate">Release Date</label>
+          <input type="date" text="picker" class="form-control" formControlName="releaseDate"
+            [(ngModel)]="release.releaseDate" />
         </div>
         <div class="form-group">
-          <label for="devstart">Dev/Test Start Date</label>
-          <input type="date" text="picker" class="form-control" formControlName="devstart"
-            [(ngModel)]="release.devstart" />
+          <label for="startDate">Dev/Test Start Date</label>
+          <input type="date" text="picker" class="form-control" formControlName="startDate"
+            [(ngModel)]="release.startDate" />
         </div>
         <div class="form-group">
           <label for="devfinish">Dev/Test Finish Date</label>
@@ -88,10 +88,10 @@
             placeholder="C5410" />
         </div>
         <div class="form-group">
-            <label for="devsupport">Dev Support</label>
-            <input type="text" class="form-control" formControlName="devsupport" [(ngModel)]="release.devsupport"
-              placeholder="James" />
-          </div>
+          <label for="devsupport">Dev Support</label>
+          <input type="text" class="form-control" formControlName="devsupport" [(ngModel)]="release.devsupport"
+            placeholder="James" />
+        </div>
         <div class="mt-5 text-center">
           <button type="submit" class="btn btn-lg px-gdn-btn-outline card-bg">
             Create

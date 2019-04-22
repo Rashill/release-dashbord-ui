@@ -32,6 +32,7 @@ import { HomeComponent } from './components/home/home.component';
 import { AuthGuard } from '../guards/auth.guard';
 
 import { AuthService } from './services/auth.service';
+import { ReleaseService } from './services/release.service';
 
 import { ShowAuthedDirective } from './directives/showAuthed.directive';
 import { ShowIfAdminDirective } from './directives/showIfAdmin.directive';
@@ -90,7 +91,8 @@ export function createTranslateLoader(http: HttpClient) {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
     },
-    AuthService
+    AuthService,
+    ReleaseService,
   ],
   bootstrap: [AppComponent],
   exports: [ShowAuthedDirective, ShowIfAdminDirective]
