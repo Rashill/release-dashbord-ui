@@ -6,7 +6,9 @@ import { MainComponent } from './components/shared/main/main.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 import { HomeComponent } from './components/home/home.component';
 import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
-import { RDTableComponent } from './components/rd-table/rd-table.component';
+import { TeamComponent } from './components/team/team.component';
+import { UsersComponent } from './components/users/users.component';
+import { ChecklistComponent } from './components/checklist/checklist.component';
 
 import { AuthGuard } from '../guards/auth.guard';
 
@@ -20,8 +22,16 @@ const appRoutes: Routes = [
          component: NgTimelineComponent
       },
       {
-        path: 'table',
-         component: RDTableComponent
+        path: 'team',
+         component: TeamComponent
+      },
+      {
+        path: 'users',
+         component: UsersComponent
+      },
+      {
+        path: 'checklist',
+        component: ChecklistComponent
       },
       {
         path: '',

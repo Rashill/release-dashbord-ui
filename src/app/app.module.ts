@@ -39,6 +39,9 @@ import { TableModule } from 'ngx-easy-table';
 
 import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
 import { RDTableComponent } from './components/rd-table/rd-table.component';
+import { TeamComponent } from './components/team/team.component';
+import { UsersComponent } from './components/users/users.component';
+import { ChecklistComponent } from './components/checklist/checklist.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -61,7 +64,10 @@ export function createTranslateLoader(http: HttpClient) {
     NotFoundPageComponent,
     HomeComponent,
     NgTimelineComponent,
-    RDTableComponent
+    RDTableComponent,
+    TeamComponent,
+    UsersComponent,
+    ChecklistComponent
   ],
   imports: [
     BrowserModule,

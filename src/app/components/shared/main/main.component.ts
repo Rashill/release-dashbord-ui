@@ -43,6 +43,23 @@ export class MainComponent implements OnInit {
       ]
     },
     {
+      title: 'Admin panel',
+      iconClass: 'material-icons',
+      iconCode: 'build',
+      children: [
+        {
+          title: 'Teams',
+          routerUrl: '/team'
+        },        {
+          title: 'Users',
+          routerUrl: '/users'
+        },        {
+          title: 'Checks',
+          routerUrl: '/checklist'
+        }
+      ]
+    },
+    {
       title: 'Release Settings',
       iconClass: 'material-icons',
       iconCode: 'settings',

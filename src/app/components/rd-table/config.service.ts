@@ -1,8 +1,15 @@
 import { Injectable } from '@angular/core';
+
+
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+
 import { Config, STYLE, THEME } from 'ngx-easy-table';
 import { TemplateRef } from '@angular/core';
 
 import { Columns } from 'ngx-easy-table';
+
 
 export class Schema implements Columns {
   key: string;
@@ -57,4 +64,15 @@ export class ConfigService {
       striped: false,
     },
   };
+}
+
+@Injectable()
+export class DataHTTPService {
+
+  constructor(private http: HttpClient) {
+  }
+
+  getData(url: string): Observable<any[]> {
+    return this.http.get<any[]>(`${url}`);
+  }
 }
