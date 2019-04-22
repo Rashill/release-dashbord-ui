@@ -38,6 +38,7 @@ import { ShowIfAdminDirective } from './directives/showIfAdmin.directive';
 import { VisModule } from 'ngx-vis';
 
 import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
+import { AuthComponent } from './components/auth/auth.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -58,7 +59,8 @@ export function createTranslateLoader(http: HttpClient) {
     MainComponent,
     NotFoundPageComponent,
     HomeComponent,
-    NgTimelineComponent
+    NgTimelineComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,
