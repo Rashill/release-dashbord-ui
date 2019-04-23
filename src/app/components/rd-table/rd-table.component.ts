@@ -61,6 +61,7 @@ export class RDTableComponent implements OnInit {
   selectedRecords = new Set();
   operation = 'none';
   httpClient: HttpClient;
+  //pre_process = [];
 
   public configuration: Config;
   public dataHTTPService: DataHTTPService;
@@ -103,6 +104,9 @@ export class RDTableComponent implements OnInit {
       if (field['visible'] != false) {
         this.schema.push(field);
       }
+      /*if (field['pr_process'] != false) {
+        this.pre_process.push(field);
+      }*/
     }
     //extending ngx-easy-table configurations from the user 
     let configKeys = Object.keys(this.configuration);
@@ -218,10 +222,6 @@ export class RDTableComponent implements OnInit {
       } catch (error1) {
 
       }
-      /*  error = this.validate(attr, row[attr.key]);
-        if(error){
-          return;
-        }*/
     });
 
     //perfrome operation
@@ -237,15 +237,6 @@ export class RDTableComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-
-  validate(attr, value) {
-    alert(value.length);
-    if (attr.required && (value == undefined || value.length == 0)) {
-      document.getElementById(attr.key + '_error').innerHTML = attr.title + ' is required';
-      return true;
-    }
-    return false;
-  }
 
   /**
    * Create function
@@ -265,6 +256,7 @@ export class RDTableComponent implements OnInit {
       .subscribe(
         res => {
           this.configuration.isLoading = false;
+          row[this.opt_obj['pKey']] = res[this.opt_obj['pKey']];
           this.data.push(
             row,
           );
@@ -365,8 +357,19 @@ export class RDTableComponent implements OnInit {
         this.configuration.isLoading = false;
         console.error('ERROR: ', error.message);
       });
-
   }
+
+
+
+
+  /*
+  pre_processData(data){
+    for (let field of this.pre_process) {
+      data.forEach(record => {
+        this.pre_process[]
+      });
+    }
+  }*/
 
   /**
    * To do: not implemented
