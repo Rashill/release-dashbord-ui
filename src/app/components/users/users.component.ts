@@ -7,16 +7,34 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UsersComponent implements OnInit {
 
-    // pass options to rd-table component
-    options = {
-      name: 'user', pKey: 'id', apiURL: '/api/v1', type: 'crud', csv: true
-    };
-  
-    fields = [
-      { key: 'name', title: 'User name'},
-      { key: 'role', title: 'Role', options: ['SuperAdmin', 'AgencyAdmin', 'OfficeManager']}
-    ];
-  
+  // pass options to rd-table component
+  options = {
+    name: 'user', pKey: '_id', apiURL: '/api/v1', update: true, csv: true
+  };
+
+  fields = [
+    {
+      key: 'authId', title: 'authId', description: 'Mongo object ID',
+      visible: false, update: false, create: false, required: true
+    },
+    {
+      key: '_id', title: '_id', description: '_id',
+      visible: false, update: false, create: false
+    },
+    {
+      key: 'jiraAccountId', title: 'jiraAccountId', description: 'User name as in JIRA',
+      visible: true, update: false, create: false, required: true
+    },
+    {
+      key: 'role', title: 'Role', options: ['SuperAdmin', 'User'],
+      visible: true, update: true, create: false, required: true
+    },
+    {
+      key: 'timestamps', title: 'Timestamp',
+      visible: true, update: false, create: false
+    }
+  ];
+
   constructor() { }
 
   ngOnInit() {

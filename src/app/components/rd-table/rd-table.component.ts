@@ -9,7 +9,7 @@
  *  <app-details [options]="options" [fields]="fields" [data]="data" [config]="config"></app-details>
  * 
  * Possible data options:
- * - name: data name (required)
+ * - name: data name (as it appears in the api URL e.g. /api/v1/<anme>/)(required)
  * - pKey: name of primary key attribute (required)
  * - apiUR: e.g. get/post/put/delete http://example/ component will inject opt.name and opt.pKey
  *        e.g. http://example/dataName/1
@@ -29,15 +29,16 @@ import { Config, API, APIDefinition } from 'ngx-easy-table';
 import { ConfigService, Schema, DataHTTPService } from './config.service';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { InputControlService } from './input-control.service';
 
 @Component({
   selector: 'app-rd-table',
   templateUrl: './rd-table.component.html',
   styleUrls: ['./rd-table.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers: [ConfigService, DataHTTPService],
+  providers: [ConfigService, DataHTTPService, InputControlService],
 })
 export class RDTableComponent implements OnInit {
 
@@ -64,10 +65,14 @@ export class RDTableComponent implements OnInit {
   public configuration: Config;
   public dataHTTPService: DataHTTPService;
 
-  constructor(private modalService: NgbModal, httpClient: HttpClient) {
+  form: FormGroup;
+  private ics: InputControlService;
+
+  constructor(private modalService: NgbModal, httpClient: HttpClient, ics: InputControlService) {
     this.configuration = ConfigService.config;
     this.dataHTTPService = new DataHTTPService(httpClient);
     this.httpClient = httpClient;
+    this.ics = ics;
   }
 
   ngOnInit(): void {
@@ -116,6 +121,7 @@ export class RDTableComponent implements OnInit {
    * @param operation identifies the operation type (Create/Update/Delete)
    */
   openModal(content, operation) {
+    // setup form content
     content.saveLabel = 'Save';
     content.closeLabel = 'Cancel';
     content.operation = operation;
@@ -135,7 +141,21 @@ export class RDTableComponent implements OnInit {
       });
     }
 
+    //setup vaidation
+    if(operation == 'Create' || operation == 'Update'){
+      this.form = this.ics.createFormGroup(content.record, this.schema);
+    }else{
+      this.form = new FormGroup({});
+    }
+    //setup/open content
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', centered: true });
+  }
+
+
+  isValid(key) { return this.form.controls[key].valid; }
+  getValidationMsg(key) {
+    let errors = this.form.controls[key].errors;
+    return this.ics.getMessageFromError(errors);
   }
 
   /**
@@ -217,6 +237,7 @@ export class RDTableComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
+
   validate(attr, value) {
     alert(value.length);
     if (attr.required && (value == undefined || value.length == 0)) {
@@ -231,17 +252,27 @@ export class RDTableComponent implements OnInit {
    * @param row new row to be created
    */
   createRow(row) {
-    this.data.push(
-      row,
-    );
-    this.data = [...this.data];
-
     //perform server side post creation
+    let url = '';
     if (this.opt_obj.createURL != undefined) {
-      this.httpClient.post(`${this.opt_obj.createURL}`, row);
+      url = `${this.opt_obj.createURL}`;
     } else if (this.opt_obj.apiURL != undefined) {
-      this.httpClient.post(`${this.opt_obj.apiURL}/create/`, row);
+      url = `${this.opt_obj.apiURL}/${this.opt_obj.name}/`;
     }
+
+    this.configuration.isLoading = true;
+    this.httpClient.post(url, row, { headers: this.getAuthorizationHeaders() })
+      .subscribe(
+        res => {
+          this.configuration.isLoading = false;
+          this.data.push(
+            row,
+          );
+          this.data = [...this.data];
+        }, err => {
+          this.configuration.isLoading = false;
+          this.reportError(err)
+        });
   }
 
   /**
@@ -250,20 +281,31 @@ export class RDTableComponent implements OnInit {
    * @param row edited row data
    */
   updateRow(rowIndex, row) {
-    this.data = [...this.data.map((obj, index) => {
-      if (index === rowIndex) {
-        return Object.assign({}, obj, row);
-      }
-      return obj;
-    })];
-    this.selectedRecords.delete(rowIndex);
-
     //perform server side put updating
+    let url = '';
     if (this.opt_obj.updateURL != undefined) {
-      this.httpClient.put(`${this.opt_obj.updateURL}`, row);
+      url = `${this.opt_obj.updateURL}`;
     } else if (this.opt_obj.apiURL != undefined) {
-      this.httpClient.put(`${this.opt_obj.apiURL}/update/${this.data[rowIndex][this.opt_obj.pKey]}`, row);
+      url = `${this.opt_obj.apiURL}/${this.opt_obj.name}/${this.data[rowIndex][this.opt_obj.pKey]}`;
     }
+
+    this.httpClient.put(url, row, { headers: this.getAuthorizationHeaders() })
+      .subscribe(
+        res => {
+          this.configuration.isLoading = false;
+          this.data = [...this.data.map((obj, index) => {
+            if (index === rowIndex) {
+              return Object.assign({}, obj, row);
+            }
+            return obj;
+          })];
+          this.selectedRecords.delete(rowIndex);
+
+        }, err => {
+          this.configuration.isLoading = false;
+          this.reportError(err)
+        });
+
   }
 
   /**
@@ -273,22 +315,34 @@ export class RDTableComponent implements OnInit {
   deleteRow(rowIndecies: number[]) {
     //sort descending to presist the indecies
     rowIndecies.sort(function (a, b) { return b - a });
-    for (let rowIndex of rowIndecies) {
-      if (rowIndex != -1) {
-        this.data.splice(rowIndex, 1);
-        this.data = [...this.data];
-      }
-      this.selectedRecords.delete(rowIndex);
-    }
-
     //perform server side put updating
     for (let rowIndex of rowIndecies) {
+      let url = '';
+
       if (this.opt_obj.deleteURL != undefined) {
-        this.httpClient.put(`${this.opt_obj.deleteURL}`, rowIndecies);
+        url = `${this.opt_obj.deleteURL}`;
       } else if (this.opt_obj.apiURL != undefined) {
-        this.httpClient.delete(`${this.opt_obj.apiURL}/delete/${this.data[rowIndex][this.opt_obj.pKey]}`);
+        url = `${this.opt_obj.apiURL}/${this.opt_obj.name}/${this.data[rowIndex][this.opt_obj.pKey]}`;
       }
-    }
+
+      this.configuration.isLoading = false;
+      const params = new HttpParams().set(this.opt_obj.pKey, this.data[rowIndex][this.opt_obj.pKey]);
+      this.httpClient.delete(url, { params: params, headers: this.getAuthorizationHeaders() })
+        .subscribe(
+          res => {
+            this.configuration.isLoading = false;
+            if (rowIndex != -1) {
+              this.data.splice(rowIndex, 1);
+              this.data = [...this.data];
+            }
+            this.selectedRecords.delete(rowIndex);
+
+          }, err => {
+            this.configuration.isLoading = false;
+            this.reportError(err)
+          });
+
+    }//end of for loop
   }
 
   /**
@@ -302,11 +356,13 @@ export class RDTableComponent implements OnInit {
       url = `${this.opt_obj.apiURL}/${this.opt_obj.name}/`
     }
 
-    console.log(url);
-    this.dataHTTPService.getData(url)
+    this.configuration.isLoading = true;
+    this.dataHTTPService.getData(url, this.getAuthorizationHeaders())
       .subscribe((response: any[]) => {
+        this.configuration.isLoading = false;
         this.data = response;
       }, (error) => {
+        this.configuration.isLoading = false;
         console.error('ERROR: ', error.message);
       });
 
@@ -364,6 +420,22 @@ export class RDTableComponent implements OnInit {
       type: API.setTableClass,
       value: 'table table-bordered table-striped table-sm',
     });
+  }
+
+  getAuthorizationHeaders() {
+    const headers = new HttpHeaders();
+    headers.set("Authorization", 'Bearer UxWUG81YvkCWk6W56AfYKJQlp0gMQrSG')
+    headers.set('Content-Type', 'application/json');
+    return headers;
+  }
+
+  reportError(err) {
+    console.log(err.status); //401
+    console.log(err.error.error); //undefined
+    //setup/open content
+   /* alert['title']= err.status;
+    alert['message']= err.error.error;
+    this.modalService.open(alert, { ariaLabelledBy: 'modal-basic-title', centered: true });*/
   }
 
 }

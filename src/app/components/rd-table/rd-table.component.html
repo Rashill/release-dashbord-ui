@@ -26,7 +26,7 @@
   </div>
 </div>
 
-<!-- Modal-->
+<!-- Form Modal-->
   <ng-template #content let-modal>
       <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">{{content.title}}</h4>
@@ -36,30 +36,36 @@
       </div>
       <div class="modal-body">
         <!-- form area -->
-        <form *ngIf="content.operation === 'Create' || content.operation === 'Update'">
+        <form *ngIf="content.operation === 'Create' || content.operation === 'Update'"  [formGroup]="form">
           <div class="form-group" *ngFor="let attr of schema">
             <div *ngIf="(attr.create!=false && content.operation == 'Create') || (attr.update!=false && content.operation =='Update')">
               <label for="{{attr.key}}">{{attr.title}}</label>
               <div class="input-group">
                 <!-- drop down control-->
                 <select *ngIf="attr.options !== undefined" id="{{attr.key}}" name="{{attr.key}}" 
-                        class="form-control" [multiple]="attr.type==='multiple'">
+                        [multiple]="attr.type==='multiple'" [formControlName]="attr.key"
+                        [className]="!isValid(attr.key)?'form-control is-invalid':'form-control'">
                     <option *ngFor="let option of attr.options" value="{{option}}" 
                     [selected]="content.record[attr.key] === option">{{option}}</option>
                 </select>
                 <!-- checkbox control-->
                 <div *ngIf="attr.type === 'checkbox'" class="custom-control custom-checkbox px-gdn-checkbox-1">
-                    <input type="checkbox" [checked]="content.record[attr.key]" class="custom-control-input ml-3" 
-                        id="{{attr.key}}" name="{{attr.key}}" value="{{content.record[attr.key]}}"/>
+                    <input type="checkbox" [checked]="content.record[attr.key]" id="{{attr.key}}"
+                    name="{{attr.key}}" value="{{content.record[attr.key]}}" [formControlName]="attr.key"
+                    [className]="!isValid(attr.key)?'form-control is-invalid ml-3':'form-control ml-3'"/>
                     <label class="custom-control-label ml-3" for="{{attr.key}}"></label>
                 </div>
                 <!-- you can add more controls after this line and include the oposite conditon in the text contorl part -->
                 <!-- text control -->
                 <input *ngIf="attr.options === undefined && attr.type !== 'checkbox'"
-                      id="{{attr.key}}" name="{{attr.key}}" type="{{attr.type}}" class="form-control"
-                      placeholder="{{attr.description||attr.title}}" value="{{content.record[attr.key]}}"/>
+                      id="{{attr.key}}" name="{{attr.key}}" type="{{attr.type}}" [formControlName]="attr.key"
+                      placeholder="{{attr.description||attr.title}}" value="{{content.record[attr.key]}}"
+                      [className]="!isValid(attr.key)?'form-control is-invalid':'form-control'"/>
+                 <!-- validation feedback text -->     
+                <div class="form-text invalid-feedback"  *ngIf="!isValid(attr.key)">
+                  <small> {{getValidationMsg(attr.key)}} </small>
+                </div>
               </div>
-              <div id="{{attr.key}}_error"></div>
             </div>
           </div>
         </form>
@@ -73,10 +79,27 @@
       </div>
       <div class="modal-footer">
           <button type="button" class="btn btn-info" (click)="modal.close()">{{content.closeLabel}}</button>
-          <button type="button" class="btn btn-primary" (click)="save(content.operation, content.rowIndex)">{{content.saveLabel}}</button>
+          <button type="button" class="btn btn-primary" (click)="save(content.operation, content.rowIndex)"
+          [disabled]="!form.valid">{{content.saveLabel}}</button>
       </div>
     </ng-template>
-  <!-- end of Modal-->
+  <!-- end of Form Modal-->
 
+  <!-- Alert Modal
+  <ng-template #alert let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{alert.title}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{alert.message}}</p>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-info" (click)="modal.close()">{{content.closeLabel}}</button>
+      </div>
+</ng-template>
+  end of Alert Modal-->
 
   <!-- To do: inline edit/delete -->
