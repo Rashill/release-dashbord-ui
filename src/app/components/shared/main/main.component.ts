@@ -42,16 +42,16 @@ export class MainComponent implements OnInit {
       ]
     },
     {
-      title: 'Release Settings',
+      title: 'Release',
       iconClass: 'material-icons',
       iconCode: 'settings',
       children: [
         {
-          title: 'Checklist',
-          routerUrl: '/teams/typography'
+          title: 'Create Release',
+          routerUrl: '/release/create'
         }
       ]
-    }
+    },
   ];
 
   isSmallMenuMode = false;
