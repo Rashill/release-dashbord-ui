@@ -24,6 +24,8 @@ export class Schema implements Columns {
   orderBy?: string;
   type?: string;
   options?: any = [];
+  optionsURL?: string;
+  optionObj?: any = {};
   description?: string;
   required?: boolean;
   validator?: string;

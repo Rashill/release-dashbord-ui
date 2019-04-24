@@ -20,13 +20,13 @@
             [columns]="schema"
             (event)="triggerAChangeEvent($event)">
           </ngx-table>
-          <!-- End of table elements-->
+          <!-- End of table element -->
         </div>
       </div>
   </div>
 </div>
 
-<!-- Form Modal-->
+<!-- Form Modal for Create/Update/Delete -->
   <ng-template #content let-modal>
       <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">{{content.title}}</h4>
@@ -41,12 +41,21 @@
             <div *ngIf="(attr.create!=false && content.operation == 'Create') || (attr.update!=false && content.operation =='Update')">
               <label for="{{attr.key}}">{{attr.title}}</label>
               <div class="input-group">
-                <!-- drop down control-->
-                <select *ngIf="attr.options !== undefined" id="{{attr.key}}" name="{{attr.key}}" 
+                <!-- drop down control for option as array of obj [{value: '', label: ''}] -->
+                <select *ngIf="attr.options !== undefined && attr.optionObj !== undefined" id="{{attr.key}}" name="{{attr.key}}" 
                         [multiple]="attr.type==='multiple'" [formControlName]="attr.key"
                         [className]="!isValid(attr.key)?'form-control is-invalid':'form-control'">
-                    <option *ngFor="let option of attr.options" value="{{option}}" 
-                    [selected]="content.record[attr.key] === option">{{option}}</option>
+                        <option *ngFor="let option of attr.options" 
+                        [selected]="content.record[attr.key] === option.label"
+                        value="{{option.value}}"> {{option.label}} </option>
+                </select>
+                <!-- drop down control for option as array of str ['',''] -->
+                <select *ngIf="attr.options !== undefined && attr.optionObj === undefined" id="{{attr.key}}" name="{{attr.key}}" 
+                        [multiple]="attr.type==='multiple'" [formControlName]="attr.key"
+                        [className]="!isValid(attr.key)?'form-control is-invalid':'form-control'">
+                        <option *ngFor="let option of attr.options" 
+                        [selected]="content.record[attr.key] === option"
+                        value="{{option}}"> {{option}} </option>
                 </select>
                 <!-- checkbox control-->
                 <div *ngIf="attr.type === 'checkbox'" class="custom-control custom-checkbox px-gdn-checkbox-1">
@@ -73,7 +82,7 @@
         <form *ngIf="content.operation === 'Delete'">
           <h4>Are you sure to delete? (Total: {{content.records.length}})</h4>
           <ul *ngFor="let record of content.records">
-            <li>{{opt_obj.pKey}}: {{record[opt_obj.pKey]}}</li>
+            <li>{{opt_obj.pKey_label}}: {{record[opt_obj.pKey]}}</li>
           </ul>
         </form>
       </div>
@@ -85,21 +94,24 @@
     </ng-template>
   <!-- end of Form Modal-->
 
-  <!-- Alert Modal
-  <ng-template #alert let-modal>
+  <!-- Alert Modal -->
+  <ng-template #alertModal let-modal>
       <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">{{alert.title}}</h4>
+        <h4 class="modal-title" id="modal-basic-title">
+          <i _ngcontent-c18="" class="material-icons m-1 ng-star-inserted">report_problem</i>
+          {{alertContent.title}}
+        </h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <p>{{alert.message}}</p>
+        <p>{{alertContent.message}}</p>
       </div>
       <div class="modal-footer">
-          <button type="button" class="btn btn-info" (click)="modal.close()">{{content.closeLabel}}</button>
+          <button type="button" class="btn btn-info" (click)="modal.close()">Close</button>
       </div>
 </ng-template>
-  end of Alert Modal-->
+  <!-- end of Alert Modal-->
 
   <!-- To do: inline edit/delete -->

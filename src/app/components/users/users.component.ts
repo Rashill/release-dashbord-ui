@@ -22,7 +22,7 @@ export class UsersComponent implements OnInit {
       visible: false, update: false, create: false
     },
     {
-      key: 'jiraAccountId', title: 'jiraAccountId', description: 'User name as in JIRA',
+      key: 'jiraAccountId', title: 'JiraAccountId', description: 'User name as in JIRA',
       visible: true, update: false, create: false, required: true
     },
     {

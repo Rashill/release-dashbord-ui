@@ -23,7 +23,7 @@
  * - deleteURL: e.g. delete http://example/delete/  (default: undefined)
  */
 
-import { Component, OnInit, ViewChild, ViewEncapsulation, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, Input, TemplateRef, ContentChild } from '@angular/core';
 
 import { Config, API, APIDefinition } from 'ngx-easy-table';
 import { ConfigService, Schema, DataHTTPService } from './config.service';
@@ -32,6 +32,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { InputControlService } from './input-control.service';
+import { load } from '@angular/core/src/render3';
+import { promise } from 'protractor';
 
 @Component({
   selector: 'app-rd-table',
@@ -43,6 +45,8 @@ import { InputControlService } from './input-control.service';
 export class RDTableComponent implements OnInit {
 
   @ViewChild('table') table: APIDefinition
+  
+  @ViewChild('alertModal') alertModal: TemplateRef<any>;
 
   @Input() options = {};
   @Input() fields: [];
@@ -50,7 +54,7 @@ export class RDTableComponent implements OnInit {
   @Input() config = {};
 
   opt_obj = {
-    name: '', pKey: 'id', apiURL: undefined, type: 'simple', create: false, update: false, delete: false,
+    name: '', pKey: 'id', pKey_label: 'ID', apiURL: undefined, type: 'simple', create: false, update: false, delete: false,
     csv: false, pdf: false, bootstrap: true,
     loadURL: undefined, createURL: undefined, updateURL: undefined, deleteURL: undefined
   };
@@ -58,10 +62,10 @@ export class RDTableComponent implements OnInit {
   schema: Schema[] = [];
 
   message: string = '';
+  alertContent= {};
   selectedRecords = new Set();
   operation = 'none';
   httpClient: HttpClient;
-  //pre_process = [];
 
   public configuration: Config;
   public dataHTTPService: DataHTTPService;
@@ -145,10 +149,12 @@ export class RDTableComponent implements OnInit {
       });
     }
 
+    this.loadOptions();
+
     //setup vaidation
-    if(operation == 'Create' || operation == 'Update'){
+    if (operation == 'Create' || operation == 'Update') {
       this.form = this.ics.createFormGroup(content.record, this.schema);
-    }else{
+    } else {
       this.form = new FormGroup({});
     }
     //setup/open content
@@ -201,16 +207,23 @@ export class RDTableComponent implements OnInit {
         if (elem !== undefined) {
           let el: HTMLSelectElement = (<HTMLSelectElement>document.getElementById(attr.key));
           if (attr.options != undefined) {
-            if (attr.type == 'multiple') {
+            //if (attr.type == 'multiple') {
               let ops = el.selectedOptions;
               let values = [];
               for (let i = 0; i < ops.length; i++) {
-                values.push(ops[i].value);
+                let val = '';
+                if(ops[i].value.split(":").length >1){
+                 val = (ops[i].value.split(":")[1]).trim().replace('\'','').replace('\'','');
+                }else{
+                  val = ops[i].value;
+                }
+                values.push(val);
               }
               row[attr.key] = values.join(',');
-            } else {
-              row[attr.key] = el.options[el.selectedIndex].value;
-            }
+           // } else {
+             // row[attr.key] = (el.selectedOptions.item(0).value.split(":")[1]).trim().replace('\'','').replace('\'','');
+            //}
+            
           } else if (attr.type == 'checkbox') {
             let el: HTMLInputElement = (<HTMLInputElement>document.getElementById(attr.key));
             row[attr.key] = el.checked;
@@ -304,37 +317,54 @@ export class RDTableComponent implements OnInit {
    * Delete method
    * @param rowIndecies row indecies to be removed
    */
-  deleteRow(rowIndecies: number[]) {
+  async deleteRow(rowIndecies: number[]) {
     //sort descending to presist the indecies
     rowIndecies.sort(function (a, b) { return b - a });
     //perform server side put updating
+    this.configuration.isLoading = true;
     for (let rowIndex of rowIndecies) {
       let url = '';
-
       if (this.opt_obj.deleteURL != undefined) {
         url = `${this.opt_obj.deleteURL}`;
       } else if (this.opt_obj.apiURL != undefined) {
         url = `${this.opt_obj.apiURL}/${this.opt_obj.name}/${this.data[rowIndex][this.opt_obj.pKey]}`;
       }
 
-      this.configuration.isLoading = false;
+      setTimeout( () => { this.performDeleteion(url, rowIndex); }, 500 );
+    }//end of for loop
+    this.resetSelectAllCheckbox(false);
+    this.configuration.isLoading = false;
+  }
+
+  /**
+   * Communicate to the server to perfome the deletion
+   * @param url for api deletion endpoint
+   * @param rowIndex row index of single record
+   */
+  performDeleteion(url, rowIndex) {
+    try {
       const params = new HttpParams().set(this.opt_obj.pKey, this.data[rowIndex][this.opt_obj.pKey]);
       this.httpClient.delete(url, { params: params, headers: this.getAuthorizationHeaders() })
         .subscribe(
           res => {
-            this.configuration.isLoading = false;
-            if (rowIndex != -1) {
-              this.data.splice(rowIndex, 1);
-              this.data = [...this.data];
-            }
             this.selectedRecords.delete(rowIndex);
-
+            this.data.splice(rowIndex, 1);
+            this.data = [...this.data];
+            return true;
           }, err => {
-            this.configuration.isLoading = false;
             this.reportError(err)
+            return true;
           });
+    } catch (err) {
+    }
+    return false;
+  }
 
-    }//end of for loop
+  resetSelectAllCheckbox(isChecked){
+    let checkLabel = document.querySelector('.ngx-form-checkbox');
+    let children: HTMLCollection = checkLabel.children;
+    let el: HTMLInputElement = (<HTMLInputElement> children[0]);
+    el.checked = isChecked;
   }
 
   /**
@@ -359,17 +389,34 @@ export class RDTableComponent implements OnInit {
       });
   }
 
-
-
-
-  /*
-  pre_processData(data){
-    for (let field of this.pre_process) {
-      data.forEach(record => {
-        this.pre_process[]
-      });
+  /**
+   * Loads options  from the server
+   */
+  loadOptions() {
+    for (let field of this.schema) {
+      if (field['optionsURL'] != undefined && field['optionObj'] != undefined) {
+          let url = field['optionsURL'];
+          let fOp =field['optionObj'];
+          this.dataHTTPService.getData(url, this.getAuthorizationHeaders())
+            .subscribe((res: any[]) => {
+              let options = []
+              
+              res.forEach(op => {
+                options.push({
+                    value: op[fOp['value']],
+                    label: op[fOp['label']]
+                    })
+              });
+              field['options'] = options;
+            }, (error) => {
+              console.log(error);
+          });
+      }
     }
-  }*/
+
+  }
+
+
 
   /**
    * To do: not implemented
@@ -433,12 +480,12 @@ export class RDTableComponent implements OnInit {
   }
 
   reportError(err) {
-    console.log(err.status); //401
-    console.log(err.error.error); //undefined
-    //setup/open content
-   /* alert['title']= err.status;
-    alert['message']= err.error.error;
-    this.modalService.open(alert, { ariaLabelledBy: 'modal-basic-title', centered: true });*/
+    let apiFeedback = err.error.message;
+    // setup/open content
+    this.alertContent['title']= 'Error';
+    this.alertContent['message']= apiFeedback;
+    
+    this.modalService.open(this.alertModal, { windowClass: 'alert-modal', centered: true });
   }
 
 }

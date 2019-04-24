@@ -14,13 +14,15 @@ export class TeamComponent implements OnInit {
 
   // pass options to rd-table component
   options = {
-    name: 'team', pKey: '_id', apiURL: '/api/v1', type: 'crud', csv: true
+    name: 'team', pKey: '_id', pKey_label: 'ID', apiURL: '/api/v1', type: 'crud', csv: true
   };
 
   fields = [
     {
       key: 'jiraProjectId', title: 'jiraProjectId', description: 'Project Id as appears in JIRA',
-      visible: true, update: true, create: true, required: true
+      visible: true, update: true, create: true, required: true,
+      //this is for the data comming from optionsURL, also it is needed for option id and value
+      options: [], optionsURL: '/api/v1/project', optionObj: {value: 'id', label: 'name'}
     },
     {
       key: '_id', title: '_id', description: '_id',

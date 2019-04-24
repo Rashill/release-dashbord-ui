@@ -1,5 +1,6 @@
 $primary: #0be3df;
 $shadow: rgba(11,227,223,.1);
+$red: red;
 
 tbody tr:nth-of-type(odd){
     background-color: $shadow
@@ -17,3 +18,7 @@ tbody tr:nth-of-type(odd){
 .modal-open .modal{
     z-index: 2050;
 }
+
+.alert-modal .modal-title {
+    color: $red;
+  }

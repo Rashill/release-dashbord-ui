@@ -93,8 +93,8 @@ export class InputControlService {
   getMessageFromError(error){
     try{
       let validator = Object.keys(error)[0];
-      console.log(error);
-      return this.getMessage(validator) + (JSON.stringify(error[validator]) || "");
+      let details = JSON.stringify(error[validator]);
+      return this.getMessage(validator) + " " + (details != 'true' ? details : "");
     }catch(e){
       return 'Invalid input';
     }
