@@ -28,11 +28,11 @@ export class UsersComponent implements OnInit {
     {
       key: 'role', title: 'Role', options: ['SuperAdmin', 'User'],
       visible: true, update: true, create: false, required: true
-    }/*,
+    },
     {
-      key: 'avatarUrls', title: 'Avatar', cellTemplate: 'imageTpl',
+      key: 'avatarUrls', title: 'Avatar', cellTemplate: 'imageTpl:avatarUrls.16x16',
       visible: true, update: false, create: false,
-    }*/
+    }
   ];
 
   constructor() { }

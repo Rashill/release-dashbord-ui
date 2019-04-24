@@ -30,6 +30,7 @@ export class Schema implements Columns {
   required?: boolean;
   validator?: string;
   visible?: boolean= true;
+  collTemplateParms?: [];
 }
 
 

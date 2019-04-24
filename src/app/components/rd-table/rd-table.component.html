@@ -1,125 +1,124 @@
 {{message}}
-<div class="card" >
-    <div class="card-body" >
-      <!-- action bar -->
-      <div class="col-12">
-          <button *ngIf="opt_obj.create" (click)="openModal(content, 'Create')" id="add-row-button" class="btn  btn-primary px-4 mb-3 mr-1">Add</button>
-          <button *ngIf="opt_obj.update" (click)="openModal(content, 'Update')" [disabled]="selectedRecords.size != 1" id="add-row-button" class="btn btn-primary px-4 mb-3 mr-1">Edit</button>
-          <button *ngIf="opt_obj.delete" (click)="openModal(content, 'Delete')" id="add-row-button" [disabled]="selectedRecords.size == 0" class="btn btn-warning px-4 mb-3 mr-5">Delete</button>
-          <button *ngIf="opt_obj.csv" (click)="exportToCSV()" id="add-row-button" class="btn  btn-primary px-4 mb-3 mr-1">Export to CSV</button>
-          <button *ngIf="opt_obj.pdf" (click)="exportToPDF()" id="add-row-button" class="btn  btn-primary px-4 mb-3 mr-3">Export to PDF</button>
+<div class="card">
+  <div class="card-body">
+    <!-- action bar -->
+    <div class="col-12">
+      <button *ngIf="opt_obj.create" (click)="openModal(content, 'Create')" id="add-row-button"
+        class="btn  btn-primary px-4 mb-3 mr-1">Add</button>
+      <button *ngIf="opt_obj.update" (click)="openModal(content, 'Update')" [disabled]="selectedRecords.size != 1"
+        id="add-row-button" class="btn btn-primary px-4 mb-3 mr-1">Edit</button>
+      <button *ngIf="opt_obj.delete" (click)="openModal(content, 'Delete')" id="add-row-button"
+        [disabled]="selectedRecords.size == 0" class="btn btn-warning px-4 mb-3 mr-5">Delete</button>
+      <button *ngIf="opt_obj.csv" (click)="exportToCSV()" id="add-row-button"
+        class="btn  btn-primary px-4 mb-3 mr-1">Export to CSV</button>
+      <button *ngIf="opt_obj.pdf" (click)="exportToPDF()" id="add-row-button"
+        class="btn  btn-primary px-4 mb-3 mr-3">Export to PDF</button>
+    </div>
+    <!-- end of action bar -->
+    <div class="col-12">
+      <div class="">
+        <!-- Table element-->
+        <ngx-table #table [configuration]="configuration" [data]="data" [columns]="filteredSchema"
+          (event)="triggerAChangeEvent($event)">
+        </ngx-table>
+        <!-- End of table element -->
       </div>
-      <!-- end of action bar -->
-      <div class="col-12">
-        <div class="">
-          <!-- Table element-->
-          <ngx-table
-            #table
-            [configuration]="configuration"
-            [data]="data"
-            [columns]="schema"
-            (event)="triggerAChangeEvent($event)">
-          </ngx-table>
-          <!-- End of table element -->
-        </div>
-      </div>
+    </div>
   </div>
 </div>
 
 <!-- Form Modal for Create/Update/Delete -->
-  <ng-template #content let-modal>
-      <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">{{content.title}}</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- form area -->
-        <form *ngIf="content.operation === 'Create' || content.operation === 'Update'"  [formGroup]="form">
-          <div class="form-group" *ngFor="let attr of schema">
-            <div *ngIf="(attr.create!=false && content.operation == 'Create') || (attr.update!=false && content.operation =='Update')">
-              <label for="{{attr.key}}">{{attr.title}}</label>
-              <div class="input-group">
-                <!-- drop down control for option as array of obj [{value: '', label: ''}] -->
-                <select *ngIf="attr.options !== undefined && attr.optionObj !== undefined" id="{{attr.key}}" name="{{attr.key}}" 
-                        [multiple]="attr.type==='multiple'" [formControlName]="attr.key"
-                        [className]="!isValid(attr.key)?'form-control is-invalid':'form-control'">
-                        <option *ngFor="let option of attr.options" 
-                        [selected]="content.record[attr.key] === option.label"
-                        value="{{option.value}}"> {{option.label}} </option>
-                </select>
-                <!-- drop down control for option as array of str ['',''] -->
-                <select *ngIf="attr.options !== undefined && attr.optionObj === undefined" id="{{attr.key}}" name="{{attr.key}}" 
-                        [multiple]="attr.type==='multiple'" [formControlName]="attr.key"
-                        [className]="!isValid(attr.key)?'form-control is-invalid':'form-control'">
-                        <option *ngFor="let option of attr.options" 
-                        [selected]="content.record[attr.key] === option"
-                        value="{{option}}"> {{option}} </option>
-                </select>
-                <!-- checkbox control-->
-                <div *ngIf="attr.type === 'checkbox'" class="custom-control custom-checkbox px-gdn-checkbox-1">
-                    <input type="checkbox" [checked]="content.record[attr.key]" id="{{attr.key}}"
-                    name="{{attr.key}}" value="{{content.record[attr.key]}}" [formControlName]="attr.key"
-                    [className]="!isValid(attr.key)?'form-control is-invalid ml-3':'form-control ml-3'"/>
-                    <label class="custom-control-label ml-3" for="{{attr.key}}"></label>
-                </div>
-                <!-- you can add more controls after this line and include the oposite conditon in the text contorl part -->
-                <!-- text control -->
-                <input *ngIf="attr.options === undefined && attr.type !== 'checkbox'"
-                      id="{{attr.key}}" name="{{attr.key}}" type="{{attr.type}}" [formControlName]="attr.key"
-                      placeholder="{{attr.description||attr.title}}" value="{{content.record[attr.key]}}"
-                      [className]="!isValid(attr.key)?'form-control is-invalid':'form-control'"/>
-                 <!-- validation feedback text -->     
-                <div class="form-text invalid-feedback"  *ngIf="!isValid(attr.key)">
-                  <small> {{getValidationMsg(attr.key)}} </small>
-                </div>
-              </div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{content.title}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!-- form area -->
+    <form *ngIf="content.operation === 'Create' || content.operation === 'Update'" [formGroup]="form">
+      <div class="form-group" *ngFor="let attr of schema">
+        <div
+          *ngIf="(attr.create!=false && content.operation == 'Create') || (attr.update!=false && content.operation =='Update')">
+          <label for="{{attr.key}}">{{attr.title}}</label>
+          <div class="input-group">
+            <!-- drop down control for option as array of obj [{value: '', label: ''}] -->
+            <select *ngIf="attr.options !== undefined && attr.optionObj !== undefined" id="{{attr.key}}"
+              name="{{attr.key}}" [multiple]="attr.type==='multiple'" [formControlName]="attr.key"
+              [className]="!isValid(attr.key)?'form-control is-invalid':'form-control'">
+              <option *ngFor="let option of attr.options" [selected]="content.record[attr.key] === option.label"
+                value="{{option.value}}"> {{option.label}} </option>
+            </select>
+            <!-- drop down control for option as array of str ['',''] -->
+            <select *ngIf="attr.options !== undefined && attr.optionObj === undefined" id="{{attr.key}}"
+              name="{{attr.key}}" [multiple]="attr.type==='multiple'" [formControlName]="attr.key"
+              [className]="!isValid(attr.key)?'form-control is-invalid':'form-control'">
+              <option *ngFor="let option of attr.options" [selected]="content.record[attr.key] === option"
+                value="{{option}}"> {{option}} </option>
+            </select>
+            <!-- checkbox control-->
+            <div *ngIf="attr.type === 'checkbox'" class="custom-control custom-checkbox px-gdn-checkbox-1">
+              <input type="checkbox" [checked]="content.record[attr.key]" id="{{attr.key}}" name="{{attr.key}}"
+                value="{{content.record[attr.key]}}" [formControlName]="attr.key"
+                [className]="!isValid(attr.key)?'form-control is-invalid ml-3':'form-control ml-3'" />
+              <label class="custom-control-label ml-3" for="{{attr.key}}"></label>
+            </div>
+            <!-- you can add more controls after this line and include the oposite conditon in the text contorl part -->
+            <!-- text control -->
+            <input *ngIf="attr.options === undefined && attr.type !== 'checkbox'" id="{{attr.key}}" name="{{attr.key}}"
+              type="{{attr.type}}" [formControlName]="attr.key" placeholder="{{attr.description||attr.title}}"
+              value="{{content.record[attr.key]}}"
+              [className]="!isValid(attr.key)?'form-control is-invalid':'form-control'" />
+            <!-- validation feedback text -->
+            <div class="form-text invalid-feedback" *ngIf="!isValid(attr.key)">
+              <small> {{getValidationMsg(attr.key)}} </small>
             </div>
           </div>
-        </form>
-        <!-- end form area -->
-        <form *ngIf="content.operation === 'Delete'">
-          <h4>Are you sure to delete? (Total: {{content.records.length}})</h4>
-          <ul *ngFor="let record of content.records">
-            <li>{{opt_obj.pKey_label}}: {{record[opt_obj.pKey]}}</li>
-          </ul>
-        </form>
-      
+        </div>
       </div>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-info" (click)="modal.close()">{{content.closeLabel}}</button>
-          <button type="button" class="btn btn-primary" (click)="save(content.operation, content.rowIndex)"
-          [disabled]="!form.valid">{{content.saveLabel}}</button>
-      </div>
-    </ng-template>
-  <!-- end of Form Modal-->
+    </form>
+    <!-- end form area -->
+    <form *ngIf="content.operation === 'Delete'">
+      <h4>Are you sure to delete? (Total: {{content.records.length}})</h4>
+      <ul *ngFor="let record of content.records">
+        <li>{{opt_obj.pKey_label}}: {{record[opt_obj.pKey]}}</li>
+      </ul>
+    </form>
 
-  <ng-template #imageTpl let-row>
-      <div>
-        <img [src]="row.avatarURLs['16x16']" alt="">
-      </div>
-      <span>{{row}}</span>
-  </ng-template>
-    
-  <!-- Alert Modal -->
-  <ng-template #alertModal let-modal>
-      <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">
-          <i _ngcontent-c18="" class="material-icons m-1 ng-star-inserted">report_problem</i>
-          {{alertContent.title}}
-        </h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>{{alertContent.message}}</p>
-      </div>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-info" (click)="modal.close()">Close</button>
-      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-info" (click)="modal.close()">{{content.closeLabel}}</button>
+    <button type="button" class="btn btn-primary" (click)="save(content.operation, content.rowIndex)"
+      [disabled]="!form.valid">{{content.saveLabel}}</button>
+  </div>
 </ng-template>
-  <!-- end of Alert Modal-->
+<!-- end of Form Modal-->
 
-  <!-- To do: inline edit/delete -->
+<ng-template #imageTpl let-row let-rowIndex="rowIndex">
+  <div>
+    <img [src]="row['avatarUrls']['16x16']" [alt]="row[opt_obj['pKey']]">
+  </div>
+</ng-template>
+
+<!-- Alert Modal -->
+<ng-template #alertModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      <i _ngcontent-c18="" class="material-icons m-1 ng-star-inserted">report_problem</i>
+      {{alertContent.title}}
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{alertContent.message}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-info" (click)="modal.close()">Close</button>
+  </div>
+</ng-template>
+<!-- end of Alert Modal-->
+
+<!-- To do: inline edit/delete -->

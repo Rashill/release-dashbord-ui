@@ -21,6 +21,7 @@
  * - createURL: e.g. post http://example/create/   (default: undefined)
  * - updateURL: e.g. put http://example/update/  (default: undefined)
  * - deleteURL: e.g. delete http://example/delete/  (default: undefined)
+ * - forceServerUpdate: call load data after operation (create/update/delete) done successfully
  */
 
 import { Component, OnInit, ViewChild, ViewEncapsulation, Input, TemplateRef, ContentChild } from '@angular/core';
@@ -55,11 +56,12 @@ export class RDTableComponent implements OnInit {
 
   opt_obj = {
     name: '', pKey: 'id', pKey_label: 'ID', apiURL: undefined, type: 'simple', create: false, update: false, delete: false,
-    csv: false, pdf: false, bootstrap: true,
+    csv: false, pdf: false, bootstrap: true, forceServerUpdate: false,
     loadURL: undefined, createURL: undefined, updateURL: undefined, deleteURL: undefined
   };
 
   schema: Schema[] = [];
+  filteredSchema: Schema[] = [];
 
   message: string = '';
   alertContent= {};
@@ -105,14 +107,20 @@ export class RDTableComponent implements OnInit {
     }
     //init the schema from fields
     for (let field of this.fields) {
-      if (field['visible'] != false) {
-        this.schema.push(field);
+      let f = new Schema();
+      f = field;
+      //this is for image display or custmized cells
+      if (field['cellTemplate'] != undefined) {
+        let elem = this.processTemplate(field['cellTemplate'])
+        f.cellTemplate = elem.tplRef;
+        f.collTemplateParms = elem.parms
       }
-    /*  if (field['cellTemplate'] != undefined) {
-        let f = new Schema(); f = field;
-        f.cellTemplate = this.imageTpl;
-        this.schema.push(f);
-      }*/
+      //should be visible in the table
+      if (field['visible'] != false) {
+        this.filteredSchema.push(f);
+      }
+      //should not be visible in the table, but in the form might be
+      this.schema.push(f);
     }
     //extending ngx-easy-table configurations from the user 
     let configKeys = Object.keys(this.configuration);
@@ -121,6 +129,21 @@ export class RDTableComponent implements OnInit {
         this.configuration[configKey] = this.config[configKey];
       }
     }
+  }
+
+  /**
+   * 
+   * @param input passed with collTemplate: e.g. (imageTpl:avatarUrls.16x16)
+   */
+  processTemplate(input){
+    let el = input.split(":");
+    let tplRef: TemplateRef<any>;
+    if(el[0]=='imageTpl'){
+      tplRef = this.imageTpl;
+    }
+
+    let parms = el[1].split('.');
+    return {tplRef, parms};
   }
 
   /**
@@ -247,7 +270,6 @@ export class RDTableComponent implements OnInit {
     } else if (operation == 'Delete') {
       this.deleteRow(rowIndex);
     }
-
     //destory the modal
     this.modalService.dismissAll();
   }
@@ -271,10 +293,15 @@ export class RDTableComponent implements OnInit {
       .subscribe(
         res => {
           this.configuration.isLoading = false;
-          row[this.opt_obj['pKey']] = res[this.opt_obj['pKey']];
-          this.data.push(
-            row,
-          );
+          //row[this.opt_obj['pKey']] = res[this.opt_obj['pKey']];
+          if(this.opt_obj.forceServerUpdate){
+            this.load();
+          }else{
+            this.data.push(
+              res,
+            );
+          }
+
           this.data = [...this.data];
         }, err => {
           this.configuration.isLoading = false;
@@ -300,12 +327,16 @@ export class RDTableComponent implements OnInit {
       .subscribe(
         res => {
           this.configuration.isLoading = false;
-          this.data = [...this.data.map((obj, index) => {
-            if (index === rowIndex) {
-              return Object.assign({}, obj, row);
-            }
-            return obj;
-          })];
+          if(this.opt_obj.forceServerUpdate){
+            this.load();
+          }else{
+            this.data = [...this.data.map((obj, index) => {
+              if (index === rowIndex) {
+                return Object.assign({}, {}, res);
+              }
+              return obj;
+            })];
+          }
           this.selectedRecords.delete(rowIndex);
 
         }, err => {
@@ -335,6 +366,11 @@ export class RDTableComponent implements OnInit {
       setTimeout( () => { this.performDeleteion(url, rowIndex); }, 500 );
     }//end of for loop
     this.resetSelectAllCheckbox(false);
+
+    if(this.opt_obj.forceServerUpdate){
+      this.load();
+    }
+
     this.configuration.isLoading = false;
   }
 
