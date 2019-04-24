@@ -19,11 +19,15 @@ export class TeamComponent implements OnInit {
 
   fields = [
     {
-      key: 'jiraProjectId', title: 'jiraProjectId', description: 'Project Id as appears in JIRA',
+      key: 'jiraProjectId', title: 'JIRA Porject ID', description: 'Project Id as appears in JIRA',
       visible: true, update: true, create: true, required: true,
       //this is for the data comming from optionsURL, also it is needed for option id and value
       options: [], optionsURL: '/api/v1/project', optionObj: {value: 'id', label: 'name'}
     },
+  /*  {
+      key: 'name', title: 'Name', description: 'Project name as appears in JIRA',
+      visible: true, update: false, create: false
+    },*/
     {
       key: '_id', title: '_id', description: '_id',
       visible: false, update: false, create: false

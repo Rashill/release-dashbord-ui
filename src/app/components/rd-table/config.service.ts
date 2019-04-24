@@ -29,6 +29,7 @@ export class Schema implements Columns {
   description?: string;
   required?: boolean;
   validator?: string;
+  visible?: boolean= true;
 }
 
 

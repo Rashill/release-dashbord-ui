@@ -14,25 +14,25 @@ export class UsersComponent implements OnInit {
 
   fields = [
     {
-      key: 'authId', title: 'authId', description: 'Mongo object ID',
-      visible: false, update: false, create: false, required: true
-    },
-    {
-      key: '_id', title: '_id', description: '_id',
+      key: '_id', title: '_id',
       visible: false, update: false, create: false
     },
     {
-      key: 'jiraAccountId', title: 'JiraAccountId', description: 'User name as in JIRA',
-      visible: true, update: false, create: false, required: true
+      key: 'displayName', title: 'Display Name',
+      visible: true, update: false, create: false
+    },
+    {
+      key: 'emailAddress', title: 'Email',
+      visible: true, update: false, create: false
     },
     {
       key: 'role', title: 'Role', options: ['SuperAdmin', 'User'],
       visible: true, update: true, create: false, required: true
-    },
+    }/*,
     {
-      key: 'timestamps', title: 'Timestamp',
-      visible: true, update: false, create: false
-    }
+      key: 'avatarUrls', title: 'Avatar', cellTemplate: 'imageTpl',
+      visible: true, update: false, create: false,
+    }*/
   ];
 
   constructor() { }

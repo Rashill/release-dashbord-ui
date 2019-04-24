@@ -45,7 +45,7 @@ import { promise } from 'protractor';
 export class RDTableComponent implements OnInit {
 
   @ViewChild('table') table: APIDefinition
-  
+  @ViewChild('imageTpl') imageTpl: TemplateRef<any>;
   @ViewChild('alertModal') alertModal: TemplateRef<any>;
 
   @Input() options = {};
@@ -108,8 +108,10 @@ export class RDTableComponent implements OnInit {
       if (field['visible'] != false) {
         this.schema.push(field);
       }
-      /*if (field['pr_process'] != false) {
-        this.pre_process.push(field);
+    /*  if (field['cellTemplate'] != undefined) {
+        let f = new Schema(); f = field;
+        f.cellTemplate = this.imageTpl;
+        this.schema.push(f);
       }*/
     }
     //extending ngx-easy-table configurations from the user 
@@ -383,6 +385,7 @@ export class RDTableComponent implements OnInit {
       .subscribe((response: any[]) => {
         this.configuration.isLoading = false;
         this.data = response;
+        console.log(response);
       }, (error) => {
         this.configuration.isLoading = false;
         console.error('ERROR: ', error.message);
@@ -473,9 +476,9 @@ export class RDTableComponent implements OnInit {
   }
 
   getAuthorizationHeaders() {
-    const headers = new HttpHeaders();
-    headers.set("Authorization", 'Bearer UxWUG81YvkCWk6W56AfYKJQlp0gMQrSG')
-    headers.set('Content-Type', 'application/json');
+    let headers = new HttpHeaders().
+    set("Authorization", 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiI1Y2JmZTE3OTdkZDZmYTVkNTRlYmI1ODIiLCJhY2Nlc3NfdG9rZW4iOiJMWlMxZ1BzZGUyRllxbjI4OEFFVTNFektJbVNQNk5SbiIsImlhdCI6MTU1NjA3OTAwN30.bjWAVC6Pmk9GG9SCjDbGiv7jYgzN1XpOjjYZN_n5HxI').
+    set('Content-Type', 'application/json');
     return headers;
   }
 

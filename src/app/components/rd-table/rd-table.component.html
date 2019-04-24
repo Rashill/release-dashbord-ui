@@ -85,6 +85,7 @@
             <li>{{opt_obj.pKey_label}}: {{record[opt_obj.pKey]}}</li>
           </ul>
         </form>
+      
       </div>
       <div class="modal-footer">
           <button type="button" class="btn btn-info" (click)="modal.close()">{{content.closeLabel}}</button>
@@ -94,6 +95,13 @@
     </ng-template>
   <!-- end of Form Modal-->
 
+  <ng-template #imageTpl let-row>
+      <div>
+        <img [src]="row.avatarURLs['16x16']" alt="">
+      </div>
+      <span>{{row}}</span>
+  </ng-template>
+    
   <!-- Alert Modal -->
   <ng-template #alertModal let-modal>
       <div class="modal-header">
