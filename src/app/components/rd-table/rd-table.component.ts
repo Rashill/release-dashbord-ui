@@ -36,7 +36,6 @@ import { InputControlService } from './input-control.service';
 import { load } from '@angular/core/src/render3';
 import { promise } from 'protractor';
 
-
 @Component({
   selector: 'app-rd-table',
   templateUrl: './rd-table.component.html',
@@ -370,6 +369,7 @@ export class RDTableComponent implements OnInit {
 
     if(this.opt_obj.forceServerUpdate){
       this.load();
+      this.selectedRecords = new Set();
     }
 
     this.configuration.isLoading = false;
@@ -512,9 +512,10 @@ export class RDTableComponent implements OnInit {
     });
   }
 
-
   getAuthorizationHeaders() {
-    let headers = new HttpHeaders({ 'Content-Type': 'application/json',"Authorization":localStorage.getItem('token') });
+    let headers = new HttpHeaders().
+    set("Authorization", 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiI1Y2JmZTE3OTdkZDZmYTVkNTRlYmI1ODIiLCJhY2Nlc3NfdG9rZW4iOiJMWlMxZ1BzZGUyRllxbjI4OEFFVTNFektJbVNQNk5SbiIsImlhdCI6MTU1NjA3OTAwN30.bjWAVC6Pmk9GG9SCjDbGiv7jYgzN1XpOjjYZN_n5HxI').
+    set('Content-Type', 'application/json');
     return headers;
   }
 

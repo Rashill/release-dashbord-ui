@@ -8,7 +8,8 @@
       <button *ngIf="opt_obj.update" (click)="openModal(content, 'Update')" [disabled]="selectedRecords.size != 1"
         id="add-row-button" class="btn btn-primary px-4 mb-3 mr-1">Edit</button>
       <button *ngIf="opt_obj.delete" (click)="openModal(content, 'Delete')" id="add-row-button"
-        [disabled]="selectedRecords.size == 0" class="btn btn-warning px-4 mb-3 mr-5">Delete</button>
+      [disabled]="selectedRecords.size != 1" class="btn btn-warning px-4 mb-3 mr-5">Delete</button>
+      <!--[disabled]="selectedRecords.size == 0" class="btn btn-warning px-4 mb-3 mr-5">Delete</button>-->
       <button *ngIf="opt_obj.csv" (click)="exportToCSV()" id="add-row-button"
         class="btn  btn-primary px-4 mb-3 mr-1">Export to CSV</button>
       <button *ngIf="opt_obj.pdf" (click)="exportToPDF()" id="add-row-button"
