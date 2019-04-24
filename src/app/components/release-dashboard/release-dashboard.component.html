@@ -1,3 +1,27 @@
-<p>
-  release-dashboard works!
-</p>
+<div class="container">
+  <h1> Release Dashboard</h1>
+    <div class="row" style="border:0.5px solid black" >
+        <div class="chart_container" >
+            <h3>Issue Status</h3>
+            <canvas id="canvas1">{{ chart1 }}</canvas>
+        </div>
+        <div class="chart_container" >
+          <h3>Issue Status</h3>
+            <canvas id="canvas">{{ chart }}</canvas>
+        </div>
+    </div>
+</div>
+<br>
+<div class="container" >
+    <h2>Timeline</h2>
+    <div  id="timeline" #visTimeline></div>
+  </div>
+  
+<!-- <div>
+    <table style="float: left">
+      <tr>
+        <td>..</td>
+      </tr>
+    </table>
+   
+  </div> -->

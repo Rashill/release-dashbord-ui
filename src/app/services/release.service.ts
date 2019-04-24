@@ -20,4 +20,8 @@ export class ReleaseService {
     console.log(release)
     return forkJoin(this.http.post<any>('/api/v1/release',release,httpOptions));
   }
+
+  getRelease() {
+    return forkJoin(this.http.get<any>('/api/v1/release',httpOptions));
+  }
 }

@@ -1,0 +1,49 @@
+#canvas, #canvas1 {
+    width: 550px;
+    height: 350px;
+}
+.label {
+    text-align: center;
+    width: 600px;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px;
+}
+.chart_container {
+    float: left;
+    
+}
+
+.container-1{
+    padding-top: 2%;
+    padding-bottom: 2%
+}
+.vis-item.red {
+    color: white;
+    background-color: red;
+    border-color: darkred;
+  }
+
+.red {
+color: white;
+background-color: red;
+border-color: darkred;
+}
+
+.vis-item.yellow {
+    color: white;
+    background-color: yellow;
+    border-color: orange;
+  }
+
+.vis-item.bllue {
+    color: white;
+    background-color: blue;
+    border-color: darkblue;
+  }
+
+.vis-item.green {
+color: white;
+background-color: green;
+border-color: darkgreen;
+}
