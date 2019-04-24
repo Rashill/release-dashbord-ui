@@ -22,6 +22,6 @@ export class ReleaseService {
   }
 
   getRelease() {
-    return forkJoin(this.http.get<any>('/api/v1/release',httpOptions));
+    return forkJoin(this.http.get<any>('/api/v1/release?TestOOC',httpOptions));
   }
 }

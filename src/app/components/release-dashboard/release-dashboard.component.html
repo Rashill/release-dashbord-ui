@@ -1,27 +1,114 @@
-<div class="container">
+<div class="container-4">
   <h1> Release Dashboard</h1>
-    <div class="row" style="border:0.5px solid black" >
-        <div class="chart_container" >
-            <h3>Issue Status</h3>
-            <canvas id="canvas1">{{ chart1 }}</canvas>
-        </div>
-        <div class="chart_container" >
-          <h3>Issue Status</h3>
-            <canvas id="canvas">{{ chart }}</canvas>
-        </div>
-    </div>
-</div>
-<br>
-<div class="container" >
-    <h2>Timeline</h2>
-    <div  id="timeline" #visTimeline></div>
-  </div>
-  
-<!-- <div>
-    <table style="float: left">
-      <tr>
-        <td>..</td>
-      </tr>
+  <br>
+  <div class="floatLeft">
+    <h3>Release Details</h3>
+    <table class="table table-striped">
+
+      <tbody>
+        <tr *ngFor="let detail of release">
+          <td>{{ detail.first }}</td>
+          <td>{{ detail.second }}</td>
+        </tr>
+      </tbody>
     </table>
-   
-  </div> -->
+  </div>
+
+  <div class="floatRight">
+    <table class="table table-striped">
+      <h3>Issue Status</h3>
+      <canvas id="canvas">{{ chart }}</canvas>
+    </table>
+  </div>
+
+</div>
+
+
+<div class="container-1">
+  <h2>Timeline</h2>
+  <div id="timeline" #visTimeline></div>
+</div>
+
+<div class="container-4">
+  <div class="floatLeft">
+    <table class="table table-striped">
+      <tbody>
+        <tr *ngFor="let detail of environment">
+          <td>{{ detail.first }}</td>
+          <td>{{ detail.second }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="floatRight">
+    <table class="table table-striped">
+      <tbody>
+        <tr *ngFor="let detail of release">
+          <td>{{ detail.first }}</td>
+          <td>{{ detail.second }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+
+<!-- <div class="container">
+  <div class="row">
+    <div class="card" style="width: 14rem;">
+      <div class="card-header">
+        Featured
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Cras justo odio</li>
+        <li class="list-group-item">Dapibus ac facilisis in</li>
+        <li class="list-group-item">Vestibulum at eros</li>
+      </ul>
+    </div>
+    <div class="card" style="width: 14rem;">
+      <div class="card-header">
+        Featured
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Cras justo odio</li>
+        <li class="list-group-item">Dapibus ac facilisis in</li>
+        <li class="list-group-item">Vestibulum at eros</li>
+      </ul>
+    </div>
+    <div class="card" style="width: 14rem;">
+      <div class="card-header">
+        Featured
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Cras justo odio</li>
+        <li class="list-group-item">Dapibus ac facilisis in</li>
+        <li class="list-group-item">Vestibulum at eros</li>
+      </ul>
+    </div>
+    <div class="card" style="width: 14rem;">
+        <div class="card-header">
+          Featured
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Cras justo odio</li>
+          <li class="list-group-item">Dapibus ac facilisis in</li>
+          <li class="list-group-item">Vestibulum at eros</li>
+        </ul>
+      </div>
+  </div>
+</div> -->
+
+<div class="container-2">
+  <h1> Release Details</h1>
+  <table class="table table-striped">
+    <tbody>
+      <tr *ngFor="let detail of details">
+        <td>{{ detail.first }}</td>
+        <td>{{ detail.second }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
