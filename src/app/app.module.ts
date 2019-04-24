@@ -37,11 +37,17 @@ import { ReleaseService } from './services/release.service';
 import { ShowAuthedDirective } from './directives/showAuthed.directive';
 import { ShowIfAdminDirective } from './directives/showIfAdmin.directive';
 import { VisModule } from 'ngx-vis';
+import { TableModule } from 'ngx-easy-table';
 
 import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { CreateReleaseComponent } from './components/create-release/create-release.component';
 import { ReleaseDashboardComponent } from './components/release-dashboard/release-dashboard.component';
+import { RDTableComponent } from './components/rd-table/rd-table.component';
+import { TeamComponent } from './components/team/team.component';
+import { UsersComponent } from './components/users/users.component';
+import { ChecklistComponent } from './components/checklist/checklist.component';
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -65,7 +71,11 @@ export function createTranslateLoader(http: HttpClient) {
     NgTimelineComponent,
     AuthComponent,
     CreateReleaseComponent,
-    ReleaseDashboardComponent
+    ReleaseDashboardComponent,
+    RDTableComponent,
+    TeamComponent,
+    UsersComponent,
+    ChecklistComponent
   ],
   imports: [
     NgbModule,
@@ -82,6 +92,7 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     NgxGraphModule,
     VisModule,
+    TableModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory

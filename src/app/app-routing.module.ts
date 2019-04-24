@@ -11,6 +11,10 @@ import { NotFoundPageComponent } from './components/not-found-page/not-found-pag
 import { HomeComponent } from './components/home/home.component';
 import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
 import {ReleaseDashboardComponent} from './components/release-dashboard/release-dashboard.component'
+import { TeamComponent } from './components/team/team.component';
+import { UsersComponent } from './components/users/users.component';
+import { ChecklistComponent } from './components/checklist/checklist.component';
+
 import { AuthGuard } from '../guards/auth.guard';
 
 const appRoutes: Routes = [
@@ -23,6 +27,18 @@ const appRoutes: Routes = [
         path: 'ngtimeline',
          component: NgTimelineComponent,
          canActivate : [AuthGuard],
+      },
+      {
+        path: 'team',
+         component: TeamComponent
+      },
+      {
+        path: 'users',
+         component: UsersComponent
+      },
+      {
+        path: 'checklist',
+        component: ChecklistComponent
       },
       {
         path: '',
