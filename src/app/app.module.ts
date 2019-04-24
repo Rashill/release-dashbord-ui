@@ -29,8 +29,10 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { HomeComponent } from './components/home/home.component';
+import { AuthGuard } from '../guards/auth.guard';
 
 import { AuthService } from './services/auth.service';
+import { ReleaseService } from './services/release.service';
 
 import { ShowAuthedDirective } from './directives/showAuthed.directive';
 import { ShowIfAdminDirective } from './directives/showIfAdmin.directive';
@@ -38,6 +40,9 @@ import { VisModule } from 'ngx-vis';
 import { TableModule } from 'ngx-easy-table';
 
 import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
+import { AuthComponent } from './components/auth/auth.component';
+import { CreateReleaseComponent } from './components/create-release/create-release.component';
+import { ReleaseDashboardComponent } from './components/release-dashboard/release-dashboard.component';
 import { RDTableComponent } from './components/rd-table/rd-table.component';
 import { TeamComponent } from './components/team/team.component';
 import { UsersComponent } from './components/users/users.component';
@@ -64,12 +69,16 @@ export function createTranslateLoader(http: HttpClient) {
     NotFoundPageComponent,
     HomeComponent,
     NgTimelineComponent,
+    AuthComponent,
+    CreateReleaseComponent,
+    ReleaseDashboardComponent,
     RDTableComponent,
     TeamComponent,
     UsersComponent,
     ChecklistComponent
   ],
   imports: [
+    NgbModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
@@ -95,7 +104,8 @@ export function createTranslateLoader(http: HttpClient) {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
     },
-    AuthService
+    AuthService,
+    ReleaseService,
   ],
   bootstrap: [AppComponent],
   exports: [ShowAuthedDirective, ShowIfAdminDirective]

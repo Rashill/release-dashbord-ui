@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import decode from 'jwt-decode';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json',"Authorization":localStorage.getItem('token') })
 };
 
 @Injectable()
@@ -23,6 +23,15 @@ export class AuthService {
 
   register(user) {
     return this.http.post<any>('/api/v1/users', user);
+  }
+
+  authURL() {
+    return this.http.get<any>('/api/v1/auth');
+  }
+
+  auth(auth) {
+    console.log(auth)
+    return this.http.post<any>('/api/v1/auth',auth);
   }
 
   //   forgotPassword(email) {

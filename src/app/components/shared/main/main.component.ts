@@ -5,11 +5,10 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { ResizeService } from './../../../services/resize.service';
-// import { AuthService } from './../../../services/auth.service';
 import { routerTransition } from './../../../../utils/page.animation';
 import { AuthService } from './../../../services/auth.service';
 import { Router } from '@angular/router';
-
+import { ActivatedRoute } from '@angular/router';
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 @Component({
@@ -20,7 +19,7 @@ import { map } from 'rxjs/operators';
 })
 export class MainComponent implements OnInit {
   userEmail: string;
-
+  error:Boolean;
   // sites: Site[];
 
   // Model for side menu
@@ -65,11 +64,11 @@ export class MainComponent implements OnInit {
       iconCode: 'settings',
       children: [
         {
-          title: 'Checklist',
-          routerUrl: '/teams/typography'
+          title: 'Create Release',
+          routerUrl: '/release/create'
         }
       ]
-    }
+    },
   ];
 
   isSmallMenuMode = false;
@@ -87,6 +86,7 @@ export class MainComponent implements OnInit {
 
   constructor(
     private resizeService: ResizeService,
+    private route: ActivatedRoute,
     private authService: AuthService,
     private router: Router
   ) {
@@ -122,7 +122,8 @@ export class MainComponent implements OnInit {
     }, this.sideNavTransitionDuration);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   /**
    * Call resize service after box mode changes
