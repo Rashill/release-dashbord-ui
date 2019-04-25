@@ -9,7 +9,7 @@ export class ChecklistComponent implements OnInit {
 
   // pass options to rd-table component
   options = {
-    name: 'checklist', pKey: '_id', apiURL: '/api/v1', type: 'crud', csv: true
+    name: 'checklist', pKey: '_id', apiURL: 'https://unisuperreleasedashboard-api.azurewebsites.net/api/v1', type: 'crud', csv: true
   };
 
   fields = [

@@ -515,7 +515,8 @@ export class RDTableComponent implements OnInit {
   getAuthorizationHeaders() {
     let headers = new HttpHeaders().
     set("Authorization", 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiI1Y2JmZTE3OTdkZDZmYTVkNTRlYmI1ODIiLCJhY2Nlc3NfdG9rZW4iOiJMWlMxZ1BzZGUyRllxbjI4OEFFVTNFektJbVNQNk5SbiIsImlhdCI6MTU1NjA3OTAwN30.bjWAVC6Pmk9GG9SCjDbGiv7jYgzN1XpOjjYZN_n5HxI').
-    set('Content-Type', 'application/json');
+    set('Content-Type', 'application/json').
+    set('Access-Control-Allow-Origin','*');
     return headers;
   }
 

@@ -14,7 +14,7 @@ export class TeamComponent implements OnInit {
 
   // pass options to rd-table component
   options = {
-    name: 'team', pKey: '_id', pKey_label: 'ID', apiURL: '/api/v1', type: 'crud', csv: true,
+    name: 'team', pKey: '_id', pKey_label: 'ID', apiURL: 'https://unisuperreleasedashboard-api.azurewebsites.net/api/v1', type: 'crud', csv: true,
     forceServerUpdate: true
   };
 
