@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Timeline, DataSet } from 'vis';
 import { Router } from '@angular/router';
-
+import {TimeLineDetails} from './timeline'
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -28,6 +28,8 @@ export class ReleaseDashboardComponent implements OnInit {
   yellowStyle: string = "border-color: rgb(245,216,144); background-color: rgb(245,216,144);"
   baijStyle: string = "border-color: rgb(227,217,207); background-color: rgb(227,217,207);"
   error: Boolean
+  today: Date
+  timelineDetails:TimeLineDetails
   constructor(private router: Router,
     private releaseService: ReleaseService) { }
   chart = [];
@@ -35,7 +37,8 @@ export class ReleaseDashboardComponent implements OnInit {
   details =[]
   release=[]
   environment=[]
-  ngAfterViewInit() {
+
+  showTimeLine() {
     this.tlContainer = this.timelineContainer.nativeElement;
     this.timeline = new Timeline(this.tlContainer, this.data, {});
     this.timeline.setOptions(this.options);
@@ -44,11 +47,11 @@ export class ReleaseDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.release.push(new release("Release Name","Test OOC"))
-    this.release.push(new release("Type of Release","OOC"))
-    this.release.push(new release("Release Date","29-05-17"))
-    this.release.push(new release("Today's Date","24-05-17"))
-    this.release.push(new release("Current Phase","QA"))
+    // this.release.push(new release("Release Name","Test OOC"))
+    // this.release.push(new release("Type of Release","OOC"))
+    // this.release.push(new release("Release Date","29-05-17"))
+    // this.release.push(new release("Today's Date","24-05-17"))
+    // this.release.push(new release("Current Phase","QA"))
 
     this.environment.push(new release("Release Name","Test OOC"))
     this.environment.push(new release("Dev Environment","CIO2"))
@@ -82,27 +85,24 @@ export class ReleaseDashboardComponent implements OnInit {
       }
 
     });
-    // var ctx = document.getElementById("canvas1");
-
-    // this.chart1 = new Chart(ctx, {
-    //   type: 'pie',
-    //   data: {
-    //     labels: ["Done", "In Progress", "In Review", "To Do"],
-    //     datasets: [{
-    //       label: "Population (millions)",
-    //       backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9"],
-    //       data: [2, 2, 1, 3]
-    //     }]
-    //   }
-
-    // });
-    this.loadTimelineData();
+    
     this.releaseService.getRelease().pipe(
       map(res => res) // or any other operator
     )
       .subscribe(
         res => {
           console.log('response', res);
+          
+          this.release.push(new release("Release Name","Test OOC"))
+          this.release.push(new release("Type of Release","OOC"))
+          console.log(res[0][0].releaseDate)
+          this.release.push(new release("Release Date",res[0][0].releaseDate.substring(0,10)))
+          this.today = new Date();
+          this.release.push(new release("Today's Date",this.today.toDateString()))
+          this.release.push(new release("Current Phase","QA"))
+          this.timelineDetails=new TimeLineDetails(res[0][0].releaseDate.substring(0,10),res[0][0].devfinish.substring(0,10))
+          this.loadTimelineData(this.timelineDetails);
+          this.showTimeLine()
           // this.router.navigate(['/']);
         },
         error => {
@@ -112,7 +112,10 @@ export class ReleaseDashboardComponent implements OnInit {
         }
       );
   }
-  loadTimelineData() {
+
+  
+
+  loadTimelineData(timelineDetails) {
     this.groups = new DataSet([
       {
         id: 1,
@@ -121,8 +124,8 @@ export class ReleaseDashboardComponent implements OnInit {
     ]);
     this.data = new DataSet([
       {
-        id: 1, content: 'Pre-Release',
-        start: '2019-04-10', end: '2019-04-14',
+        id: 1, content: 'Devlopment',
+        start: timelineDetails.getStartDate(), end: '2019-04-14',
         group: 1, style: this.redStyle
       },
       {
