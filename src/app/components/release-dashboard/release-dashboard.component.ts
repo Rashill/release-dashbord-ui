@@ -35,6 +35,8 @@ export class ReleaseDashboardComponent implements OnInit {
   chart1 = [];
   details = []
   release = []
+  allIssues = []
+  issues=[]
   environment = []
 
   showTimeLine() {
@@ -92,6 +94,7 @@ export class ReleaseDashboardComponent implements OnInit {
           this.environment.push(new release("Sitecore", res[0].sitecore))
           this.environment.push(new release("Biztalk", res[0].biztalk))
           this.environment.push(new release("Dev Support", res[0].devsupport))
+          
 
           var toDO = 0;
           var done = 0;
@@ -100,8 +103,8 @@ export class ReleaseDashboardComponent implements OnInit {
           for (var i = 0; i < res[0].projects.length; i++) {
             // console.log(res[0].projects[i].versionDetails.issues)
             for (var j = 0; j < res[0].projects[i].versionDetails.issues.issues.length; j++) {
-              console.log(res[0].projects[i].versionDetails.issues.issues[j].id)
-              
+
+              this.issues.push(new release(res[0].projects[i].versionDetails.issues.issues[j].fields.summary,res[0].projects[i].versionDetails.issues.issues[j].key))
               if (res[0].projects[i].versionDetails.issues.issues[j].fields.status.name == "Done")
                 done++
               else if (res[0].projects[i].versionDetails.issues.issues[j].fields.status.name == "To Do")
@@ -112,8 +115,10 @@ export class ReleaseDashboardComponent implements OnInit {
                 inProgress++;
 
             }
-            
+            this.allIssues.push(this.issues)
+            this.issues=[]
           }
+          console.log(this.allIssues)
           this.chart = new Chart(ctx, {
             type: 'doughnut',
             data: {
