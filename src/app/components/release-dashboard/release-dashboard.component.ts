@@ -38,7 +38,7 @@ export class ReleaseDashboardComponent implements OnInit {
   allIssues = []
   issues:Issues
   environment = []
-
+  searchTodos=[]
   showTimeLine() {
     this.tlContainer = this.timelineContainer.nativeElement;
     this.timeline = new Timeline(this.tlContainer, this.data, {});
@@ -50,9 +50,6 @@ export class ReleaseDashboardComponent implements OnInit {
   ngOnInit() {
 
     var ctx = document.getElementById("canvas");
-
-
-
     this.releaseService.getRelease().pipe(
       map(res => res) // or any other operator
     )
