@@ -23,7 +23,7 @@ export class TeamComponent implements OnInit {
       key: 'jiraProjectId', title: 'Name', description: 'Project Id as appears in JIRA',
       visible: false, update: true, create: true, required: true,
       //this is for the data comming from optionsURL, also it is needed for option id and value
-      options: [], optionsURL: '/api/v1/project', optionObj: {value: 'id', label: 'name'}
+      options: [], optionsURL: 'https://unisuperreleasedashboard-api.azurewebsites.net/api/v1/project', optionObj: {value: 'id', label: 'name'}
     },
     {
       key: 'name', title: 'Name', description: 'Project name as appears in JIRA',
