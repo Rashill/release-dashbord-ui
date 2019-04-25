@@ -28,6 +28,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+
 import { HomeComponent } from './components/home/home.component';
 import { AuthGuard } from '../guards/auth.guard';
 
@@ -47,7 +50,6 @@ import { RDTableComponent } from './components/rd-table/rd-table.component';
 import { TeamComponent } from './components/team/team.component';
 import { UsersComponent } from './components/users/users.component';
 import { ChecklistComponent } from './components/checklist/checklist.component';
-
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -106,6 +108,11 @@ export function createTranslateLoader(http: HttpClient) {
     },
     AuthService,
     ReleaseService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent],
   exports: [ShowAuthedDirective, ShowIfAdminDirective]

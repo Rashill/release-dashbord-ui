@@ -1,27 +1,39 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin } from 'rxjs'; // change to new RxJS 6 import syntax
-
+import { environment } from '../../environments/environment';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json',"Authorization":localStorage.getItem('token') })
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+    Authorization: localStorage.getItem('token')
+  })
 };
 
 @Injectable()
 export class ReleaseService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getTeam() {
-    return forkJoin(this.http.get<any>('/api/v1/team',httpOptions));
+    return forkJoin(
+      this.http.get<any>(environment.baseUrl + '/team', httpOptions)
+    );
   }
 
   createRelease(release) {
-    console.log(release)
-    return forkJoin(this.http.post<any>('/api/v1/release',release,httpOptions));
+    console.log(release);
+    return forkJoin(
+      this.http.post<any>(
+        environment.baseUrl + '/release',
+        release,
+        httpOptions
+      )
+    );
   }
 
   getRelease() {
-    return forkJoin(this.http.get<any>('/api/v1/release?TestOOC',httpOptions));
+    return forkJoin(
+      this.http.get<any>(environment.baseUrl + '/release?TestOOC', httpOptions)
+    );
   }
 }

@@ -5,12 +5,11 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { AuthComponent } from './components/auth/auth.component';
 import { CreateReleaseComponent } from './components/create-release/create-release.component';
 
-
 import { MainComponent } from './components/shared/main/main.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 import { HomeComponent } from './components/home/home.component';
 import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
-import {ReleaseDashboardComponent} from './components/release-dashboard/release-dashboard.component'
+import { ReleaseDashboardComponent } from './components/release-dashboard/release-dashboard.component';
 import { TeamComponent } from './components/team/team.component';
 import { UsersComponent } from './components/users/users.component';
 import { ChecklistComponent } from './components/checklist/checklist.component';
@@ -21,20 +20,20 @@ const appRoutes: Routes = [
   {
     path: '',
     component: MainComponent,
-    
+
     children: [
       {
         path: 'ngtimeline',
-         component: NgTimelineComponent,
-         canActivate : [AuthGuard],
+        component: NgTimelineComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'team',
-         component: TeamComponent
+        component: TeamComponent
       },
       {
         path: 'users',
-         component: UsersComponent
+        component: UsersComponent
       },
       {
         path: 'checklist',
@@ -42,15 +41,15 @@ const appRoutes: Routes = [
       },
       {
         path: '',
-        component: HomeComponent,
+        component: HomeComponent
       },
       {
         path: 'release/create',
-        component: CreateReleaseComponent,
+        component: CreateReleaseComponent
       },
       {
         path: 'release/dashboard',
-        component: ReleaseDashboardComponent,
+        component: ReleaseDashboardComponent
       }
     ]
   },
@@ -60,7 +59,7 @@ const appRoutes: Routes = [
   // { path: 'signup', component: SignupComponent },
   // { path: 'forgot-password', component: ForgotPasswordComponent },
   // { path: 'reset-password', component: ResetPasswordComponent },
-  
+
   {
     path: '404',
     component: NotFoundPageComponent,

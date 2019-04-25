@@ -2,49 +2,43 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin } from 'rxjs'; // change to new RxJS 6 import syntax
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 import decode from 'jwt-decode';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json',"Authorization":localStorage.getItem('token') })
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+    Authorization: localStorage.getItem('token')
+  })
 };
-
 @Injectable()
 export class AuthService {
   constructor(private http: HttpClient) {}
 
   getUsers() {
-    return forkJoin(this.http.get<any>('/api/v1/users'));
+    return forkJoin(this.http.get<any>(environment.baseUrl + '/users'));
   }
 
   login(credentials) {
-    return this.http.post<any>('/api/v1/users/login', credentials);
+    return this.http.post<any>(
+      environment.baseUrl + '/users/login',
+      credentials
+    );
   }
 
   register(user) {
-    return this.http.post<any>('/api/v1/users', user);
+    return this.http.post<any>(environment.baseUrl + '/users', user);
   }
 
-  authURL() {
-    return this.http.get<any>('/api/v1/auth');
+  getAuthUrl() {
+    return this.http.get<any>(environment.baseUrl + '/auth');
   }
 
-  auth(auth) {
-    console.log(auth)
-    return this.http.post<any>('/api/v1/auth',auth);
+  authenticate(auth) {
+    console.log(auth);
+    return this.http.post<any>(environment.baseUrl + '/auth', auth);
   }
-
-  //   forgotPassword(email) {
-  //     return this.http.post<any>('/api/v1/auth/forgot-password', {
-  //       email: email
-  //     });
-  //   }
-
-  //   resetPassword(password, token) {
-  //     return this.http.post<any>('/api/v1/auth/reset-password/' + token, {
-  //       password: password
-  //     });
-  //   }
 
   isAuthenticated() {
     if (localStorage.getItem('token')) {
@@ -57,22 +51,9 @@ export class AuthService {
     return localStorage.getItem('role') === 'admin';
   }
 
-  // getUserRole() {
-  //   if (localStorage.getItem('token')) {
-  //     return decode(localStorage.getItem('token')).role;
-  //   }
-  // }
-
   getUserEmail() {
     return localStorage.getItem('username');
   }
-
-  // getUserId() {
-  //   if (localStorage.getItem('token')) {
-  //     // console.log(decode(localStorage.getItem('token')));
-  //     return decode(localStorage.getItem('token'))._id;
-  //   }
-  // }
 
   logout() {
     localStorage.removeItem('token');
