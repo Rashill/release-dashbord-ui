@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { TimeLineDetails } from './timeline'
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
-
+import { Issues } from './Issues'
 import { ReleaseService } from '../../services/release.service';
 import { Chart } from 'chart.js';
 import { release } from './release'
@@ -36,7 +36,7 @@ export class ReleaseDashboardComponent implements OnInit {
   details = []
   release = []
   allIssues = []
-  issues=[]
+  issues:Issues
   environment = []
 
   showTimeLine() {
@@ -95,28 +95,41 @@ export class ReleaseDashboardComponent implements OnInit {
           this.environment.push(new release("Biztalk", res[0].biztalk))
           this.environment.push(new release("Dev Support", res[0].devsupport))
           
-
+      
           var toDO = 0;
           var done = 0;
           var inReview = 0;
           var inProgress = 0;
           for (var i = 0; i < res[0].projects.length; i++) {
+            var toDoIssues=[]
+            var doneIssues=[]
+            var inProgressIssues=[]
             // console.log(res[0].projects[i].versionDetails.issues)
             for (var j = 0; j < res[0].projects[i].versionDetails.issues.issues.length; j++) {
 
-              this.issues.push(new release(res[0].projects[i].versionDetails.issues.issues[j].fields.summary,res[0].projects[i].versionDetails.issues.issues[j].key))
-              if (res[0].projects[i].versionDetails.issues.issues[j].fields.status.name == "Done")
+             
+    
+              if (res[0].projects[i].versionDetails.issues.issues[j].fields.status.name == "Done"){
+                doneIssues.push(res[0].projects[i].versionDetails.issues.issues[j].fields.summary)
                 done++
-              else if (res[0].projects[i].versionDetails.issues.issues[j].fields.status.name == "To Do")
+              }
+              else if (res[0].projects[i].versionDetails.issues.issues[j].fields.status.name == "To Do"){
                 toDO++;
-              else if (res[0].projects[i].versionDetails.issues.issues[j].fields.status.name == "In Review")
+                toDoIssues.push(res[0].projects[i].versionDetails.issues.issues[j].fields.summary)
+              }
+              else if (res[0].projects[i].versionDetails.issues.issues[j].fields.status.name == "In Review"){
                 inReview++;
-              else if (res[0].projects[i].versionDetails.issues.issues[j].fields.status.name == "In Progress")
+                inProgressIssues.push(res[0].projects[i].versionDetails.issues.issues[j].fields.summary)
+              }
+              else if (res[0].projects[i].versionDetails.issues.issues[j].fields.status.name == "In Progress"){
                 inProgress++;
+                inProgressIssues.push(res[0].projects[i].versionDetails.issues.issues[j].fields.summary)
+              }
 
             }
+            this.issues=new Issues(res[0].projects[i].projectId,toDoIssues,inProgressIssues,doneIssues)
             this.allIssues.push(this.issues)
-            this.issues=[]
+            this.issues=null
           }
           console.log(this.allIssues)
           this.chart = new Chart(ctx, {
