@@ -1,4 +1,4 @@
-<div class="container mb-5">
+<div class="container mb-5" *ngIf="loaded">
   <div class="row text-center">
     <div class="col-md-4">
       <div class="btn-group">
@@ -39,7 +39,7 @@
       [refresh]="refresh"
       [activeDayIsOpen]="activeDayIsOpen"
       (dayClicked)="dayClicked($event.day)"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventClicked)="handleClickEvent($event.event)"
       (eventTimesChanged)="eventTimesChanged($event)"
     >
     </mwl-calendar-month-view>

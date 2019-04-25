@@ -48,7 +48,7 @@ const appRoutes: Routes = [
         component: CreateReleaseComponent
       },
       {
-        path: 'release/dashboard',
+        path: 'release/:id',
         component: ReleaseDashboardComponent
       }
     ]
