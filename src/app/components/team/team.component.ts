@@ -29,7 +29,7 @@ export class TeamComponent implements OnInit {
       required: true,
       //this is for the data comming from optionsURL, also it is needed for option id and value
       options: [],
-      optionsURL: '/api/v1/project',
+      optionsURL: environment.baseUrl+'/project',
       optionObj: { value: 'id', label: 'name' }
     },
     {

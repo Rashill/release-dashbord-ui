@@ -65,6 +65,7 @@ export class CreateReleaseComponent implements OnInit {
     step3: ['regressionDeploy', 'regressionStart', 'regressionEnd'],
     step4: ['cabDate', 'testenvironment', 'regenvironment', 'sitecore', 'biztalk', 'devsupport']
   };
+
   validation_messages = { 'required': 'This is required field', 'dateInvalid': 'Date invalid' };
 
 
@@ -151,9 +152,13 @@ export class CreateReleaseComponent implements OnInit {
       });
     //end of form gorup init.
   }
+
+
   onSubmit() {
     this.createRelease();
   }
+
+  
   createRelease() {
 
     this.releaseService.getTeam()
@@ -219,7 +224,11 @@ export class CreateReleaseComponent implements OnInit {
   getValidationMsg(key) {
     let errors = this.createForm.controls[key].errors;
     let validator = Object.keys(errors)[0];
-    return this.validation_messages[validator];
+    if(validator == 'dateInvalid'){
+      return this.createForm.controls[key].errors['msg'];
+    }else{
+      return this.validation_messages[validator];
+    }
   }
 }
 
