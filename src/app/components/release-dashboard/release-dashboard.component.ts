@@ -50,7 +50,8 @@ export class ReleaseDashboardComponent implements OnInit {
   ngOnInit() {
 
     var ctx = document.getElementById("canvas");
-    this.releaseService.getRelease().pipe(
+    console.log("URL is "+this.router.url)
+    this.releaseService.getRelease(this.router.url).pipe(
       map(res => res) // or any other operator
     )
       .subscribe(

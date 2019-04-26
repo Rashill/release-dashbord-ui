@@ -22,9 +22,9 @@ export class ReleaseService {
     return forkJoin(this.http.get<any>(environment.baseUrl + '/release'));
   }
 
-  getRelease() {
+  getRelease(url) {
     return forkJoin(
-      this.http.get<any>(environment.baseUrl + '/release/5cbfad638fc519175a4c7d66')
+      this.http.get<any>(environment.baseUrl + url)
     );
   }
 }
