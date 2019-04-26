@@ -55,8 +55,7 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "sofu:build:production",
-              "proxyConfig": "proxy.conf.json"
+              "browserTarget": "sofu:build:production"
             }
           }
         },

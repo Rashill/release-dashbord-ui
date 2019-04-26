@@ -1,6 +1,6 @@
 {
   "/api/*": {
-    "target": "https://unisuperreleasedashboard-api.azurewebsites.net",
+    "target": "http://localhost:6500",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true
