@@ -10,33 +10,39 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnInit {
-  error: Boolean
-  constructor(private route: ActivatedRoute,
+  error: Boolean;
+  constructor(
+    private route: ActivatedRoute,
     private authService: AuthService,
-    private router: Router) {
+    private router: Router
+  ) {
     this.route.queryParams.subscribe(params => {
       let oauth_token = this.route.snapshot.queryParamMap.get('oauth_token');
-      let oauth_verifier = this.route.snapshot.queryParamMap.get('oauth_verifier');
-      var auth = { "oauth_token": oauth_token, "oauth_verifier": oauth_verifier };
+      let oauth_verifier = this.route.snapshot.queryParamMap.get(
+        'oauth_verifier'
+      );
       this.authService
-        .auth({ "oauth_token": oauth_token, "oauth_verifier": oauth_verifier }
-        )
+        .authenticate({
+          oauth_token: oauth_token,
+          oauth_verifier: oauth_verifier
+        })
         .pipe(
           map(res => res) // or any other operator
         )
         .subscribe(
           res => {
-            localStorage.setItem("token", res.token)
+            console.log('res', res);
+            localStorage.setItem('token', res.token);
+            localStorage.setItem('user', res.user);
             this.router.navigate(['/']);
           },
           error => {
             this.error = true;
             console.error('Error!', error);
             return throwError(error); // Angular 5/RxJS 5.5
-          });
-    })
+          }
+        );
+    });
   }
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

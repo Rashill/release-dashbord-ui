@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RDTableComponent } from '../rd-table/rd-table.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-team',
@@ -7,40 +8,57 @@ import { RDTableComponent } from '../rd-table/rd-table.component';
   styleUrls: ['./team.component.scss']
 })
 export class TeamComponent implements OnInit {
-  //loadURL: undefined, createURL: undefined, updateURL: undefined, deleteURL: undefined
-
-  // pass options to ngx-easy-table (The core plugin)
-  //config = {}
-
-  // pass options to rd-table component
   options = {
-    name: 'team', pKey: '_id', pKey_label: 'ID', apiURL: '/api/v1', type: 'crud', csv: true
+    name: 'team',
+    pKey: '_id',
+    pKey_label: 'ID',
+    apiURL: environment.baseUrl,
+    type: 'crud',
+    csv: true,
+    forceServerUpdate: true
   };
 
   fields = [
     {
-      key: 'jiraProjectId', title: 'JIRA Porject ID', description: 'Project Id as appears in JIRA',
-      visible: true, update: true, create: true, required: true,
+      key: 'jiraProjectId',
+      title: 'Name',
+      description: 'Project Id as appears in JIRA',
+      visible: false,
+      update: true,
+      create: true,
+      required: true,
       //this is for the data comming from optionsURL, also it is needed for option id and value
-      options: [], optionsURL: '/api/v1/project', optionObj: {value: 'id', label: 'name'}
-    },
-  /*  {
-      key: 'name', title: 'Name', description: 'Project name as appears in JIRA',
-      visible: true, update: false, create: false
-    },*/
-    {
-      key: '_id', title: '_id', description: '_id',
-      visible: false, update: false, create: false
+      options: [],
+      optionsURL: '/api/v1/project',
+      optionObj: { value: 'id', label: 'name' }
     },
     {
-      key: 'description', title: 'Description', description: 'Team name as appears in JIRA',
-      visible: true, update: true, create: true
+      key: 'name',
+      title: 'Name',
+      description: 'Project name as appears in JIRA',
+      visible: true,
+      update: false,
+      create: false
+    },
+    {
+      key: '_id',
+      title: '_id',
+      description: '_id',
+      visible: false,
+      update: false,
+      create: false
+    },
+    {
+      key: 'description',
+      title: 'Description',
+      description: 'Team name as appears in JIRA',
+      visible: true,
+      update: true,
+      create: true
     }
-  ]
+  ];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
