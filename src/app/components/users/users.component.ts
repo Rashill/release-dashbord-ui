@@ -9,7 +9,12 @@ import { environment } from '../../../environments/environment';
 export class UsersComponent implements OnInit {
   // pass options to rd-table component
   options = {
-    name: 'user', pKey: '_id', apiURL: '/api/v1', update: true, csv: true, forceServerUpdate: true
+    name: 'user',
+    pKey: '_id',
+    apiURL: environment.baseUrl,
+    update: true,
+    csv: true,
+    forceServerUpdate: true
   };
 
   fields = [
