@@ -1,15 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import {
   FormBuilder,
   FormGroup,
   FormControl,
   Validators
-} from '@angular/forms';
+}
+  from '@angular/forms';
 import { Router } from '@angular/router';
 import { Project } from "./Project"
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { FormWizardModule } from 'angular-wizard-form';
+
 import { ReleaseService } from '../../services/release.service'
+import { DateValidator } from './dataValidator.service'
+
+@NgModule({
+  declarations: [
+    CreateReleaseComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormWizardModule
+  ]
+})
+
 @Component({
   selector: 'ngbd-create-release',
   templateUrl: './create-release.component.html',
@@ -43,6 +59,15 @@ export class CreateReleaseComponent implements OnInit {
 
   error: Boolean;
 
+  steps = {
+    step1: ['name', 'type', 'description', 'releaseDate'],
+    step2: ['startDate', 'devfinish', 'refreshDate'],
+    step3: ['regressionDeploy', 'regressionStart', 'regressionEnd'],
+    step4: ['cabDate', 'testenvironment', 'regenvironment', 'sitecore', 'biztalk', 'devsupport']
+  };
+  validation_messages = { 'required': 'This is required field', 'dateInvalid': 'Date invalid' };
+
+
   constructor(private router: Router,
     private formBuilder: FormBuilder,
     private releaseService: ReleaseService) { }
@@ -70,7 +95,8 @@ export class CreateReleaseComponent implements OnInit {
       projects: Array()
     };
 
-    this.createForm = new FormGroup({
+
+    this.createForm = this.formBuilder.group({
       name: new FormControl(this.release.name, [
         Validators.required
       ]),
@@ -119,11 +145,14 @@ export class CreateReleaseComponent implements OnInit {
       devsupport: new FormControl(this.release.devsupport, [
         Validators.required
       ])
-    });
+    }, {
+        // it validates the dates (check the imported service)
+        validator: DateValidator('')
+      });
+    //end of form gorup init.
   }
   onSubmit() {
     this.createRelease();
-
   }
   createRelease() {
 
@@ -161,4 +190,36 @@ export class CreateReleaseComponent implements OnInit {
         }
       );
   }
+
+
+  /**
+   * This is used to draw error flag in the invalid control
+   * @param key control name
+   */
+  isValid(key) {
+    return this.createForm.controls[key].valid;// || !this.error;
+  }
+
+  /**
+  * It validates multiple control for a given step
+  * @param step e.g. step1
+  */
+  isValidStep(step) {
+    let result = true;
+    this.steps[step].forEach(key => {
+      result = result && this.createForm.controls[key].valid;
+    });
+    return result;
+  }
+
+  /**
+   * It returns validation message to be appear under the invalid control
+   * @param key control name
+   */
+  getValidationMsg(key) {
+    let errors = this.createForm.controls[key].errors;
+    let validator = Object.keys(errors)[0];
+    return this.validation_messages[validator];
+  }
 }
+

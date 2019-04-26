@@ -41,6 +41,7 @@ import { ShowAuthedDirective } from './directives/showAuthed.directive';
 import { ShowIfAdminDirective } from './directives/showIfAdmin.directive';
 import { VisModule } from 'ngx-vis';
 import { TableModule } from 'ngx-easy-table';
+import { FormWizardModule } from 'angular-wizard-form';
 
 import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
 import { AuthComponent } from './components/auth/auth.component';
@@ -98,7 +99,8 @@ export function createTranslateLoader(http: HttpClient) {
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
-    })
+    }),
+    FormWizardModule
   ],
   providers: [
     ResizeService,
