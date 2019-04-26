@@ -9,7 +9,7 @@ export class UsersComponent implements OnInit {
 
   // pass options to rd-table component
   options = {
-    name: 'user', pKey: '_id', apiURL: '/api/v1', update: true, csv: true
+    name: 'user', pKey: '_id', apiURL: '/api/v1', update: true, csv: true, forceServerUpdate: true
   };
 
   fields = [
