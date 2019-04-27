@@ -16,6 +16,7 @@ import { FormWizardModule } from 'angular-wizard-form';
 import { ReleaseService } from '../../services/release.service'
 import { DateValidator } from './dataValidator.service'
 
+
 @NgModule({
   declarations: [
     CreateReleaseComponent
@@ -55,6 +56,10 @@ export class CreateReleaseComponent implements OnInit {
     // projects:String
   };
 
+  //either create or update
+  mode: string= 'create';
+  releaseId: string = '';
+
   createForm: FormGroup;
 
   error: Boolean;
@@ -74,6 +79,14 @@ export class CreateReleaseComponent implements OnInit {
     private releaseService: ReleaseService) { }
 
   ngOnInit() {
+   // this.releaseId = '5cbfad638fc519175a4c7d66'
+   let url_splitted = this.router.url.split('/');
+   console.log(url_splitted);
+
+   if(url_splitted.length == 4){
+    this.releaseId = url_splitted[3];
+   }
+
     this.error = false;
 
     this.release = {
@@ -96,7 +109,27 @@ export class CreateReleaseComponent implements OnInit {
       projects: Array()
     };
 
+    this.initFormGroup();
 
+    if(this.releaseId.length>0){
+      this.mode = 'Edit'
+      this.loadAndFillControls();
+    }
+  }
+
+  changeMode(){
+    this.mode = this.mode == 'Edit'? 'Create': 'Edit';
+    if(this.mode == 'Edit'){
+      this.loadAndFillControls();
+    }else{
+      let attrs = Object.keys(this.release);
+      attrs.forEach(attr => {
+        this.release[attr]= '';
+      });
+    }
+  }
+
+  initFormGroup(){
     this.createForm = this.formBuilder.group({
       name: new FormControl(this.release.name, [
         Validators.required
@@ -153,9 +186,40 @@ export class CreateReleaseComponent implements OnInit {
     //end of form gorup init.
   }
 
+  loadAndFillControls(){
+    let url = '/release/' + this.releaseId;
+    this.releaseService.getRelease(url)
+    .pipe(
+      map(res => res) // or any other operator
+    )
+    .subscribe(
+      res => {
+        let res_release = res[0];
+        console.log(res_release);
+        let attrs = Object.keys(res_release);
+        attrs.forEach(attr => {
+          if(attr != '_id' && res_release[attr] != undefined){
+            try{
+              this.release[attr] = (res_release[attr]).substring(0,10);
+            }catch(e){}
+          }
+        });
+      },
+      error => {
+        this.error = true;
+        console.error('Error!', error);
+        return throwError(error); // Angular 5/RxJS 5.5
+      }
+    );
+  }
+
 
   onSubmit() {
-    this.createRelease();
+    if(this.mode == 'Create'){
+      this.createRelease();
+    }else if(this.mode == 'Update'){
+      this.updateRelease();
+    }
   }
 
   
@@ -196,6 +260,38 @@ export class CreateReleaseComponent implements OnInit {
       );
   }
 
+  updateRelease() {
+    this.releaseService.getTeam()
+    .subscribe(
+        res => {
+          console.log('response', res);
+          console.log(res[0].length)
+          for (var i = 0; i < res[0].length; i++) {
+            this.release.projects.push(new Project(res[0][i].jiraProjectId))
+          }
+          this.releaseService.updateRelease(this.releaseId, this.release)
+            .pipe(
+              map(res => res) // or any other operator
+            )
+            .subscribe(
+              res => {
+                console.log('response', res);
+                this.router.navigate(['/']);
+              },
+              error => {
+                this.error = true;
+                console.error('Error!', error);
+                return throwError(error); // Angular 5/RxJS 5.5
+              }
+            );
+        },
+        error => {
+          this.error = true;
+          console.error('Error!', error);
+          return throwError(error); // Angular 5/RxJS 5.5
+        }
+      );
+  }
 
   /**
    * This is used to draw error flag in the invalid control

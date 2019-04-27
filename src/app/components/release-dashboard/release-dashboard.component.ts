@@ -47,7 +47,14 @@ export class ReleaseDashboardComponent implements OnInit {
     //this.timeline.setItems(items);
   }
 
+releaseId: string ='';
+
   ngOnInit() {
+
+    let url_splitted = this.router.url.split('/');
+    if(url_splitted.length == 3){
+     this.releaseId = url_splitted[2];
+    }
 
     var ctx = document.getElementById("canvas");
     console.log("URL is "+this.router.url)

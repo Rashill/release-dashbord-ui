@@ -2,8 +2,16 @@
   <div class="card mx-auto">
     <div class="card-body">
       <div class="card-title text-center mb-5">
-        <h2>Create Release</h2>
+        <h2>{{mode}} Release</h2>
       </div>
+
+   <!--  <div class="mt-5 text-center">
+        <button type="button" class="btn btn-lg px-gdn-btn-outline card-bg" (click)="changeMode()">
+          Switch to {{mode=='Edit'? 'create' : 'edit' }} mode
+        </button>
+      </div>
+      -->
+
       <div class="alert alert-danger" *ngIf="error">
         You have entered wrong details
         {{createForm.errors}}
@@ -11,7 +19,7 @@
 
       <form novalidate [formGroup]="createForm" (ngSubmit)="onSubmit()">
 
-        <form-wizard [txtBtnDone]="'Create'">
+        <form-wizard [txtBtnDone]="mode">
 
           <wizard-step [title]="'Step1: Basic info.'" [isValid]="isValidStep('step1')" (onNext)="onStep1Next($event)">
             <br />
