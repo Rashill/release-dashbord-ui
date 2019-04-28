@@ -49,6 +49,7 @@ import { RDTableComponent } from './components/rd-table/rd-table.component';
 import { TeamComponent } from './components/team/team.component';
 import { UsersComponent } from './components/users/users.component';
 import { ChecklistComponent } from './components/checklist/checklist.component';
+import { ForbiddenPageComponent } from './components/forbidden-page/forbidden-page.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -74,7 +75,8 @@ export function createTranslateLoader(http: HttpClient) {
     RDTableComponent,
     TeamComponent,
     UsersComponent,
-    ChecklistComponent
+    ChecklistComponent,
+    ForbiddenPageComponent
   ],
   imports: [
     NgbModule,

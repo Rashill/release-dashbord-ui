@@ -18,7 +18,9 @@ export class ShowIfAdminDirective implements OnInit {
     private templateRef: TemplateRef<any>,
     private authService: AuthService,
     private viewContainer: ViewContainerRef
-  ) {}
+  ) {
+    this.isAdmin = authService.getUser().role === 'SuperAdmin';
+  }
 
   @Input()
   set showIfAdmin(condition: boolean) {
@@ -26,10 +28,10 @@ export class ShowIfAdminDirective implements OnInit {
   }
 
   ngOnInit() {
-    this.isAuthenticated = this.authService.isAuthenticated();
-    this.isAdmin = this.authService.isAdmin();
+    // this.isAuthenticated = this.authService.isAuthenticated();
+    // this.isAdmin = this.authService.isAdmin();
 
-    if (this.isAuthenticated && this.isAdmin) {
+    if (this.isAdmin) {
       this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainer.clear();

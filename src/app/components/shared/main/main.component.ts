@@ -34,39 +34,46 @@ export class MainComponent implements OnInit {
       title: 'Teams',
       iconClass: 'material-icons',
       iconCode: 'group',
-      children: [
-        {
-          title: 'Create',
-          routerUrl: '/teams/typography'
-        }
-      ]
+      routerUrl: '/team'
     },
     {
-      title: 'Admin panel',
+      title: 'Checklists',
       iconClass: 'material-icons',
-      iconCode: 'build',
-      children: [
-        {
-          title: 'Teams',
-          routerUrl: '/team'
-        },
-        {
-          title: 'Users',
-          routerUrl: '/users'
-        },
-        {
-          title: 'Checks',
-          routerUrl: '/checklist'
-        }
-      ]
+      iconCode: 'check',
+      routerUrl: '/checklist'
     },
+    {
+      title: 'Users',
+      iconClass: 'material-icons',
+      iconCode: 'person',
+      routerUrl: '/user'
+    },
+    // {
+    //   title: 'Admin panel',
+    //   iconClass: 'material-icons',
+    //   iconCode: 'build',
+    //   children: [
+    //     {
+    //       title: 'Teams',
+    //       routerUrl: '/team'
+    //     },
+    //     {
+    //       title: 'Users',
+    //       routerUrl: '/users'
+    //     },
+    //     {
+    //       title: 'Checks',
+    //       routerUrl: '/checklist'
+    //     }
+    //   ]
+    // },
     {
       title: 'Release Settings',
       iconClass: 'material-icons',
       iconCode: 'settings',
       children: [
         {
-          title: 'Create Release',
+          title: 'Create New Release',
           routerUrl: '/release/create'
         }
       ]
@@ -95,6 +102,10 @@ export class MainComponent implements OnInit {
     this.onResize();
 
     this.user = authService.getUser();
+
+    if (authService.getUser() && authService.getUser().role === 'User') {
+      this.isMenuClosed = true;
+    }
 
     const vm = this;
   }

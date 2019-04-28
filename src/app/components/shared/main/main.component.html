@@ -10,6 +10,7 @@
 >
   <header class="d-flex justify-content-start align-items-center">
     <div
+      *showIfAdmin="true"
       class="menu"
       (click)="isMenuClosed = !isMenuClosed; onSideNavModeChange()"
     >
@@ -24,7 +25,7 @@
     <div class="ml-auto d-flex justify-content-start align-items-center">
       <img
         class="user-avatar d-none d-md-block"
-        [src]="user['avatarUrls']['32x32']"
+        [src]="user['avatarUrls']['48x48']"
       />
       <div class="user-name d-none d-md-block">{{ user.displayName }}</div>
       <div
@@ -37,7 +38,7 @@
           <div
             class="dropdown-header d-flex justify-content-end align-items-center"
           >
-            <img class="user-avatar" [src]="user['avatarUrls']['32x32']" />
+            <img class="user-avatar" [src]="user['avatarUrls']['48x48']" />
             <div class="user-name">{{ user.displayName }}</div>
             <i class="material-icons pl-4">keyboard_arrow_up</i>
           </div>
@@ -58,6 +59,7 @@
       </div>
     </div>
   </header>
+
   <div class="main-content">
     <div
       [ngClass]="{
@@ -69,6 +71,7 @@
       <router-outlet #outlet="outlet"></router-outlet>
     </div>
   </div>
+
   <div class="side-nav">
     <div
       class="back-btn"

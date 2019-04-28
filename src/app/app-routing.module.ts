@@ -6,6 +6,7 @@ import { CreateReleaseComponent } from './components/release/create/create.compo
 
 import { MainComponent } from './components/shared/main/main.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
+import { ForbiddenPageComponent } from './components/forbidden-page/forbidden-page.component';
 import { HomeComponent } from './components/home/home.component';
 import { ViewReleaseComponent } from './components/release/release.component';
 import { TeamComponent } from './components/team/team.component';
@@ -13,40 +14,47 @@ import { UsersComponent } from './components/users/users.component';
 import { ChecklistComponent } from './components/checklist/checklist.component';
 
 import { AuthGuard } from '../guards/auth.guard';
+import { AdminGuard } from '../guards/admin.guard';
 
 const appRoutes: Routes = [
   {
     path: '',
     component: MainComponent,
-
     children: [
       {
-        path: 'team',
-        component: TeamComponent
+        path: '',
+        component: HomeComponent,
+        canActivate: [AuthGuard]
       },
       {
-        path: 'users',
-        component: UsersComponent
+        path: 'team',
+        component: TeamComponent,
+        canActivate: [AdminGuard]
+      },
+      {
+        path: 'user',
+        component: UsersComponent,
+        canActivate: [AdminGuard]
       },
       {
         path: 'checklist',
-        component: ChecklistComponent
-      },
-      {
-        path: '',
-        component: HomeComponent
+        component: ChecklistComponent,
+        canActivate: [AdminGuard]
       },
       {
         path: 'release/create',
-        component: CreateReleaseComponent
+        component: CreateReleaseComponent,
+        canActivate: [AdminGuard]
       },
       {
         path: 'release/edit/:id',
-        component: CreateReleaseComponent
+        component: CreateReleaseComponent,
+        canActivate: [AdminGuard]
       },
       {
         path: 'release/:id',
-        component: ViewReleaseComponent
+        component: ViewReleaseComponent,
+        canActivate: [AuthGuard]
       }
     ]
   },
@@ -60,6 +68,11 @@ const appRoutes: Routes = [
     path: '404',
     component: NotFoundPageComponent,
     data: { message: 'Page not found!' }
+  },
+  {
+    path: '403',
+    component: ForbiddenPageComponent,
+    data: { message: 'Unauthorised!' }
   },
   { path: '**', redirectTo: '/404', pathMatch: 'prefix' }
 ];
