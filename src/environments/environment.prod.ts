@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
+  production: false,
   baseUrl: 'https://unisuperreleasedashboard-api.azurewebsites.net/api/v1'
 };

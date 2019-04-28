@@ -18,8 +18,8 @@ import { map } from 'rxjs/operators';
   animations: [routerTransition]
 })
 export class MainComponent implements OnInit {
-  userEmail: string;
-  error:Boolean;
+  user: any;
+  error: Boolean;
   // sites: Site[];
 
   // Model for side menu
@@ -49,10 +49,12 @@ export class MainComponent implements OnInit {
         {
           title: 'Teams',
           routerUrl: '/team'
-        },        {
+        },
+        {
           title: 'Users',
           routerUrl: '/users'
-        },        {
+        },
+        {
           title: 'Checks',
           routerUrl: '/checklist'
         }
@@ -68,7 +70,7 @@ export class MainComponent implements OnInit {
           routerUrl: '/release/create'
         }
       ]
-    },
+    }
   ];
 
   isSmallMenuMode = false;
@@ -92,7 +94,7 @@ export class MainComponent implements OnInit {
   ) {
     this.onResize();
 
-    this.userEmail = 'sadasd';
+    this.user = authService.getUser();
 
     const vm = this;
   }
@@ -122,8 +124,7 @@ export class MainComponent implements OnInit {
     }, this.sideNavTransitionDuration);
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   /**
    * Call resize service after box mode changes
@@ -161,6 +162,7 @@ export class MainComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+    this.router.navigateByUrl('/');
   }
 
   /**

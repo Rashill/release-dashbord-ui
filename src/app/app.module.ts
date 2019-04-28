@@ -17,7 +17,6 @@ import { ResizeService } from './services/resize.service';
 
 import { AppRoutingModule } from './app-routing.module';
 
-import { LoginPageComponent } from './components/login-page/login-page.component';
 import { MainComponent } from './components/shared/main/main.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 import { TextMaskModule } from 'angular2-text-mask';
@@ -43,10 +42,9 @@ import { VisModule } from 'ngx-vis';
 import { TableModule } from 'ngx-easy-table';
 import { FormWizardModule } from 'angular-wizard-form';
 
-import { NgTimelineComponent } from './components/ng-timeline/ng-timeline.component';
 import { AuthComponent } from './components/auth/auth.component';
-import { CreateReleaseComponent } from './components/create-release/create-release.component';
-import { ReleaseDashboardComponent } from './components/release-dashboard/release-dashboard.component';
+import { CreateReleaseComponent } from './components/release/create/create.component';
+import { ViewReleaseComponent } from './components/release/release.component';
 import { RDTableComponent } from './components/rd-table/rd-table.component';
 import { TeamComponent } from './components/team/team.component';
 import { UsersComponent } from './components/users/users.component';
@@ -67,14 +65,12 @@ export function createTranslateLoader(http: HttpClient) {
     ShowIfAdminDirective,
     AppComponent,
     MultimenuComponent,
-    LoginPageComponent,
     MainComponent,
     NotFoundPageComponent,
     HomeComponent,
-    NgTimelineComponent,
     AuthComponent,
     CreateReleaseComponent,
-    ReleaseDashboardComponent,
+    ViewReleaseComponent,
     RDTableComponent,
     TeamComponent,
     UsersComponent,
