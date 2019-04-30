@@ -57,18 +57,19 @@ export class CreateReleaseComponent implements OnInit {
   };
 
   //either create or update
-  mode: string= 'create';
+  mode: string= 'Create';
   releaseId: string = '';
+  isCompleted: boolean = false;
 
   createForm: FormGroup;
 
   error: Boolean;
 
   steps = {
-    step1: ['name', 'type', 'description', 'releaseDate'],
+    step1: ['name', 'type', 'description', 'releaseDate', 'cabDate'],
     step2: ['startDate', 'devfinish', 'refreshDate'],
     step3: ['regressionDeploy', 'regressionStart', 'regressionEnd'],
-    step4: ['cabDate', 'testenvironment', 'regenvironment', 'sitecore', 'biztalk', 'devsupport']
+    step4: ['testenvironment', 'regenvironment', 'sitecore', 'biztalk', 'devsupport']
   };
 
   validation_messages = { 'required': 'This is required field', 'dateInvalid': 'Date invalid' };
@@ -81,7 +82,6 @@ export class CreateReleaseComponent implements OnInit {
   ngOnInit() {
    // this.releaseId = '5cbfad638fc519175a4c7d66'
    let url_splitted = this.router.url.split('/');
-   console.log(url_splitted);
 
    if(url_splitted.length == 4){
     this.releaseId = url_splitted[3];
@@ -150,7 +150,7 @@ export class CreateReleaseComponent implements OnInit {
         Validators.required
       ]),
       regressionDeploy: new FormControl(this.release.regressionDeploy, [
-        Validators.required
+        //Validators.required
       ]),
       refreshDate: new FormControl(this.release.refreshDate, [
         Validators.required
@@ -165,7 +165,7 @@ export class CreateReleaseComponent implements OnInit {
         Validators.required
       ]),
       cabDate: new FormControl(this.release.cabDate, [
-        Validators.required
+       // Validators.required
       ]),
       regenvironment: new FormControl(this.release.regenvironment, [
         Validators.required
@@ -184,10 +184,38 @@ export class CreateReleaseComponent implements OnInit {
         validator: DateValidator('')
       });
     //end of form gorup init.
+
+
+    this.createForm.controls['type'].valueChanges.subscribe(type => {
+      if (type == 'ER') {
+        this.createForm.controls['cabDate'].setValidators([Validators.required]);
+        this.createForm.controls['regressionDeploy'].setValidators([Validators.required]);
+
+        this.createForm.controls['cabDate'].enable();
+        this.createForm.controls['regressionDeploy'].enable();
+      }else{
+        this.createForm.controls['cabDate'].setValidators(null);
+        this.createForm.controls['regressionDeploy'].setValidators(null);
+
+        this.createForm.controls['cabDate'].disable();
+        this.createForm.controls['regressionDeploy'].disable();
+      }
+      this.createForm.controls['cabDate'].updateValueAndValidity();
+      this.createForm.controls['regressionDeploy'].updateValueAndValidity();
+      this.createForm.updateValueAndValidity();
+    });
+
+    //change next, previus and submit buttons style
+    let buttons = document.querySelector('.card-footer');
+    buttons.children[0].classList.replace('btn-secondary', 'btn-info');
+    buttons.children[1].classList.replace('btn-secondary', 'btn-info');
+    buttons.children[2].classList.replace('btn-secondary', 'btn-primary');
+
   }
 
   loadAndFillControls(){
     let url = '/release/' + this.releaseId;
+    console.log(url);
     this.releaseService.getRelease(url)
     .pipe(
       map(res => res) // or any other operator
@@ -199,9 +227,25 @@ export class CreateReleaseComponent implements OnInit {
         let attrs = Object.keys(res_release);
         attrs.forEach(attr => {
           if(attr != '_id' && res_release[attr] != undefined){
-            try{
-              this.release[attr] = (res_release[attr]).substring(0,10);
-            }catch(e){}
+            if(attr == 'projects'){
+              let vd = (res_release[attr][0])['versionDetails'];
+              this.release['name'] = vd.name;
+              let type = ''
+              if((vd.name).indexOf('OOC')>-1){
+                type = 'OOC'
+              }else if((vd.name).indexOf('ER')>-1){
+                type = 'ER'
+              }else if((vd.name).indexOf('Hot Fix')>-1){
+                type = 'Hot Fix'
+              }
+              this.release.type = type;
+              this.release['description'] = vd.description;
+
+            }else{
+              try{
+                this.release[attr] = (res_release[attr]).substring(0,10);
+              }catch(e){}
+            }
           }
         });
       },
@@ -215,11 +259,15 @@ export class CreateReleaseComponent implements OnInit {
 
 
   onSubmit() {
+    console.log(this.release);
+    console.log(this.mode);
+
     if(this.mode == 'Create'){
       this.createRelease();
-    }else if(this.mode == 'Update'){
+    }else if(this.mode == 'Edit'){
       this.updateRelease();
     }
+    this.isCompleted = true;
   }
 
   
@@ -298,7 +346,10 @@ export class CreateReleaseComponent implements OnInit {
    * @param key control name
    */
   isValid(key) {
-    return this.createForm.controls[key].valid;// || !this.error;
+    if(this.createForm.controls[key] == undefined || this.createForm.controls[key].disabled){
+      return true;
+    }
+    return this.createForm.controls[key].valid;
   }
 
   /**
@@ -308,7 +359,11 @@ export class CreateReleaseComponent implements OnInit {
   isValidStep(step) {
     let result = true;
     this.steps[step].forEach(key => {
-      result = result && this.createForm.controls[key].valid;
+      if(this.createForm.controls[key] == undefined){
+        result = result && true;
+      }else{
+        result = result && !(this.createForm.controls[key].errors && !this.createForm.controls[key].errors.dateInvalid);//this.createForm.controls[key].valid;
+      }
     });
     return result;
   }
@@ -319,6 +374,10 @@ export class CreateReleaseComponent implements OnInit {
    */
   getValidationMsg(key) {
     let errors = this.createForm.controls[key].errors;
+    if(errors == undefined){
+      return;
+    }
+
     let validator = Object.keys(errors)[0];
     if(validator == 'dateInvalid'){
       return this.createForm.controls[key].errors['msg'];

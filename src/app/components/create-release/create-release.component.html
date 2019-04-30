@@ -5,7 +5,7 @@
         <h2>{{mode}} Release</h2>
       </div>
 
-   <!--  <div class="mt-5 text-center">
+      <!--  <div class="mt-5 text-center">
         <button type="button" class="btn btn-lg px-gdn-btn-outline card-bg" (click)="changeMode()">
           Switch to {{mode=='Edit'? 'create' : 'edit' }} mode
         </button>
@@ -21,7 +21,7 @@
 
         <form-wizard [txtBtnDone]="mode">
 
-          <wizard-step [title]="'Step1: Basic info.'" [isValid]="isValidStep('step1')" (onNext)="onStep1Next($event)">
+          <wizard-step [title]="'Step1: Basic info.'" [isValid]="isValidStep('step1')" >
             <br />
 
             <div class="form-group">
@@ -66,7 +66,6 @@
               </div>
             </div>
 
-
             <div class="form-group">
               <label for="releaseDate">Release Date</label>
               <div class="input-group">
@@ -80,9 +79,21 @@
               </div>
             </div>
 
+            <div class="form-group">
+              <label for="cabDate">CAB</label>
+              <div class="input-group">
+                <input type="date" class="form-control" formControlName="cabDate" [(ngModel)]="release.cabDate"
+                  placeholder="CIO2" [className]="!isValid('cabDate')?'form-control is-invalid':'form-control'" />
+                <!-- validation feedback text -->
+                <div class="form-text invalid-feedback" *ngIf="!isValid('cabDate')">
+                  {{getValidationMsg('cabDate')}}
+                </div>
+              </div>
+            </div>
+
           </wizard-step>
 
-          <wizard-step [title]="'Step2: Dev/Test'" [isValid]="isValidStep('step2')" (onNext)="onStep2Next($event)">
+          <wizard-step [title]="'Step2: Dev/Test'" [isValid]="isValidStep('step2')">
             <br />
 
             <div class="form-group">
@@ -128,10 +139,10 @@
 
           </wizard-step>
 
-          <wizard-step [title]="'Step3: Regression'" [isValid]="isValidStep('step3')" (onNext)="onStep3Next($event)">
+          <wizard-step [title]="'Step3: Regression'" [isValid]="isValidStep('step3')">
             <br />
 
-            <div class="form-group" *ngIf="release.type == 'ER'">
+            <div class="form-group">
               <label for="regressionDeploy">Regression Deploy Date</label>
               <div class="input-group">
                 <input type="date" text="regressionDeploy" class="form-control" formControlName="regressionDeploy"
@@ -173,85 +184,85 @@
           </wizard-step>
 
           <wizard-step [title]="'Step4: Details'" [isValid]="createForm.valid" [showNext]="false"
-          (onComplete)="onSubmit()">
+            (onComplete)="onSubmit()">
+            <div [ngSwitch]="isCompleted">
+              <div *ngSwitchDefault>
+                <br />
 
-            <div class="form-group" *ngIf="release.type == 'ER'">
-              <label for="cabDate">CAB</label>
-              <div class="input-group">
-                <input type="date" class="form-control" formControlName="cabDate" [(ngModel)]="release.cabDate"
-                  placeholder="CIO2" [className]="!isValid('cabDate')?'form-control is-invalid':'form-control'" />
-                <!-- validation feedback text -->
-                <div class="form-text invalid-feedback" *ngIf="!isValid('cabDate')">
-                  {{getValidationMsg('cabDate')}}
+                <div class="form-group">
+                  <label for="testenvironment">Test Environment</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" formControlName="testenvironment"
+                      [(ngModel)]="release.testenvironment" placeholder="CIO2"
+                      [className]="!isValid('testenvironment')?'form-control is-invalid':'form-control'" />
+                    <!-- validation feedback text -->
+                    <div class="form-text invalid-feedback" *ngIf="!isValid('testenvironment')">
+                      {{getValidationMsg('testenvironment')}}
+                    </div>
+                  </div>
                 </div>
+
+                <div class="form-group">
+                  <label for="regenvironment">Regression Environment</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" formControlName="regenvironment"
+                      [(ngModel)]="release.regenvironment" placeholder="LAB03"
+                      [className]="!isValid('regenvironment')?'form-control is-invalid':'form-control'" />
+                    <!-- validation feedback text -->
+                    <div class="form-text invalid-feedback" *ngIf="!isValid('regenvironment')">
+                      {{getValidationMsg('regenvironment')}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="sitecore">Site Core</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" formControlName="sitecore" [(ngModel)]="release.sitecore"
+                      placeholder="C5261" [className]="!isValid('sitecore')?'form-control is-invalid':'form-control'" />
+                    <!-- validation feedback text -->
+                    <div class="form-text invalid-feedback" *ngIf="!isValid('sitecore')">
+                      {{getValidationMsg('sitecore')}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="biztalk">Biz Talk</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" formControlName="biztalk" [(ngModel)]="release.biztalk"
+                      placeholder="C5410" [className]="!isValid('biztalk')?'form-control is-invalid':'form-control'" />
+                    <!-- validation feedback text -->
+                    <div class="form-text invalid-feedback" *ngIf="!isValid('biztalk')">
+                      {{getValidationMsg('biztalk')}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="devsupport">Dev Support</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" formControlName="devsupport"
+                      [(ngModel)]="release.devsupport" placeholder="James"
+                      [className]="!isValid('devsupport')?'form-control is-invalid':'form-control'" />
+                    <!-- validation feedback text -->
+                    <div class="form-text invalid-feedback" *ngIf="!isValid('devsupport')">
+                      {{getValidationMsg('devsupport')}}
+                    </div>
+                  </div>
+                </div>
+
+
               </div>
-            </div>
-
-            <div class="form-group">
-              <label for="testenvironment">Test Environment</label>
-              <div class="input-group">
-                <input type="text" class="form-control" formControlName="testenvironment"
-                  [(ngModel)]="release.testenvironment" placeholder="CIO2"
-                  [className]="!isValid('testenvironment')?'form-control is-invalid':'form-control'" />
-                <!-- validation feedback text -->
-                <div class="form-text invalid-feedback" *ngIf="!isValid('testenvironment')">
-                  {{getValidationMsg('testenvironment')}}
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="regenvironment">Regression Environment</label>
-              <div class="input-group">
-                <input type="text" class="form-control" formControlName="regenvironment"
-                  [(ngModel)]="release.regenvironment" placeholder="LAB03"
-                  [className]="!isValid('regenvironment')?'form-control is-invalid':'form-control'" />
-                <!-- validation feedback text -->
-                <div class="form-text invalid-feedback" *ngIf="!isValid('regenvironment')">
-                  {{getValidationMsg('regenvironment')}}
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="sitecore">Site Core</label>
-              <div class="input-group">
-                <input type="text" class="form-control" formControlName="sitecore" [(ngModel)]="release.sitecore"
-                  placeholder="C5261" [className]="!isValid('sitecore')?'form-control is-invalid':'form-control'" />
-                <!-- validation feedback text -->
-                <div class="form-text invalid-feedback" *ngIf="!isValid('sitecore')">
-                  {{getValidationMsg('sitecore')}}
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="biztalk">Biz Talk</label>
-              <div class="input-group">
-                <input type="text" class="form-control" formControlName="biztalk" [(ngModel)]="release.biztalk"
-                  placeholder="C5410" [className]="!isValid('biztalk')?'form-control is-invalid':'form-control'" />
-                <!-- validation feedback text -->
-                <div class="form-text invalid-feedback" *ngIf="!isValid('biztalk')">
-                  {{getValidationMsg('biztalk')}}
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="devsupport">Dev Support</label>
-              <div class="input-group">
-                <input type="text" class="form-control" formControlName="devsupport" [(ngModel)]="release.devsupport"
-                  placeholder="James" [className]="!isValid('devsupport')?'form-control is-invalid':'form-control'" />
-                <!-- validation feedback text -->
-                <div class="form-text invalid-feedback" *ngIf="!isValid('devsupport')">
-                  {{getValidationMsg('devsupport')}}
-                </div>
+              <div *ngSwitchCase="true">
+                <br/>
+                <h4>The form has been submitted...</h4>
               </div>
             </div>
 
           </wizard-step>
 
-               <!-- <div class="mt-5 text-center">
+          <!-- <div class="mt-5 text-center">
                   <button type="submit" class="btn btn-lg px-gdn-btn-outline card-bg" [disabled]="!createForm.valid">
                     Create
                   </button>

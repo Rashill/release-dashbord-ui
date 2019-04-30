@@ -17,13 +17,20 @@ export function DateValidator(s: string) {
       let f = group.controls[from];
       let t = group.controls[to];
 
+      // if one of the controls is disabled
+      if(f.disabled || t.disabled){
+        f.setErrors(null);
+        t.setErrors(null);
+        break;
+      }
+
       // in case if an error already rised
-      if ((f.errors && !f.errors.datInvalid) || (t.errors && !t.errors.datInvalid)) {
-        return;
+      if ((f.errors && !f.errors.dateInvalid) || (t.errors && !t.errors.dateInvalid)) {
+       // break;
       }
 
       // check if from date after to date -> raise an error 
-      if (f.value > t.value) {
+      if (f.value >= t.value) {
         let fLabel = label_control_mapping[from];
         let tLabel = label_control_mapping[to];
         f.setErrors({ dateInvalid: true, msg: fLabel + ' should be before ' + tLabel});
