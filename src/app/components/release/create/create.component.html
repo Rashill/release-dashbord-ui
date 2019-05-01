@@ -14,14 +14,14 @@
 
       <div class="alert alert-danger" *ngIf="error">
         You have entered wrong details
-        {{createForm.errors}}
+        {{errorMessage}}
       </div>
 
       <form novalidate [formGroup]="createForm" (ngSubmit)="onSubmit()">
 
         <form-wizard [txtBtnDone]="mode">
 
-          <wizard-step [title]="'Step1: Basic info.'" [isValid]="isValidStep('step1')" >
+          <wizard-step [title]="'1: Basic info.'" [isValid]="isValidStep('step1')" >
             <br />
 
             <div class="form-group">
@@ -93,7 +93,7 @@
 
           </wizard-step>
 
-          <wizard-step [title]="'Step2: Dev/Test'" [isValid]="isValidStep('step2')">
+          <wizard-step [title]="'2: Dev/Test'" [isValid]="isValidStep('step2')">
             <br />
 
             <div class="form-group">
@@ -139,7 +139,7 @@
 
           </wizard-step>
 
-          <wizard-step [title]="'Step3: Regression'" [isValid]="isValidStep('step3')">
+          <wizard-step [title]="'3: Regression'" [isValid]="isValidStep('step3')">
             <br />
 
             <div class="form-group">
@@ -183,10 +183,8 @@
 
           </wizard-step>
 
-          <wizard-step [title]="'Step4: Details'" [isValid]="createForm.valid" [showNext]="false"
-            (onComplete)="onSubmit()">
-            <div [ngSwitch]="isCompleted">
-              <div *ngSwitchDefault>
+          <wizard-step [title]="'4: Details'" [isValid]="isValidStep('step4')" [showNext]="true">
+
                 <br />
 
                 <div class="form-group">
@@ -252,21 +250,41 @@
                   </div>
                 </div>
 
+          </wizard-step>
 
+
+          <wizard-step [title]="'Summary'" [showNext]="false" [isValid]="isValidStep('done')" 
+            (onComplete)="onSubmit()">
+            <div [ngSwitch]="isCompleted">
+              <div *ngSwitchDefault>
+                <br />
+                <div><span class="font-weight-bold">Release Name: </span><span [className]="!isValid('name')?'text-light bg-danger':''" >{{release.name}}</span></div>
+                <div><span class="font-weight-bold">Description: </span><span [className]="!isValid('description')?'text-light bg-danger':''" >{{release.description}}</span></div>
+                <div><span class="font-weight-bold">Release Date: </span><span [className]="!isValid('releaseDate')?'text-light bg-danger':''" >{{release.releaseDate}}</span></div>
+                <div><span class="font-weight-bold">CAB Date: </span><span [className]="!isValid('cabDate')?'text-light bg-danger':''" >{{release.cabDate}}</span></div>
+                <hr/>
+                <div><span class="font-weight-bold">Dev/Test Start Date: </span><span [className]="!isValid('startDate')?'text-light bg-danger':''" >{{release.startDate}}</span></div>
+                <div><span class="font-weight-bold">Dev/Test Finish Date: </span><span [className]="!isValid('devfinish')?'text-light bg-danger':''" >{{release.devfinish}}</span></div>
+                <div><span class="font-weight-bold">Potential Code Refresh Date: </span><span [className]="!isValid('refreshDate')?'text-light bg-danger':''" >{{release.refreshDate}}</span></div>
+                <hr/>
+                <div><span class="font-weight-bold">Regression Deploy Date: </span><span [className]="!isValid('regressionDeploy')?'text-light bg-danger':''" >{{release.regressionDeploy}}</span></div>
+                <div><span class="font-weight-bold">Regression Start Date: </span><span [className]="!isValid('regressionStart')?'text-light bg-danger':''" >{{release.regressionStart}}</span></div>
+                <div><span class="font-weight-bold">Regression End Date: </span><span [className]="!isValid('regressionEnd')?'text-light bg-danger':''" >{{release.regressionEnd}}</span></div>
+                <hr/>
+                <div><span class="font-weight-bold">Test Environment: </span><span [className]="!isValid('testenvironment')?'text-light bg-danger':''" >{{release.testenvironment}}</span></div>
+                <div><span class="font-weight-bold">Regression Environment: </span><span [className]="!isValid('regenvironment')?'text-light bg-danger':''" >{{release.regenvironment}}</span></div>
+                <div><span class="font-weight-bold">Site Core: </span><span [className]="!isValid('sitecore')?'text-light bg-danger':''" >{{release.sitecore}}</span></div>
+                <div><span class="font-weight-bold">Biz Talk: </span><span [className]="!isValid('biztalk')?'text-light bg-danger':''" >{{release.biztalk}}</span></div>
+                <div><span class="font-weight-bold">Dev Support: </span><span [className]="!isValid('devsupport')?'text-light bg-danger':''" >{{release.devsupport}}</span></div>
+                <hr/>
               </div>
               <div *ngSwitchCase="true">
                 <br/>
                 <h4>The form has been submitted...</h4>
               </div>
             </div>
-
           </wizard-step>
 
-          <!-- <div class="mt-5 text-center">
-                  <button type="submit" class="btn btn-lg px-gdn-btn-outline card-bg" [disabled]="!createForm.valid">
-                    Create
-                  </button>
-                </div>-->
         </form-wizard>
       </form>
 

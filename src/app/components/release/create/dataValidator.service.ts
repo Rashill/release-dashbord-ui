@@ -21,12 +21,12 @@ export function DateValidator(s: string) {
       if(f.disabled || t.disabled){
         f.setErrors(null);
         t.setErrors(null);
-        break;
+        continue;
       }
 
       // in case if an error already rised
       if ((f.errors && !f.errors.dateInvalid) || (t.errors && !t.errors.dateInvalid)) {
-       // break;
+       continue;
       }
 
       // check if from date after to date -> raise an error 

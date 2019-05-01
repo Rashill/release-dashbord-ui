@@ -64,6 +64,7 @@ export class CreateReleaseComponent implements OnInit {
   createForm: FormGroup;
 
   error: Boolean;
+  errorMessage: string='';
 
   steps = {
     step1: ['name', 'type', 'description', 'releaseDate', 'cabDate'],
@@ -115,6 +116,7 @@ export class CreateReleaseComponent implements OnInit {
       this.mode = 'Edit'
       this.loadAndFillControls();
     }
+    
   }
 
   changeMode(){
@@ -184,7 +186,6 @@ export class CreateReleaseComponent implements OnInit {
         validator: DateValidator('')
       });
     //end of form gorup init.
-
 
     this.createForm.controls['type'].valueChanges.subscribe(type => {
       if (type == 'ER') {
@@ -279,11 +280,17 @@ export class CreateReleaseComponent implements OnInit {
       )
       .subscribe(
         res => {
+          
           console.log('response', res);
           console.log(res[0].length)
           for (var i = 0; i < res[0].length; i++) {
             this.release.projects.push(new Project(res[0][i].jiraProjectId))
           }
+
+          console.log("Release: "+this.release);
+          console.log("Mode: "+this.mode);
+
+
           this.releaseService.createRelease(this.release)
             .pipe(
               map(res => res) // or any other operator
@@ -317,7 +324,7 @@ export class CreateReleaseComponent implements OnInit {
           for (var i = 0; i < res[0].length; i++) {
             this.release.projects.push(new Project(res[0][i].jiraProjectId))
           }
-          this.releaseService.updateRelease(this.releaseId, this.release)
+          this.releaseService.createRelease(this.release)
             .pipe(
               map(res => res) // or any other operator
             )
@@ -357,12 +364,30 @@ export class CreateReleaseComponent implements OnInit {
   * @param step e.g. step1
   */
   isValidStep(step) {
+    if(step == 'done'){
+      console.log(this.createForm.valid);
+      return this.createForm.valid;
+    }
+
     let result = true;
     this.steps[step].forEach(key => {
       if(this.createForm.controls[key] == undefined){
         result = result && true;
       }else{
-        result = result && !(this.createForm.controls[key].errors && !this.createForm.controls[key].errors.dateInvalid);//this.createForm.controls[key].valid;
+        if(this.createForm.controls[key].errors == undefined){
+          result = result && true;
+        }else{
+          if(this.createForm.controls[key].valid){
+            result = result && true;
+          }else{
+            let dateInvalid = (this.createForm.controls[key].errors.dateInvalid == true)
+            result = result && dateInvalid;
+            if(dateInvalid){
+            this.errorMessage = this.getValidationMsg(key);
+            }
+          }
+          //result = result && !(this.createForm.controls[key].errors && !this.createForm.controls[key].errors.dateInvalid);//this.createForm.controls[key].valid;  
+        }
       }
     });
     return result;
