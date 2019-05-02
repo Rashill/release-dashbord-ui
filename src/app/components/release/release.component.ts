@@ -82,7 +82,7 @@ export class ViewReleaseComponent implements OnInit {
           );
           this.release.push(new release('Current Phase', 'QA'));
           this.timelineDetails = new TimeLineDetails(
-            res[0].startDate.substring(0, 10),
+            res[0].projects[0].versionDetails.startDate.substring(0, 10),
             res[0].devfinish.substring(0, 10),
             res[0].refreshDate.substring(0, 10),
             res[0].regressionStart.substring(0, 10),
@@ -97,8 +97,9 @@ export class ViewReleaseComponent implements OnInit {
           this.details.push(
             new release('Release Date', this.timelineDetails.getReleaseDate())
           );
+
           this.details.push(
-            new release('Dev Start Date', this.timelineDetails.getStartDate())
+            new release('Dev Start Date', res[0].projects[0].versionDetails.startDate)
           );
           this.details.push(
             new release('Dev Finish Date', this.timelineDetails.getDevFinish())
