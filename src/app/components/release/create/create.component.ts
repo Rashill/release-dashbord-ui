@@ -231,15 +231,15 @@ export class CreateReleaseComponent implements OnInit {
             if(attr == 'projects'){
               let vd = (res_release[attr][0])['versionDetails'];
               this.release['name'] = vd.name;
-              let type = ''
-              if((vd.name).indexOf('OOC')>-1){
-                type = 'OOC'
-              }else if((vd.name).indexOf('ER')>-1){
-                type = 'ER'
-              }else if((vd.name).indexOf('Hot Fix')>-1){
-                type = 'Hot Fix'
-              }
-              this.release.type = type;
+              // let type = ''
+              // if((vd.name).indexOf('OOC')>-1){
+              //   type = 'OOC'
+              // }else if((vd.name).indexOf('ER')>-1){
+              //   type = 'ER'
+              // }else if((vd.name).indexOf('Hot Fix')>-1){
+              //   type = 'Hot Fix'
+              // }
+              // this.release.type = type;
               this.release['description'] = vd.description;
               this.release.startDate=vd.startDate
             }else{
