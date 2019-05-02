@@ -23,7 +23,8 @@
               "src/styles/styles.scss",
               "node_modules/vis/dist/vis.css",
               "node_modules/ngx-easy-table/style.scss",
-              "./node_modules/angular-calendar/css/angular-calendar.css"
+              "./node_modules/angular-calendar/css/angular-calendar.css",
+              "./node_modules/font-awesome/css/font-awesome.css"
             ],
             "scripts": ["node_modules/vis/dist/vis.min.js"]
           },

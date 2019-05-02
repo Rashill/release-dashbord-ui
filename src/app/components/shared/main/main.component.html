@@ -10,6 +10,7 @@
 >
   <header class="d-flex justify-content-start align-items-center">
     <div
+      *showIfAdmin="true"
       class="menu"
       (click)="isMenuClosed = !isMenuClosed; onSideNavModeChange()"
     >
@@ -24,9 +25,9 @@
     <div class="ml-auto d-flex justify-content-start align-items-center">
       <img
         class="user-avatar d-none d-md-block"
-        src="/assets/images/avatars/avatar-1.png"
+        [src]="user['avatarUrls']['48x48']"
       />
-      <div class="user-name d-none d-md-block">John Collins</div>
+      <div class="user-name d-none d-md-block">{{ user.displayName }}</div>
       <div
         ngbDropdown
         class="dropdown-no-toggle dropdown-bounce"
@@ -37,19 +38,20 @@
           <div
             class="dropdown-header d-flex justify-content-end align-items-center"
           >
-            <img
-              class="user-avatar"
-              src="/assets/images/avatars/avatar-1.png"
-            />
-            <div class="user-name">John Collins</div>
+            <img class="user-avatar" [src]="user['avatarUrls']['48x48']" />
+            <div class="user-name">{{ user.displayName }}</div>
             <i class="material-icons pl-4">keyboard_arrow_up</i>
           </div>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Messages</a>
+          <!-- <a class="dropdown-item" href="#">Messages</a>
           <a class="dropdown-item" href="#">Profile</a>
           <a class="dropdown-item" href="#">Options</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item d-flex justify-content-end" href="#">
+          <div class="dropdown-divider"></div> -->
+          <a
+            class="dropdown-item d-flex justify-content-end"
+            (click)="logout()"
+            href="#"
+          >
             <span>Logout</span>
             <i class="material-icons ml-auto">exit_to_app</i>
           </a>
@@ -57,6 +59,7 @@
       </div>
     </div>
   </header>
+
   <div class="main-content">
     <div
       [ngClass]="{
@@ -68,6 +71,7 @@
       <router-outlet #outlet="outlet"></router-outlet>
     </div>
   </div>
+
   <div class="side-nav">
     <div
       class="back-btn"
@@ -94,7 +98,7 @@
     ></px-gdn-multimenu>
   </div>
 </div>
-<div
+<!-- <div
   class="card options-panel options-closed"
   [class.options-closed]="isOptionsClosed"
 >
@@ -171,4 +175,4 @@
     (click)="isOptionsClosed = !isOptionsClosed"
     >settings</i
   >
-</div>
+</div> -->

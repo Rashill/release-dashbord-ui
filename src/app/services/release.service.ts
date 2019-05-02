@@ -27,4 +27,10 @@ export class ReleaseService {
       this.http.get<any>(environment.baseUrl + url)
     );
   }
+
+  updateRelease(releaseId, release) {
+    return forkJoin(
+      this.http.put<any>(environment.baseUrl + '/release/'+releaseId, release)
+    );
+  }
 }

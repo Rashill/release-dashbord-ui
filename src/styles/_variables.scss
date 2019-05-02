@@ -5,24 +5,23 @@ $simple-line-font-path: '../../node_modules/simple-line-icons/fonts/';
 
 //Colors
 $body-color: rgba(#000000, 0.59);
-$primary-color: #0be3df;
-$primary-color-2: #00c8fa;
-$light-color: #ffffff;
+$primary-color: #05386b;
+$primary-color-2: #379683;
+$light-color: #edf5e1;
 
 $red: #ff0000;
 $yellow: #f4c22b;
 $green: #28a745;
 
-
 $theme-colors: (
   primary: $primary-color,
   secondary: #a7a7a7,
   success: $green,
-  info: $primary-color-2,
+  info: #5cdb95,
   warning: $yellow,
   danger: $red,
   light: $light-color,
-  dark: #343a40,
+  dark: #2d2d2d,
   body: $body-color
 );
 
@@ -31,7 +30,7 @@ $body-bg: #f2f3f7;
 $input-color: $body-color;
 $input-color-placeholder: rgba(#000000, 0.38);
 $grid-gutter-width: 16px;
-$border-radius: .125rem !default;
+$border-radius: 0.125rem !default;
 $border-radius-lg: $border-radius;
 $border-radius-sm: $border-radius;
 $enable-shadows: true;
@@ -40,9 +39,9 @@ $enable-shadows: true;
 $font-family-base: OpenSans;
 $font-size-base: 0.875rem;
 $font-size-lg: 1.125rem;
-$font-size-sm: 0.750rem;
+$font-size-sm: 0.75rem;
 $font-weight-bold: 700 !default;
-$fa-font-path: "~font-awesome/fonts";
+$fa-font-path: '~font-awesome/fonts';
 $headings-font-weight: 400;
 $h1-font-size: 2.375rem !default;
 $h2-font-size: 1.875rem !default;
@@ -70,7 +69,7 @@ $tooltip-arrow-height: 10px;
 //Tables
 $table-cell-padding-sm: 0.475rem;
 $table-border-color: rgba(#3e4f5c, 0.11);
-$table-accent-bg: rgba($primary-color, .1);
+$table-accent-bg: rgba($primary-color, 0.1);
 $table-hover-bg: transparent;
 
 //Progress
@@ -97,7 +96,9 @@ $input-btn-padding-x-lg: $input-btn-padding-x;
 $btn-box-shadow: none;
 $input-btn-focus-box-shadow: 0px 0px 7px 0px rgba(#09b5b2, 0.53);
 $btn-active-box-shadow: none;
-$btn-transition: background-color .15s ease-in-out, border-color .15s ease-in-out, color .15s ease-in-out, mat-elevation-transition-property-value();
+$btn-transition: background-color 0.15s ease-in-out,
+  border-color 0.15s ease-in-out, color 0.15s ease-in-out,
+  mat-elevation-transition-property-value();
 
 // Forms
 $input-bg: #ffffff;
@@ -111,11 +112,11 @@ $custom-file-button-color: #ffffff;
 $custom-control-indicator-box-shadow: none;
 
 // Form validation
-$form-feedback-valid-color: map-get($theme-colors, "success");
-$form-feedback-invalid-color: map-get($theme-colors, "danger");
+$form-feedback-valid-color: map-get($theme-colors, 'success');
+$form-feedback-invalid-color: map-get($theme-colors, 'danger');
 
 // Breadcrumbs
-$breadcrumb-item-padding: .5rem !default;
+$breadcrumb-item-padding: 0.5rem !default;
 $breadcrumb-margin-bottom: 1rem !default;
 $breadcrumb-bg: transparent;
 $breadcrumb-divider-color: $body-color;

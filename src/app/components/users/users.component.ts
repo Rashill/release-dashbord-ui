@@ -13,7 +13,8 @@ export class UsersComponent implements OnInit {
     pKey: '_id',
     apiURL: environment.baseUrl,
     update: true,
-    csv: true
+    csv: true,
+    forceServerUpdate: true
   };
 
   fields = [
