@@ -116,7 +116,7 @@ export class CreateReleaseComponent implements OnInit {
       this.mode = 'Edit'
       this.loadAndFillControls();
     }
-    
+
   }
 
   changeMode(){
@@ -241,7 +241,7 @@ export class CreateReleaseComponent implements OnInit {
               }
               this.release.type = type;
               this.release['description'] = vd.description;
-
+              this.release.startDate=vd.startDate
             }else{
               try{
                 this.release[attr] = (res_release[attr]).substring(0,10);
@@ -271,7 +271,7 @@ export class CreateReleaseComponent implements OnInit {
     this.isCompleted = true;
   }
 
-  
+
   createRelease() {
 
     this.releaseService.getTeam()
@@ -280,7 +280,7 @@ export class CreateReleaseComponent implements OnInit {
       )
       .subscribe(
         res => {
-          
+
           console.log('response', res);
           console.log(res[0].length)
           for (var i = 0; i < res[0].length; i++) {
@@ -386,7 +386,7 @@ export class CreateReleaseComponent implements OnInit {
             this.errorMessage = this.getValidationMsg(key);
             }
           }
-          //result = result && !(this.createForm.controls[key].errors && !this.createForm.controls[key].errors.dateInvalid);//this.createForm.controls[key].valid;  
+          //result = result && !(this.createForm.controls[key].errors && !this.createForm.controls[key].errors.dateInvalid);//this.createForm.controls[key].valid;
         }
       }
     });
