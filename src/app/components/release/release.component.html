@@ -1,107 +1,138 @@
-<div class="container-4">
-  <h1> Release Dashboard
-    <a routerLink="/release/edit/{{releaseId}}">
-        <small>(Edit)</small>
+<div class="container">
+  <h1 class="text-primary">
+    Release Dashboard
+    <a routerLink="/release/edit/{{ releaseId }}">
+      <small>(Edit)</small>
     </a>
   </h1>
-  <br>
-  <div class="floatLeft">
-    <h3>Release Details</h3>
-    <table class="table table-striped">
 
+  <br />
+
+  <div class="row mb-4">
+    <div class="col-6">
+      <h3 class="text-primary">Release Details</h3>
+      <table class="table table-striped table-light">
+        <tbody>
+          <tr *ngFor="let detail of release">
+            <td style="font-weight: 900;">{{ detail.first }}</td>
+            <td>{{ detail.second }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header">
+          <h3>Issue Status</h3>
+        </div>
+        <div class="card-body">
+          <canvas id="canvas">{{ chart }}</canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <h2>Timeline</h2>
+        </div>
+        <div class="card-body">
+          <div id="timeline" #visTimeline></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-6">
+      <table class="table table-striped table-light">
+        <tbody>
+          <tr *ngFor="let detail of environment">
+            <td style="font-weight: 900;">{{ detail.first }}</td>
+            <td>{{ detail.second }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-6">
+      <table class="table table-striped table-light">
+        <tbody>
+          <tr *ngFor="let detail of release">
+            <td style="font-weight: 900;">{{ detail.first }}</td>
+            <td>{{ detail.second }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row mb-4" *ngFor="let issues of allIssues">
+    <div class="col-12">
+      <h6>{{ issues.teamName }}</h6>
+    </div>
+
+    <div class="col-4">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          To Do
+        </div>
+        <ul
+          class="list-group list-group-flush"
+          *ngFor="let issuesName of issues.toDo"
+        >
+          <li class="list-group-item">
+            <div class="alert alert-info">{{ issuesName }}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-4">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          In Progress
+        </div>
+        <ul
+          class="list-group list-group-flush"
+          *ngFor="let issuesName of issues.inProgress"
+        >
+          <li class="list-group-item">
+            <div class="alert alert-info">{{ issuesName }}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-4">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          Done
+        </div>
+        <ul
+          class="list-group list-group-flush"
+          *ngFor="let issuesName of issues.inProgress"
+        >
+          <li class="list-group-item">
+            <div class="alert alert-info">{{ issuesName }}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <h1 class="text-primary">Release Details</h1>
+    <table class="table table-striped table-light">
       <tbody>
-        <tr *ngFor="let detail of release">
-          <td>{{ detail.first }}</td>
+        <tr *ngFor="let detail of details">
+          <td style="font-weight: 900;">{{ detail.first }}</td>
           <td>{{ detail.second }}</td>
         </tr>
       </tbody>
     </table>
   </div>
-
-  <div class="floatRight">
-    <table class="table table-striped">
-      <h3>Issue Status</h3>
-      <canvas id="canvas">{{ chart }}</canvas>
-    </table>
-  </div>
-
-</div>
-
-
-<div class="container-1">
-  <h2>Timeline</h2>
-  <div id="timeline" #visTimeline></div>
-</div>
-
-<div class="container-4">
-  <div class="floatLeft">
-    <table class="table table-striped">
-      <tbody>
-        <tr *ngFor="let detail of environment">
-          <td>{{ detail.first }}</td>
-          <td>{{ detail.second }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="floatRight">
-    <table class="table table-striped">
-      <tbody>
-        <tr *ngFor="let detail of release">
-          <td>{{ detail.first }}</td>
-          <td>{{ detail.second }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-</div>
-
-
-
-
-
-
-<div class="container-2">
-  
-  <div class="row" *ngFor="let issues of allIssues">
-      <h6>{{issues.teamName}}</h6>
-    <div class="card" style="width: 25rem;">
-      <div class="card-header">
-        To Do
-      </div>
-      <ul class="list-group list-group-flush"  *ngFor="let issuesName of issues.toDo">
-        <li class="list-group-item" >{{issuesName}}</li>
-      </ul>
-    </div>
-    <div class="card" style="width: 25rem;">
-      <div class="card-header">
-        In Progress
-      </div>
-      <ul class="list-group list-group-flush" *ngFor="let issuesName of issues.inProgress">
-        <li class="list-group-item" >{{issuesName}}</li>
-      </ul>
-    </div>
-    <div class="card" style="width: 25rem;">
-      <div class="card-header">
-        Done
-      </div>
-      <ul class="list-group list-group-flush" *ngFor="let issuesName of issues.inProgress">
-        <li class="list-group-item">{{issuesName}}</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="container-2">
-  <h1> Release Details</h1>
-  <table class="table table-striped">
-    <tbody>
-      <tr *ngFor="let detail of details">
-        <td>{{ detail.first }}</td>
-        <td>{{ detail.second }}</td>
-      </tr>
-    </tbody>
-  </table>
 </div>
