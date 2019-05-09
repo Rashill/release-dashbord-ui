@@ -33,4 +33,8 @@ export class ReleaseService {
       this.http.put<any>(environment.baseUrl + '/release/'+releaseId, release)
     );
   }
+
+  getChecklists() {
+    return forkJoin(this.http.get<any>(environment.baseUrl + '/checklist'));
+  }
 }

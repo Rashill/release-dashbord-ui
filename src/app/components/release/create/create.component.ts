@@ -52,9 +52,16 @@ export class CreateReleaseComponent implements OnInit {
     sitecore: string,
     biztalk: string,
     devsupport: string,
+    deploymentChampion: {
+      name: string,
+      email: string
+    },
     projects: Array<Project>
     // projects:String
   };
+
+  checklist: [];
+  checklist_data;
 
   //either create or update
   mode: string= 'Create';
@@ -70,10 +77,16 @@ export class CreateReleaseComponent implements OnInit {
     step1: ['name', 'type', 'description', 'releaseDate', 'cabDate'],
     step2: ['startDate', 'devfinish', 'refreshDate'],
     step3: ['regressionDeploy', 'regressionStart', 'regressionEnd'],
-    step4: ['testenvironment', 'regenvironment', 'sitecore', 'biztalk', 'devsupport']
+    step4: ['testenvironment', 'regenvironment', 'sitecore', 'biztalk', 'devsupport',
+     'depchampionName', 'depchampionEmail'],
+    step5: []
   };
 
-  validation_messages = { 'required': 'This is required field', 'dateInvalid': 'Date invalid' };
+  validation_messages = { 
+    'required': 'This is required field', 
+    'dateInvalid': 'Date invalid', 
+    'email': 'Invalid email format'
+  };
 
 
   constructor(private router: Router,
@@ -107,8 +120,14 @@ export class CreateReleaseComponent implements OnInit {
       sitecore: '',
       biztalk: '',
       devsupport: '',
+      deploymentChampion: {
+        name: '',
+        email: ''
+      },
       projects: Array()
     };
+
+    this.checklist_data = {};
 
     this.initFormGroup();
 
@@ -180,6 +199,12 @@ export class CreateReleaseComponent implements OnInit {
       ]),
       devsupport: new FormControl(this.release.devsupport, [
         Validators.required
+      ]),
+      depchampionName: new FormControl(this.release.deploymentChampion.name, [
+        Validators.required
+      ]),
+      depchampionEmail: new FormControl(this.release.deploymentChampion.email, [
+        Validators.required, Validators.email
       ])
     }, {
         // it validates the dates (check the imported service)
@@ -187,6 +212,30 @@ export class CreateReleaseComponent implements OnInit {
       });
     //end of form gorup init.
 
+
+    // load the checklist
+    this.releaseService.getChecklists().subscribe(
+      res => {
+        let checklist =  res[0];
+        for(let check of checklist){
+          // init. controls for the checklist
+          this.steps.step5 = [];
+       /*   this.createForm.addControl(
+            check['name'], new FormControl('',
+            [Validators.required, Validators.email]
+            ) 
+          );*/
+          this.steps.step5.push(check['name']);
+          this.checklist_data[check['name']] = '';
+        }  
+        this.checklist = checklist;
+      },
+      error => {
+      }
+    );
+  
+
+    
     this.createForm.controls['type'].valueChanges.subscribe(type => {
       if (type == 'ER') {
         this.createForm.controls['cabDate'].setValidators([Validators.required]);
@@ -213,6 +262,7 @@ export class CreateReleaseComponent implements OnInit {
     buttons.children[2].classList.replace('btn-secondary', 'btn-primary');
 
   }
+
 
   loadAndFillControls(){
     let url = '/release/' + this.releaseId;

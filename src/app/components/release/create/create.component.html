@@ -14,6 +14,7 @@
   
           <form-wizard [txtBtnDone]="mode">
   
+            <!-- Basic info. -->
             <wizard-step [title]="'1: Basic info.'" [isValid]="isValidStep('step1')" >
               <br />
   
@@ -86,6 +87,7 @@
   
             </wizard-step>
   
+            <!-- Dev/Test -->
             <wizard-step [title]="'2: Dev/Test'" [isValid]="isValidStep('step2')">
               <br />
   
@@ -132,6 +134,7 @@
   
             </wizard-step>
   
+            <!-- Regression -->
             <wizard-step [title]="'3: Regression'" [isValid]="isValidStep('step3')">
               <br />
   
@@ -176,6 +179,7 @@
   
             </wizard-step>
   
+            <!-- Details -->
             <wizard-step [title]="'4: Details'" [isValid]="isValidStep('step4')" [showNext]="true">
   
                   <br />
@@ -243,9 +247,54 @@
                     </div>
                   </div>
   
+                  <div class="form-group">
+                      <label for="depchampion">Deployment Champion</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" formControlName="depchampionName"
+                          [(ngModel)]="release.deploymentChampion.name" placeholder="James"
+                          [className]="!isValid('depchampionName')?'form-control is-invalid':'form-control'" />
+                        <!-- validation feedback text -->
+                        <div class="form-text invalid-feedback" *ngIf="!isValid('depchampionName')">
+                          {{getValidationMsg('depchampionName')}}
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      <label for="depchampion">Deployment Champion Email</label>
+                      <div class="input-group">
+                        <input type="email" class="form-control" formControlName="depchampionEmail"
+                          [(ngModel)]="release.deploymentChampion.email"
+                          [className]="!isValid('depchampionEmail')?'form-control is-invalid':'form-control'" />
+                        <!-- validation feedback text -->
+                        <div class="form-text invalid-feedback" *ngIf="!isValid('depchampionEmail')">
+                          {{getValidationMsg('depchampionEmail')}}
+                        </div>
+                      </div>
+                  </div>
+
             </wizard-step>
-  
-  
+
+            <!--Checklist-->
+            <wizard-step [title]="'5: Checklist'" [isValid]="isValidStep('step5')"  [showNext]="true">
+              <br />
+
+              <div class="form-group" *ngFor="let check of checklist">
+                <label for="{{check.name}}">Due Notification for {{check.name}}</label>
+                <div class="input-group">
+                  <input type="date" class="form-control" formControlName="{{check.name}}"
+                    [(ngModel)]="checklist_data[check.name]" placeholder="Send email to:" 
+                    [className]="!isValid(check.name)?'form-control is-invalid':'form-control'" />
+                    <!-- validation feedback text -->
+                    <div class="form-text invalid-feedback" *ngIf="!isValid(check.name)">
+                      {{getValidationMsg(check.name)}}
+                    </div>
+                </div>
+              </div>
+
+            </wizard-step>
+
+            <!-- Summary -->
             <wizard-step [title]="'Summary'" [showNext]="false" [isValid]="isValidStep('done')" 
               (onComplete)="onSubmit()">
               <div [ngSwitch]="isCompleted">
@@ -269,6 +318,13 @@
                   <div><span class="font-weight-bold">Site Core: </span><span [className]="!isValid('sitecore')?'text-light bg-danger':''" >{{release.sitecore}}</span></div>
                   <div><span class="font-weight-bold">Biz Talk: </span><span [className]="!isValid('biztalk')?'text-light bg-danger':''" >{{release.biztalk}}</span></div>
                   <div><span class="font-weight-bold">Dev Support: </span><span [className]="!isValid('devsupport')?'text-light bg-danger':''" >{{release.devsupport}}</span></div>
+                  <div><span class="font-weight-bold">Deployment Champion: </span><span [className]="!isValid('depchampionName')?'text-light bg-danger':''" >{{release.deploymentChampion.name}}</span></div>
+                  <div><span class="font-weight-bold">Deployment Champion Email: </span><span [className]="!isValid('depchampionName')?'text-light bg-danger':''" >{{release.deploymentChampion.email}}</span></div>
+                  <hr/>
+                  <div *ngFor="let check of checklist">
+                    <span class="font-weight-bold">Due Notification for {{check.name}}: </span>
+                    <span [className]="!isValid(check.name)?'text-light bg-danger':''" >{{checklist_data[check.name]}}</span>
+                  </div>
                   <hr/>
                 </div>
                 <div *ngSwitchCase="true">
