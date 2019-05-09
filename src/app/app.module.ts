@@ -35,6 +35,8 @@ import { AuthGuard } from '../guards/auth.guard';
 
 import { AuthService } from './services/auth.service';
 import { ReleaseService } from './services/release.service';
+import { ProjectService } from './services/project.service';
+import { ChecklistService } from './services/checklist.service';
 
 import { ShowAuthedDirective } from './directives/showAuthed.directive';
 import { ShowIfAdminDirective } from './directives/showIfAdmin.directive';
@@ -50,6 +52,8 @@ import { TeamComponent } from './components/team/team.component';
 import { UsersComponent } from './components/users/users.component';
 import { ChecklistComponent } from './components/checklist/checklist.component';
 import { ForbiddenPageComponent } from './components/forbidden-page/forbidden-page.component';
+
+import { ProjectIssuesPipe } from './pipes/issue.pipe';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -76,7 +80,8 @@ export function createTranslateLoader(http: HttpClient) {
     TeamComponent,
     UsersComponent,
     ChecklistComponent,
-    ForbiddenPageComponent
+    ForbiddenPageComponent,
+    ProjectIssuesPipe
   ],
   imports: [
     NgbModule,
@@ -108,6 +113,8 @@ export function createTranslateLoader(http: HttpClient) {
     },
     AuthService,
     ReleaseService,
+    ProjectService,
+    ChecklistService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

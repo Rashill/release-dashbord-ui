@@ -1,19 +1,21 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Timeline, DataSet } from 'vis';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TimeLineDetails } from './timeline';
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Issues } from './Issues';
 import { ReleaseService } from '../../services/release.service';
+import { ProjectService } from '../../services/project.service';
+import { ChecklistService } from '../../services/checklist.service';
 import { Chart } from 'chart.js';
-import { release } from './release';
 @Component({
   selector: 'app-release-dashboard',
   templateUrl: './release.component.html',
   styleUrls: ['./release.component.scss']
 })
 export class ViewReleaseComponent implements OnInit {
+  releaseId: string;
   @ViewChild('visTimeline') timelineContainer: ElementRef;
   tlContainer: any;
   timeline: any;
@@ -32,185 +34,154 @@ export class ViewReleaseComponent implements OnInit {
     'border-color: rgb(227,217,207); background-color: rgb(227,217,207);';
   error: Boolean;
   today: Date;
-  timelineDetails: TimeLineDetails;
-  constructor(private router: Router, private releaseService: ReleaseService) {}
   chart = [];
-  chart1 = [];
-  details = [];
-  release = [];
-  allIssues = [];
-  issues: Issues;
-  environment = [];
-  searchTodos = [];
+  release: any;
+  issues: any;
+  projects: any;
+
+  selectedProjectId = '';
+
+  timelineDetails: TimeLineDetails;
+  constructor(
+    private route: ActivatedRoute,
+    private projectService: ProjectService,
+    private checklistService: ChecklistService,
+    private releaseService: ReleaseService
+  ) {}
+
   showTimeLine() {
     this.tlContainer = this.timelineContainer.nativeElement;
     this.timeline = new Timeline(this.tlContainer, this.data, {});
     this.timeline.setOptions(this.options);
     this.timeline.setGroups(this.groups);
-    //this.timeline.setItems(items);
   }
 
-  releaseId: string = '';
-
   ngOnInit() {
-    let url_splitted = this.router.url.split('/');
-    if (url_splitted.length == 3) {
-      this.releaseId = url_splitted[2];
-    }
+    this.releaseId = this.route.snapshot.paramMap.get('id');
 
-    var ctx = document.getElementById('canvas');
-    console.log('URL is ' + this.router.url);
+    let ctx = document.getElementById('canvas');
     this.releaseService
-      .getRelease(this.router.url)
+      .getRelease(this.releaseId)
       .pipe(
         map(res => res) // or any other operator
       )
       .subscribe(
         res => {
-          console.log('response', res);
+          this.release = res[0];
 
-          this.release.push(
-            new release('Release Name', res[0].projects[0].versionDetails.name)
-          );
-          this.release.push(new release('Type of Release', 'OOC'));
-          this.release.push(
-            new release('Release Date', res[0].releaseDate.substring(0, 10))
-          );
-          this.today = new Date();
-          this.release.push(
-            new release("Today's Date", this.today.toDateString())
-          );
-          this.release.push(new release('Current Phase', 'QA'));
-          this.timelineDetails = new TimeLineDetails(
-            res[0].projects[0].versionDetails.startDate.substring(0, 10),
-            res[0].devFinishDate.substring(0, 10),
-            res[0].refreshDate.substring(0, 10),
-            res[0].regressionStartDate.substring(0, 10),
-            res[0].regressionEndDate.substring(0, 10),
-            res[0].releaseDate.substring(0, 10)
-          );
-          this.loadTimelineData(this.timelineDetails);
-          this.showTimeLine();
-          this.details.push(
-            new release('Release Name', res[0].projects[0].versionDetails.name)
-          );
-          this.details.push(
-            new release('Release Date', this.timelineDetails.getReleaseDate())
+          this.release.days = this.calculateDaysDifference(
+            new Date(this.release.projects[0].versionDetails.releaseDate)
           );
 
-          this.details.push(
-            new release(
-              'Dev Start Date',
-              res[0].projects[0].versionDetails.startDate
+          this.projectService
+            .getProjects()
+            .pipe(
+              map(response => response) // or any other operator
             )
-          );
-          this.details.push(
-            new release('Dev Finish Date', this.timelineDetails.getDevFinish())
-          );
-          if (res[0].regressionDeployDate != null) {
-            this.details.push(
-              new release('Regression Deploy Date', res[0].regressionDeployDate)
+            .subscribe(
+              response => {
+                for (let i = 0; i < response[0].length; i++) {
+                  for (let j = 0; j < this.release.projects.length; j++) {
+                    if (
+                      this.release.projects[j].projectId === response[0][i].id
+                    ) {
+                      this.release.projects[j].name = response[0][i].name;
+                    }
+                  }
+                }
+
+                console.log('this.projects', this.release);
+              },
+              error => {
+                this.error = true;
+                console.error('Error!', error);
+                return throwError(error); // Angular 5/RxJS 5.5
+              }
             );
-          }
-          this.details.push(
-            new release(
-              'Regression Start Date',
-              this.timelineDetails.getRegressionStart()
-            )
-          );
-          this.details.push(
-            new release(
-              'Regression End Date',
-              this.timelineDetails.getRegressionEnd()
-            )
-          );
-          if (res[0].cabDate != null)
-            this.details.push(new release('CAB Date', res[0].cabDate));
-          this.details.push(
-            new release('Test Enviornment', res[0].testEnvironment)
-          );
-          this.details.push(
-            new release('Regression Enviornment', res[0].regenvironment)
-          );
-          this.details.push(new release('Site Core', res[0].sitecore));
-          this.details.push(new release('Biz Talk', res[0].biztalk));
-          this.details.push(new release('Dev Support', res[0].devSupport));
 
-          this.environment.push(
-            new release('Release Name', res[0].projects[0].versionDetails.name)
-          );
-          this.environment.push(
-            new release('Dev Environment', res[0].testEnvironment)
-          );
-          this.environment.push(
-            new release('Regression Environment', res[0].regenvironment)
-          );
-          this.environment.push(new release('Sitecore', res[0].sitecore));
-          this.environment.push(new release('Biztalk', res[0].biztalk));
-          this.environment.push(new release('Dev Support', res[0].devSupport));
+          this.checklistService
+            .getChecklists()
+            .pipe(
+              map(response => response) // or any other operator
+            )
+            .subscribe(
+              response => {
+                console.log('checklist', response);
+                for (let i = 0; i < response[0].length; i++) {
+                  for (let j = 0; j < this.release.checklists.length; j++) {
+                    if (
+                      this.release.checklists[j].checklistId ===
+                      response[0][i]._id
+                    ) {
+                      this.release.checklists[j].name = response[0][i].name;
+                      this.release.checklists[j].description =
+                        response[0][i].description;
+                    }
+                  }
+                }
+              },
+              error => {
+                this.error = true;
+                console.error('Error!', error);
+                return throwError(error); // Angular 5/RxJS 5.5
+              }
+            );
 
-          var toDO = 0;
-          var done = 0;
-          var inReview = 0;
-          var inProgress = 0;
-          for (var i = 0; i < res[0].projects.length; i++) {
-            var toDoIssues = [];
-            var doneIssues = [];
-            var inProgressIssues = [];
-            // console.log(res[0].projects[i].versionDetails.issues)
+          this.loadTimelineData();
+          this.showTimeLine();
+
+          this.issues = {
+            toDO: {
+              issues: [],
+              totalStoryPoints: 0
+            },
+            done: {
+              issues: [],
+              totalStoryPoints: 0
+            },
+            inReview: {
+              issues: [],
+              totalStoryPoints: 0
+            },
+            inProgress: {
+              issues: [],
+              totalStoryPoints: 0
+            }
+          };
+
+          for (let i = 0; i < res[0].projects.length; i++) {
             for (
-              var j = 0;
+              let j = 0;
               j < res[0].projects[i].versionDetails.issues.issues.length;
               j++
             ) {
+              let issue = res[0].projects[i].versionDetails.issues.issues[j];
+              issue.projectId = res[0].projects[i].projectId;
+
               if (
                 res[0].projects[i].versionDetails.issues.issues[j].fields.status
-                  .name == 'Done'
+                  .name === 'Done'
               ) {
-                doneIssues.push(
-                  res[0].projects[i].versionDetails.issues.issues[j].fields
-                    .summary
-                );
-                done++;
+                this.issues.done.issues.push(issue);
               } else if (
                 res[0].projects[i].versionDetails.issues.issues[j].fields.status
-                  .name == 'To Do'
+                  .name === 'To Do'
               ) {
-                toDO++;
-                toDoIssues.push(
-                  res[0].projects[i].versionDetails.issues.issues[j].fields
-                    .summary
-                );
+                this.issues.toDO.issues.push(issue);
               } else if (
                 res[0].projects[i].versionDetails.issues.issues[j].fields.status
-                  .name == 'In Review'
+                  .name === 'In Review'
               ) {
-                inReview++;
-                inProgressIssues.push(
-                  res[0].projects[i].versionDetails.issues.issues[j].fields
-                    .summary
-                );
+                this.issues.inReview.issues.push(issue);
               } else if (
                 res[0].projects[i].versionDetails.issues.issues[j].fields.status
-                  .name == 'In Progress'
+                  .name === 'In Progress'
               ) {
-                inProgress++;
-                inProgressIssues.push(
-                  res[0].projects[i].versionDetails.issues.issues[j].fields
-                    .summary
-                );
+                this.issues.inProgress.issues.push(issue);
               }
             }
-            this.issues = new Issues(
-              res[0].projects[i].projectId,
-              toDoIssues,
-              inProgressIssues,
-              doneIssues
-            );
-            this.allIssues.push(this.issues);
-            this.issues = null;
           }
-          console.log(this.allIssues);
+
           this.chart = new Chart(ctx, {
             type: 'doughnut',
             data: {
@@ -218,8 +189,13 @@ export class ViewReleaseComponent implements OnInit {
               datasets: [
                 {
                   label: 'Population (millions)',
-                  backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9'],
-                  data: [done, inProgress, inReview, toDO]
+                  backgroundColor: ['#3cba9f', '#3e95cd', '#FF9900', '#C13100'],
+                  data: [
+                    this.issues.done.issues.length,
+                    this.issues.inProgress.issues.length,
+                    this.issues.inReview.issues.length,
+                    this.issues.toDO.issues.length
+                  ]
                 }
               ]
             }
@@ -233,7 +209,7 @@ export class ViewReleaseComponent implements OnInit {
       );
   }
 
-  loadTimelineData(timelineDetails) {
+  loadTimelineData() {
     this.groups = new DataSet([
       {
         id: 1,
@@ -244,32 +220,52 @@ export class ViewReleaseComponent implements OnInit {
       {
         id: 1,
         content: 'Development',
-        start: timelineDetails.getStartDate(),
-        end: timelineDetails.getDevFinish(),
+        title:
+          this.getDateString(
+            this.release.projects[0].versionDetails.startDate
+          ) +
+          ' - ' +
+          this.getDateString(this.release.devFinishDate),
+        start: new Date(this.release.projects[0].versionDetails.startDate),
+        end: new Date(this.release.devFinishDate),
         group: 1,
         style: this.redStyle
       },
       {
         id: 2,
-        content: 'Refresh Date',
-        start: timelineDetails.getDevFinish(),
-        end: timelineDetails.getRefreshDate(),
+        content: 'Code Refresh',
+        title:
+          this.getDateString(this.release.devFinishDate) +
+          ' - ' +
+          this.getDateString(this.release.refreshDate),
+        start: new Date(this.release.devFinishDate),
+        end: new Date(this.release.refreshDate),
         group: 1,
         style: this.blueStyle
       },
       {
         id: 3,
         content: 'Regression Testing',
-        start: timelineDetails.getRegressionStart(),
-        end: timelineDetails.getRegressionEnd(),
+        title:
+          this.getDateString(this.release.regressionStartDate) +
+          ' - ' +
+          this.getDateString(this.release.regressionEndDate),
+        start: new Date(this.release.regressionStartDate),
+        end: new Date(this.release.regressionEndDate),
         group: 1,
         style: this.greenStyle
       },
       {
         id: 4,
         content: 'Release',
-        start: timelineDetails.getRegressionEnd(),
-        end: timelineDetails.getReleaseDate(),
+        title:
+          this.getDateString(this.release.regressionEndDate) +
+          ' - ' +
+          this.getDateString(
+            this.release.projects[0].versionDetails.releaseDate
+          ),
+        start: new Date(this.release.regressionEndDate),
+        end: new Date(this.release.projects[0].versionDetails.releaseDate),
         group: 1,
         style: this.yellowStyle
       }
@@ -288,5 +284,25 @@ export class ViewReleaseComponent implements OnInit {
       },
       stack: false
     };
+  }
+
+  getDateString(dt) {
+    let date = new Date(dt);
+    let dd: any = date.getDate();
+    let mm: any = date.getMonth() + 1; //January is 0!
+
+    let yyyy = date.getFullYear();
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+    return dd + '/' + mm + '/' + yyyy;
+  }
+
+  calculateDaysDifference(date2) {
+    const diffTime = Math.abs(date2.getTime() - new Date().getTime());
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
 }
