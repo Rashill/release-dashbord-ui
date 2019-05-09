@@ -83,10 +83,10 @@ export class ViewReleaseComponent implements OnInit {
           this.release.push(new release('Current Phase', 'QA'));
           this.timelineDetails = new TimeLineDetails(
             res[0].projects[0].versionDetails.startDate.substring(0, 10),
-            res[0].devfinish.substring(0, 10),
+            res[0].devFinishDate.substring(0, 10),
             res[0].refreshDate.substring(0, 10),
-            res[0].regressionStart.substring(0, 10),
-            res[0].regressionEnd.substring(0, 10),
+            res[0].regressionStartDate.substring(0, 10),
+            res[0].regressionEndDate.substring(0, 10),
             res[0].releaseDate.substring(0, 10)
           );
           this.loadTimelineData(this.timelineDetails);
@@ -99,15 +99,19 @@ export class ViewReleaseComponent implements OnInit {
           );
 
           this.details.push(
-            new release('Dev Start Date', res[0].projects[0].versionDetails.startDate)
+            new release(
+              'Dev Start Date',
+              res[0].projects[0].versionDetails.startDate
+            )
           );
           this.details.push(
             new release('Dev Finish Date', this.timelineDetails.getDevFinish())
           );
-          if (res[0].regressionDeploy != null)
+          if (res[0].regressionDeployDate != null) {
             this.details.push(
-              new release('Regression Deploy Date', res[0].regressionDeploy)
+              new release('Regression Deploy Date', res[0].regressionDeployDate)
             );
+          }
           this.details.push(
             new release(
               'Regression Start Date',
@@ -123,27 +127,27 @@ export class ViewReleaseComponent implements OnInit {
           if (res[0].cabDate != null)
             this.details.push(new release('CAB Date', res[0].cabDate));
           this.details.push(
-            new release('Test Enviornment', res[0].testenvironment)
+            new release('Test Enviornment', res[0].testEnvironment)
           );
           this.details.push(
             new release('Regression Enviornment', res[0].regenvironment)
           );
           this.details.push(new release('Site Core', res[0].sitecore));
           this.details.push(new release('Biz Talk', res[0].biztalk));
-          this.details.push(new release('Dev Support', res[0].devsupport));
+          this.details.push(new release('Dev Support', res[0].devSupport));
 
           this.environment.push(
             new release('Release Name', res[0].projects[0].versionDetails.name)
           );
           this.environment.push(
-            new release('Dev Environment', res[0].testenvironment)
+            new release('Dev Environment', res[0].testEnvironment)
           );
           this.environment.push(
             new release('Regression Environment', res[0].regenvironment)
           );
           this.environment.push(new release('Sitecore', res[0].sitecore));
           this.environment.push(new release('Biztalk', res[0].biztalk));
-          this.environment.push(new release('Dev Support', res[0].devsupport));
+          this.environment.push(new release('Dev Support', res[0].devSupport));
 
           var toDO = 0;
           var done = 0;
