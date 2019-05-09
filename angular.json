@@ -16,7 +16,7 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "assets": ["src/assets"],
+            "assets": ["src/assets","src/web.config"],
             "styles": [
               "node_modules/devextreme/dist/css/dx.common.css",
               "node_modules/devextreme/dist/css/dx.light.css",
@@ -75,7 +75,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
             "styles": ["src/styles/styles.scss"],
-            "assets": ["src/assets"]
+            "assets": ["src/assets","src/web.config"]
           }
         },
         "lint": {
