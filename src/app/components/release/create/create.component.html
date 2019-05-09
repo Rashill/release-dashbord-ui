@@ -2,42 +2,33 @@
   <div class="card mx-auto">
     <div class="card-body">
       <div class="card-title text-center mb-5">
-        <h2>{{ mode }} Release</h2>
+        <h2>{{mode}} Release</h2>
       </div>
 
       <div class="alert alert-danger" *ngIf="error">
         You have entered wrong details
-        {{ errorMessage }}
+        {{errorMessage}}
       </div>
 
       <form novalidate [formGroup]="createForm" (ngSubmit)="onSubmit()">
+
         <form-wizard [txtBtnDone]="mode">
-          <wizard-step
-            [title]="'1: Basic info.'"
-            [isValid]="isValidStep('step1')"
-          >
+
+          <!-- Basic info. -->
+          <wizard-step [title]="'1: Basic info.'" [isValid]="isValidStep('step1')">
             <br />
 
             <div class="form-group">
               <label for="name">Release Name</label>
               <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="name"
-                  [(ngModel)]="release.name"
-                  placeholder="Release Name"
-                  [className]="
+                <input type="text" class="form-control" formControlName="name" [(ngModel)]="release.name"
+                  placeholder="Release Name" [className]="
                     !isValid('name')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('name')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('name')">
                   {{ getValidationMsg('name') }}
                 </div>
               </div>
@@ -46,28 +37,18 @@
             <div class="form-group">
               <label for="Type">Release Type</label>
               <div class="input-group">
-                <select
-                  class="form-control"
-                  id="type"
-                  required
-                  formControlName="type"
-                  [(ngModel)]="release.type"
-                  name="type"
-                  [className]="
+                <select class="form-control" id="type" required formControlName="type" [(ngModel)]="release.type"
+                  name="type" [className]="
                     !isValid('type')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                >
+                  ">
                   <option value="OOC" selected>OOC</option>
                   <option value="ER">ER</option>
                   <option value="Hot Fix">Hot Fix</option>
                 </select>
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('type')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('type')">
                   {{ getValidationMsg('type') }}
                 </div>
               </div>
@@ -76,23 +57,14 @@
             <div class="form-group">
               <label for="Description">Description</label>
               <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="description"
-                  [(ngModel)]="release.description"
-                  placeholder="Description"
-                  [className]="
+                <input type="text" class="form-control" formControlName="description" [(ngModel)]="release.description"
+                  placeholder="Description" [className]="
                     !isValid('description')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('description')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('description')">
                   {{ getValidationMsg('description') }}
                 </div>
               </div>
@@ -101,23 +73,14 @@
             <div class="form-group">
               <label for="releaseDate">Release Date</label>
               <div class="input-group">
-                <input
-                  type="date"
-                  text="picker"
-                  class="form-control"
-                  formControlName="releaseDate"
-                  [(ngModel)]="release.releaseDate"
-                  [className]="
+                <input type="date" text="picker" class="form-control" formControlName="releaseDate"
+                  [(ngModel)]="release.releaseDate" [className]="
                     !isValid('releaseDate')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('releaseDate')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('releaseDate')">
                   {{ getValidationMsg('releaseDate') }}
                 </div>
               </div>
@@ -126,23 +89,14 @@
             <div class="form-group">
               <label for="cabDate">CAB</label>
               <div class="input-group">
-                <input
-                  type="date"
-                  class="form-control"
-                  formControlName="cabDate"
-                  [(ngModel)]="release.cabDate"
-                  placeholder="CIO2"
-                  [className]="
+                <input type="date" class="form-control" formControlName="cabDate" [(ngModel)]="release.cabDate"
+                  placeholder="CIO2" [className]="
                     !isValid('cabDate')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('cabDate')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('cabDate')">
                   {{ getValidationMsg('cabDate') }}
                 </div>
               </div>
@@ -156,23 +110,14 @@
               <label for="startDate">Dev/Test Start Date</label>
               <div class="input-group">
                 <div class="input-group">
-                  <input
-                    type="date"
-                    text="picker"
-                    class="form-control"
-                    formControlName="startDate"
-                    [(ngModel)]="release.startDate"
-                    [className]="
+                  <input type="date" text="picker" class="form-control" formControlName="startDate"
+                    [(ngModel)]="release.startDate" [className]="
                       !isValid('startDate')
                         ? 'form-control is-invalid'
                         : 'form-control'
-                    "
-                  />
+                    " />
                   <!-- validation feedback text -->
-                  <div
-                    class="form-text invalid-feedback"
-                    *ngIf="!isValid('startDate')"
-                  >
+                  <div class="form-text invalid-feedback" *ngIf="!isValid('startDate')">
                     {{ getValidationMsg('startDate') }}
                   </div>
                 </div>
@@ -182,23 +127,14 @@
             <div class="form-group">
               <label for="devFinishDate">Dev/Test Finish Date</label>
               <div class="input-group">
-                <input
-                  type="date"
-                  text="picker"
-                  class="form-control"
-                  formControlName="devFinishDate"
-                  [(ngModel)]="release.devFinishDate"
-                  [className]="
+                <input type="date" text="picker" class="form-control" formControlName="devFinishDate"
+                  [(ngModel)]="release.devFinishDate" [className]="
                     !isValid('devFinishDate')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('devFinishDate')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('devFinishDate')">
                   {{ getValidationMsg('devFinishDate') }}
                 </div>
               </div>
@@ -207,55 +143,34 @@
             <div class="form-group">
               <label for="refreshDate">Potential Code Refresh Date</label>
               <div class="input-group">
-                <input
-                  type="date"
-                  text="refreshDate"
-                  class="form-control"
-                  formControlName="refreshDate"
-                  [(ngModel)]="release.refreshDate"
-                  [className]="
+                <input type="date" text="refreshDate" class="form-control" formControlName="refreshDate"
+                  [(ngModel)]="release.refreshDate" [className]="
                     !isValid('refreshDate')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('refreshDate')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('refreshDate')">
                   {{ getValidationMsg('refreshDate') }}
                 </div>
               </div>
             </div>
           </wizard-step>
 
-          <wizard-step
-            [title]="'3: Regression'"
-            [isValid]="isValidStep('step3')"
-          >
+          <wizard-step [title]="'3: Regression'" [isValid]="isValidStep('step3')">
             <br />
 
             <div class="form-group">
               <label for="regressionDeployDate">Regression Deploy Date</label>
               <div class="input-group">
-                <input
-                  type="date"
-                  text="regressionDeployDate"
-                  class="form-control"
-                  formControlName="regressionDeployDate"
-                  [(ngModel)]="release.regressionDeployDate"
-                  [className]="
+                <input type="date" text="regressionDeployDate" class="form-control"
+                  formControlName="regressionDeployDate" [(ngModel)]="release.regressionDeployDate" [className]="
                     !isValid('regressionDeployDate')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('regressionDeployDate')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('regressionDeployDate')">
                   {{ getValidationMsg('regressionDeployDate') }}
                 </div>
               </div>
@@ -264,23 +179,14 @@
             <div class="form-group">
               <label for="regressionStartDate">Regression Start Date</label>
               <div class="input-group">
-                <input
-                  type="date"
-                  text="regressionStartDate"
-                  class="form-control"
-                  formControlName="regressionStartDate"
-                  [(ngModel)]="release.regressionStartDate"
-                  [className]="
+                <input type="date" text="regressionStartDate" class="form-control" formControlName="regressionStartDate"
+                  [(ngModel)]="release.regressionStartDate" [className]="
                     !isValid('regressionStartDate')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('regressionStartDate')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('regressionStartDate')">
                   {{ getValidationMsg('regressionStartDate') }}
                 </div>
               </div>
@@ -289,209 +195,52 @@
             <div class="form-group">
               <label for="regressionEndDate">Regression End Date</label>
               <div class="input-group">
-                <input
-                  type="date"
-                  text="regressionEndDate"
-                  class="form-control"
-                  formControlName="regressionEndDate"
-                  [(ngModel)]="release.regressionEndDate"
-                  [className]="
+                <input type="date" text="regressionEndDate" class="form-control" formControlName="regressionEndDate"
+                  [(ngModel)]="release.regressionEndDate" [className]="
                     !isValid('regressionEndDate')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('regressionEndDate')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('regressionEndDate')">
                   {{ getValidationMsg('regressionEndDate') }}
                 </div>
               </div>
             </div>
           </wizard-step>
 
-          <wizard-step
-            [title]="'4: Details'"
-            [isValid]="isValidStep('step4')"
-            [showNext]="true"
-          >
+          <!-- Details -->
+          <wizard-step [title]="'4: Details'" [isValid]="isValidStep('step4')" [showNext]="true">
             <br />
 
             <div class="form-group">
               <label for="testEnvironment">Test Environment</label>
               <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="testEnvironment"
-                  [(ngModel)]="release.testEnvironment"
-                  placeholder="CIO2"
-                  [className]="
+                <input type="text" class="form-control" formControlName="testEnvironment"
+                  [(ngModel)]="release.testEnvironment" placeholder="CIO2" [className]="
                     !isValid('testEnvironment')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('testEnvironment')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('testEnvironment')">
                   {{ getValidationMsg('testEnvironment') }}
                 </div>
               </div>
-  
-            </wizard-step>
-  
-            <!-- Details -->
-            <wizard-step [title]="'4: Details'" [isValid]="isValidStep('step4')" [showNext]="true">
-  
-                  <br />
-  
-                  <div class="form-group">
-                    <label for="testenvironment">Test Environment</label>
-                    <div class="input-group">
-                      <input type="text" class="form-control" formControlName="testenvironment"
-                        [(ngModel)]="release.testenvironment" placeholder="CIO2"
-                        [className]="!isValid('testenvironment')?'form-control is-invalid':'form-control'" />
-                      <!-- validation feedback text -->
-                      <div class="form-text invalid-feedback" *ngIf="!isValid('testenvironment')">
-                        {{getValidationMsg('testenvironment')}}
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="form-group">
-                    <label for="regenvironment">Regression Environment</label>
-                    <div class="input-group">
-                      <input type="text" class="form-control" formControlName="regenvironment"
-                        [(ngModel)]="release.regenvironment" placeholder="LAB03"
-                        [className]="!isValid('regenvironment')?'form-control is-invalid':'form-control'" />
-                      <!-- validation feedback text -->
-                      <div class="form-text invalid-feedback" *ngIf="!isValid('regenvironment')">
-                        {{getValidationMsg('regenvironment')}}
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="form-group">
-                    <label for="sitecore">Site Core</label>
-                    <div class="input-group">
-                      <input type="text" class="form-control" formControlName="sitecore" [(ngModel)]="release.sitecore"
-                        placeholder="C5261" [className]="!isValid('sitecore')?'form-control is-invalid':'form-control'" />
-                      <!-- validation feedback text -->
-                      <div class="form-text invalid-feedback" *ngIf="!isValid('sitecore')">
-                        {{getValidationMsg('sitecore')}}
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="form-group">
-                    <label for="biztalk">Biz Talk</label>
-                    <div class="input-group">
-                      <input type="text" class="form-control" formControlName="biztalk" [(ngModel)]="release.biztalk"
-                        placeholder="C5410" [className]="!isValid('biztalk')?'form-control is-invalid':'form-control'" />
-                      <!-- validation feedback text -->
-                      <div class="form-text invalid-feedback" *ngIf="!isValid('biztalk')">
-                        {{getValidationMsg('biztalk')}}
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="form-group">
-                    <label for="devsupport">Dev Support</label>
-                    <div class="input-group">
-                      <input type="text" class="form-control" formControlName="devsupport"
-                        [(ngModel)]="release.devsupport" placeholder="James"
-                        [className]="!isValid('devsupport')?'form-control is-invalid':'form-control'" />
-                      <!-- validation feedback text -->
-                      <div class="form-text invalid-feedback" *ngIf="!isValid('devsupport')">
-                        {{getValidationMsg('devsupport')}}
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="form-group">
-                      <label for="depchampion">Deployment Champion</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" formControlName="depchampionName"
-                          [(ngModel)]="release.deploymentChampion.name" placeholder="James"
-                          [className]="!isValid('depchampionName')?'form-control is-invalid':'form-control'" />
-                        <!-- validation feedback text -->
-                        <div class="form-text invalid-feedback" *ngIf="!isValid('depchampionName')">
-                          {{getValidationMsg('depchampionName')}}
-                        </div>
-                      </div>
-                  </div>
+            </div>
 
-                  <div class="form-group">
-                      <label for="depchampion">Deployment Champion Email</label>
-                      <div class="input-group">
-                        <input type="email" class="form-control" formControlName="depchampionEmail"
-                          [(ngModel)]="release.deploymentChampion.email"
-                          [className]="!isValid('depchampionEmail')?'form-control is-invalid':'form-control'" />
-                        <!-- validation feedback text -->
-                        <div class="form-text invalid-feedback" *ngIf="!isValid('depchampionEmail')">
-                          {{getValidationMsg('depchampionEmail')}}
-                        </div>
-                      </div>
-                  </div>
-
-            </wizard-step>
-
-            <!--Checklist-->
-            <wizard-step [title]="'5: Checklist'" [isValid]="isValidStep('step5')"  [showNext]="true">
-              <br />
-
-              <div class="form-group" *ngFor="let check of checklist">
-                <label for="{{check.name}}">Due Notification for {{check.name}}</label>
-                <div class="input-group">
-                  <input type="date" class="form-control" formControlName="{{check.name}}"
-                    [(ngModel)]="checklist_data[check.name]" placeholder="Send email to:" 
-                    [className]="!isValid(check.name)?'form-control is-invalid':'form-control'" />
-                    <!-- validation feedback text -->
-                    <div class="form-text invalid-feedback" *ngIf="!isValid(check.name)">
-                      {{getValidationMsg(check.name)}}
-                    </div>
-                </div>
-              </div>
-
-            </wizard-step>
-
-            <!-- Summary -->
-            <wizard-step [title]="'Summary'" [showNext]="false" [isValid]="isValidStep('done')" 
-              (onComplete)="onSubmit()">
-              <div [ngSwitch]="isCompleted">
-                <div *ngSwitchDefault>
-                  <br />
-                  <div><span class="font-weight-bold">Release Name: </span><span [className]="!isValid('name')?'text-light bg-danger':''" >{{release.name}}</span></div>
-                  <div><span class="font-weight-bold">Description: </span><span [className]="!isValid('description')?'text-light bg-danger':''" >{{release.description}}</span></div>
-                  <div><span class="font-weight-bold">Release Date: </span><span [className]="!isValid('releaseDate')?'text-light bg-danger':''" >{{release.releaseDate}}</span></div>
-                  <div><span class="font-weight-bold">CAB Date: </span><span [className]="!isValid('cabDate')?'text-light bg-danger':''" >{{release.cabDate}}</span></div>
-                  <hr/>
-                  <div><span class="font-weight-bold">Dev/Test Start Date: </span><span [className]="!isValid('startDate')?'text-light bg-danger':''" >{{release.startDate}}</span></div>
-                  <div><span class="font-weight-bold">Dev/Test Finish Date: </span><span [className]="!isValid('devfinish')?'text-light bg-danger':''" >{{release.devfinish}}</span></div>
-                  <div><span class="font-weight-bold">Potential Code Refresh Date: </span><span [className]="!isValid('refreshDate')?'text-light bg-danger':''" >{{release.refreshDate}}</span></div>
-                  <hr/>
-                  <div><span class="font-weight-bold">Regression Deploy Date: </span><span [className]="!isValid('regressionDeploy')?'text-light bg-danger':''" >{{release.regressionDeploy}}</span></div>
-                  <div><span class="font-weight-bold">Regression Start Date: </span><span [className]="!isValid('regressionStart')?'text-light bg-danger':''" >{{release.regressionStart}}</span></div>
-                  <div><span class="font-weight-bold">Regression End Date: </span><span [className]="!isValid('regressionEnd')?'text-light bg-danger':''" >{{release.regressionEnd}}</span></div>
-                  <hr/>
-                  <div><span class="font-weight-bold">Test Environment: </span><span [className]="!isValid('testenvironment')?'text-light bg-danger':''" >{{release.testenvironment}}</span></div>
-                  <div><span class="font-weight-bold">Regression Environment: </span><span [className]="!isValid('regenvironment')?'text-light bg-danger':''" >{{release.regenvironment}}</span></div>
-                  <div><span class="font-weight-bold">Site Core: </span><span [className]="!isValid('sitecore')?'text-light bg-danger':''" >{{release.sitecore}}</span></div>
-                  <div><span class="font-weight-bold">Biz Talk: </span><span [className]="!isValid('biztalk')?'text-light bg-danger':''" >{{release.biztalk}}</span></div>
-                  <div><span class="font-weight-bold">Dev Support: </span><span [className]="!isValid('devsupport')?'text-light bg-danger':''" >{{release.devsupport}}</span></div>
-                  <div><span class="font-weight-bold">Deployment Champion: </span><span [className]="!isValid('depchampionName')?'text-light bg-danger':''" >{{release.deploymentChampion.name}}</span></div>
-                  <div><span class="font-weight-bold">Deployment Champion Email: </span><span [className]="!isValid('depchampionName')?'text-light bg-danger':''" >{{release.deploymentChampion.email}}</span></div>
-                  <hr/>
-                  <div *ngFor="let check of checklist">
-                    <span class="font-weight-bold">Due Notification for {{check.name}}: </span>
-                    <span [className]="!isValid(check.name)?'text-light bg-danger':''" >{{checklist_data[check.name]}}</span>
-                  </div>
-                  <hr/>
+            <div class="form-group">
+              <label for="regEnvironment">Regression Environment</label>
+              <div class="input-group">
+                <input type="text" class="form-control" formControlName="regEnvironment"
+                  [(ngModel)]="release.regEnvironment" placeholder="LAB03" [className]="
+                    !isValid('regEnvironment')
+                      ? 'form-control is-invalid'
+                      : 'form-control'
+                  " />
+                <!-- validation feedback text -->
+                <div class="form-text invalid-feedback" *ngIf="!isValid('regEnvironment')">
+                  {{ getValidationMsg('regEnvironment') }}
                 </div>
               </div>
             </div>
@@ -499,23 +248,14 @@
             <div class="form-group">
               <label for="sitecore">Site Core</label>
               <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="sitecore"
-                  [(ngModel)]="release.sitecore"
-                  placeholder="C5261"
-                  [className]="
+                <input type="text" class="form-control" formControlName="sitecore" [(ngModel)]="release.sitecore"
+                  placeholder="C5261" [className]="
                     !isValid('sitecore')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('sitecore')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('sitecore')">
                   {{ getValidationMsg('sitecore') }}
                 </div>
               </div>
@@ -524,23 +264,14 @@
             <div class="form-group">
               <label for="biztalk">Biz Talk</label>
               <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="biztalk"
-                  [(ngModel)]="release.biztalk"
-                  placeholder="C5410"
-                  [className]="
+                <input type="text" class="form-control" formControlName="biztalk" [(ngModel)]="release.biztalk"
+                  placeholder="C5410" [className]="
                     !isValid('biztalk')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('biztalk')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('biztalk')">
                   {{ getValidationMsg('biztalk') }}
                 </div>
               </div>
@@ -549,180 +280,167 @@
             <div class="form-group">
               <label for="devSupport">Dev Support</label>
               <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="devSupport"
-                  [(ngModel)]="release.devSupport"
-                  placeholder="James"
-                  [className]="
+                <input type="text" class="form-control" formControlName="devSupport" [(ngModel)]="release.devSupport"
+                  placeholder="James" [className]="
                     !isValid('devSupport')
                       ? 'form-control is-invalid'
                       : 'form-control'
-                  "
-                />
+                  " />
                 <!-- validation feedback text -->
-                <div
-                  class="form-text invalid-feedback"
-                  *ngIf="!isValid('devSupport')"
-                >
+                <div class="form-text invalid-feedback" *ngIf="!isValid('devSupport')">
                   {{ getValidationMsg('devSupport') }}
                 </div>
               </div>
             </div>
+
+
+            <div class="form-group">
+              <label for="depchampion">Deployment Champion</label>
+              <div class="input-group">
+                <input type="text" class="form-control" formControlName="depchampionName"
+                  [(ngModel)]="release.deploymentChampion.name" placeholder="James"
+                  [className]="!isValid('depchampionName')?'form-control is-invalid':'form-control'" />
+                <!-- validation feedback text -->
+                <div class="form-text invalid-feedback" *ngIf="!isValid('depchampionName')">
+                  {{getValidationMsg('depchampionName')}}
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="depchampion">Deployment Champion Email</label>
+              <div class="input-group">
+                <input type="email" class="form-control" formControlName="depchampionEmail"
+                  [(ngModel)]="release.deploymentChampion.email"
+                  [className]="!isValid('depchampionEmail')?'form-control is-invalid':'form-control'" />
+                <!-- validation feedback text -->
+                <div class="form-text invalid-feedback" *ngIf="!isValid('depchampionEmail')">
+                  {{getValidationMsg('depchampionEmail')}}
+                </div>
+              </div>
+            </div>
+
           </wizard-step>
 
-          <wizard-step
-            [title]="'Summary'"
-            [showNext]="false"
-            [isValid]="isValidStep('done')"
-            (onComplete)="onSubmit()"
-          >
+          <!--Checklist-->
+          <wizard-step [title]="'5: Checklist'" [isValid]="isValidStep('step5')" [showNext]="true">
+            <br />
+
+            <div class="form-group" *ngFor="let check of checklist">
+              <label for="{{check.name}}">Due Notification for {{check.name}}</label>
+              <div class="input-group">
+                <input type="date" class="form-control" formControlName="{{check.name}}"
+                  [(ngModel)]="checklist_data[check.name]" placeholder="Send email to:"
+                  [className]="!isValid(check.name)?'form-control is-invalid':'form-control'" />
+                <!-- validation feedback text -->
+                <div class="form-text invalid-feedback" *ngIf="!isValid(check.name)">
+                  {{getValidationMsg(check.name)}}
+                </div>
+              </div>
+            </div>
+
+          </wizard-step>
+
+          <!-- Summary -->
+          <wizard-step [title]="'Summary'" [showNext]="false" [isValid]="isValidStep('done')" (onComplete)="onSubmit()">
             <div [ngSwitch]="isCompleted">
               <div *ngSwitchDefault>
                 <br />
                 <div>
-                  <span class="font-weight-bold">Release Name: </span
-                  ><span
-                    [className]="!isValid('name') ? 'text-light bg-danger' : ''"
-                    >{{ release.name }}</span
-                  >
+                  <span class="font-weight-bold">Release Name: </span><span
+                    [className]="!isValid('name') ? 'text-light bg-danger' : ''">{{ release.name }}</span>
                 </div>
                 <div>
-                  <span class="font-weight-bold">Description: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Description: </span><span [className]="
                       !isValid('description') ? 'text-light bg-danger' : ''
-                    "
-                    >{{ release.description }}</span
-                  >
+                    ">{{ release.description }}</span>
                 </div>
                 <div>
-                  <span class="font-weight-bold">Release Date: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Release Date: </span><span [className]="
                       !isValid('releaseDate') ? 'text-light bg-danger' : ''
-                    "
-                    >{{ release.releaseDate }}</span
-                  >
+                    ">{{ release.releaseDate }}</span>
                 </div>
                 <div>
-                  <span class="font-weight-bold">CAB Date: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">CAB Date: </span><span [className]="
                       !isValid('cabDate') ? 'text-light bg-danger' : ''
-                    "
-                    >{{ release.cabDate }}</span
-                  >
+                    ">{{ release.cabDate }}</span>
                 </div>
                 <hr />
                 <div>
-                  <span class="font-weight-bold">Dev/Test Start Date: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Dev/Test Start Date: </span><span [className]="
                       !isValid('startDate') ? 'text-light bg-danger' : ''
-                    "
-                    >{{ release.startDate }}</span
-                  >
+                    ">{{ release.startDate }}</span>
                 </div>
                 <div>
-                  <span class="font-weight-bold">Dev/Test Finish Date: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Dev/Test Finish Date: </span><span [className]="
                       !isValid('devFinishDate') ? 'text-light bg-danger' : ''
-                    "
-                    >{{ release.devFinishDate }}</span
-                  >
+                    ">{{ release.devFinishDate }}</span>
                 </div>
                 <div>
-                  <span class="font-weight-bold"
-                    >Potential Code Refresh Date: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Potential Code Refresh Date: </span><span [className]="
                       !isValid('refreshDate') ? 'text-light bg-danger' : ''
-                    "
-                    >{{ release.refreshDate }}</span
-                  >
+                    ">{{ release.refreshDate }}</span>
                 </div>
                 <hr />
                 <div>
-                  <span class="font-weight-bold">Regression Deploy Date: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Regression Deploy Date: </span><span [className]="
                       !isValid('regressionDeployDate')
                         ? 'text-light bg-danger'
                         : ''
-                    "
-                    >{{ release.regressionDeployDate }}</span
-                  >
+                    ">{{ release.regressionDeployDate }}</span>
                 </div>
                 <div>
-                  <span class="font-weight-bold">Regression Start Date: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Regression Start Date: </span><span [className]="
                       !isValid('regressionStartDate')
                         ? 'text-light bg-danger'
                         : ''
-                    "
-                    >{{ release.regressionStartDate }}</span
-                  >
+                    ">{{ release.regressionStartDate }}</span>
                 </div>
                 <div>
-                  <span class="font-weight-bold">Regression End Date: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Regression End Date: </span><span [className]="
                       !isValid('regressionEndDate')
                         ? 'text-light bg-danger'
                         : ''
-                    "
-                    >{{ release.regressionEndDate }}</span
-                  >
+                    ">{{ release.regressionEndDate }}</span>
                 </div>
                 <hr />
                 <div>
-                  <span class="font-weight-bold">Test Environment: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Test Environment: </span><span [className]="
                       !isValid('testEnvironment') ? 'text-light bg-danger' : ''
-                    "
-                    >{{ release.testEnvironment }}</span
-                  >
+                    ">{{ release.testEnvironment }}</span>
                 </div>
                 <div>
-                  <span class="font-weight-bold">Regression Environment: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Regression Environment: </span><span [className]="
                       !isValid('regEnvironment') ? 'text-light bg-danger' : ''
-                    "
-                    >{{ release.regEnvironment }}</span
-                  >
+                    ">{{ release.regEnvironment }}</span>
                 </div>
                 <div>
-                  <span class="font-weight-bold">Site Core: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Site Core: </span><span [className]="
                       !isValid('sitecore') ? 'text-light bg-danger' : ''
-                    "
-                    >{{ release.sitecore }}</span
-                  >
+                    ">{{ release.sitecore }}</span>
                 </div>
                 <div>
-                  <span class="font-weight-bold">Biz Talk: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Biz Talk: </span><span [className]="
                       !isValid('biztalk') ? 'text-light bg-danger' : ''
-                    "
-                    >{{ release.biztalk }}</span
-                  >
+                    ">{{ release.biztalk }}</span>
                 </div>
                 <div>
-                  <span class="font-weight-bold">Dev Support: </span
-                  ><span
-                    [className]="
+                  <span class="font-weight-bold">Dev Support: </span><span [className]="
                       !isValid('devSupport') ? 'text-light bg-danger' : ''
-                    "
-                    >{{ release.devSupport }}</span
-                  >
+                    ">{{ release.devSupport }}</span>
+                </div>
+
+                <div><span class="font-weight-bold">Deployment Champion: </span><span
+                    [className]="!isValid('depchampionName')?'text-light bg-danger':''">{{release.deploymentChampion.name}}</span>
+                </div>
+                <div><span class="font-weight-bold">Deployment Champion Email: </span><span
+                    [className]="!isValid('depchampionName')?'text-light bg-danger':''">{{release.deploymentChampion.email}}</span>
+                </div>
+                <hr />
+                <div *ngFor="let check of checklist">
+                  <span class="font-weight-bold">Due Notification for {{check.name}}: </span>
+                  <span
+                    [className]="!isValid(check.name)?'text-light bg-danger':''">{{checklist_data[check.name]}}</span>
                 </div>
                 <hr />
               </div>
@@ -732,8 +450,11 @@
               </div>
             </div>
           </wizard-step>
+
         </form-wizard>
       </form>
+
+
     </div>
   </div>
 </div>

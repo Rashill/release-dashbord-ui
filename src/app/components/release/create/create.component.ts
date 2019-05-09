@@ -65,10 +65,17 @@ export class CreateReleaseComponent implements OnInit {
 
   steps = {
     step1: ['name', 'type', 'description', 'releaseDate', 'cabDate'],
-    step2: ['startDate', 'devfinish', 'refreshDate'],
-    step3: ['regressionDeploy', 'regressionStart', 'regressionEnd'],
-    step4: ['testenvironment', 'regenvironment', 'sitecore', 'biztalk', 'devsupport',
-     'depchampionName', 'depchampionEmail'],
+    step2: ['startDate', 'devFinishDate', 'refreshDate'],
+    step3: ['regressionDeployDate', 'regressionStartDate', 'regressionEndDate'],
+    step4: [
+      'testEnvironment',
+      'regEnvironment',
+      'sitecore',
+      'biztalk',
+      'devSupport',
+      'depchampionName',
+      'depchampionEmail'
+    ],
     step5: []
   };
 
