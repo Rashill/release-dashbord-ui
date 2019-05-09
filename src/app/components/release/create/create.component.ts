@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Project } from './Project';
+import { Checklist } from './Checklist';
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FormWizardModule } from 'angular-wizard-form';
@@ -46,8 +47,8 @@ export class CreateReleaseComponent implements OnInit {
     deploymentChampion: {
       name: string,
       email: string
-    }
-    // projects:String
+    },
+    checklists: Array<Checklist>
   };
 
   checklist: [];
@@ -123,7 +124,8 @@ export class CreateReleaseComponent implements OnInit {
         email: ''
       },
       devSupport: '',
-      projects: Array()
+      projects: Array(),
+      checklists: Array()
     };
 
     this.checklist_data = {};
@@ -211,20 +213,24 @@ export class CreateReleaseComponent implements OnInit {
     //end of form gorup init.
 
 
-    // load the checklist
+    // load the checklist to create the html controls
     this.releaseService.getChecklists().subscribe(
       res => {
         let checklist =  res[0];
         for(let check of checklist){
           // init. controls for the checklist
           this.steps.step5 = [];
-       /*   this.createForm.addControl(
-            check['name'], new FormControl('',
-            [Validators.required, Validators.email]
+          this.createForm.addControl(
+            check['_id'], new FormControl('',
+            [Validators.required]
             ) 
-          );*/
-          this.steps.step5.push(check['name']);
-          this.checklist_data[check['name']] = '';
+          );
+          this.steps.step5.push(check['_id']);
+          this.checklist_data[check['_id']] = {
+            "checklistId": check['_id'], 
+            "dueDate": '', 
+            "value": false
+          };
         }  
         this.checklist = checklist;
       },
@@ -294,7 +300,18 @@ export class CreateReleaseComponent implements OnInit {
                 // this.release.type = type;
                 this.release['description'] = vd.description;
                 this.release.startDate = vd.startDate;
-              } else if(attr =='deploymentChampion'){
+              } else if(attr =='checklists'){
+
+                for (var i = 0; i < res_release[attr].length; i++) {
+                  let check = res_release[attr][i];
+                  this.checklist_data[check['checklistId']] = {
+                    "_id": check['_id'], 
+                    "dueDate": check['dueDate'].substring(0, 10), 
+                    "value": check['value']
+                  };
+                }
+                
+              }else if(attr =='deploymentChampion'){
                 this.release.deploymentChampion = res_release[attr];
               }else {
                 try {
@@ -338,6 +355,13 @@ export class CreateReleaseComponent implements OnInit {
             this.release.projects.push(new Project(res[0][i].jiraProjectId));
           }
 
+          for (var i = 0; i < this.checklist.length; i++) {
+            let check = this.checklist[i];
+            let data = this.checklist_data[check['_id']];
+            this.release.checklists.push(new Checklist(undefined, check['_id'], data['value'], data['dueDate']));
+          }
+      
+
           console.log('Release: ' + this.release);
           console.log('Mode: ' + this.mode);
 
@@ -374,6 +398,14 @@ export class CreateReleaseComponent implements OnInit {
         for (var i = 0; i < res[0].length; i++) {
           this.release.projects.push(new Project(res[0][i].jiraProjectId));
         }
+
+
+        for (var i = 0; i < this.checklist.length; i++) {
+          let check = this.checklist[i];
+          let data = this.checklist_data[check['_id']];
+          this.release.checklists.push(new Checklist(data['_id'], check['_id'], data['value'], data['dueDate']));
+        }
+
         this.releaseService
           .createRelease(this.release)
           .pipe(
@@ -382,7 +414,7 @@ export class CreateReleaseComponent implements OnInit {
           .subscribe(
             res => {
               console.log('response', res);
-              this.router.navigate(['/']);
+              this.router.navigate(['/release/'+this.releaseId]);
             },
             error => {
               this.error = true;
