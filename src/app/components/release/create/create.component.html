@@ -37,9 +37,9 @@
             <div class="form-group">
               <label for="Type">Release Type</label>
               <div class="input-group">
-                <select class="form-control" id="type" required formControlName="type" [(ngModel)]="release.type"
-                  name="type" [className]="
-                    !isValid('type')
+                <select class="form-control" id="releaseType" required formControlName="releaseType" [(ngModel)]="release.releaseType"
+                  name="releaseType" [className]="
+                    !isValid('releaseType')
                       ? 'form-control is-invalid'
                       : 'form-control'
                   ">
@@ -350,6 +350,10 @@
                   <span class="font-weight-bold">Release Name: </span><span
                     [className]="!isValid('name') ? 'text-light bg-danger' : ''">{{ release.name }}</span>
                 </div>
+                <div>
+                    <span class="font-weight-bold">Release Type: </span><span
+                      [className]="!isValid('releaseType') ? 'text-light bg-danger' : ''">{{ release.releaseType }}</span>
+                  </div>
                 <div>
                   <span class="font-weight-bold">Description: </span><span [className]="
                       !isValid('description') ? 'text-light bg-danger' : ''

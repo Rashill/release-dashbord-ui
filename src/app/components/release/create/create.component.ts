@@ -27,7 +27,7 @@ import { DateValidator } from './dataValidator.service';
 export class CreateReleaseComponent implements OnInit {
   release: {
     name: string,
-    type: String;
+    releaseType: String;
     description: string;
     releaseDate: string;
     startDate: string;
@@ -64,7 +64,7 @@ export class CreateReleaseComponent implements OnInit {
   errorMessage: string = '';
 
   steps = {
-    step1: ['name', 'type', 'description', 'releaseDate', 'cabDate'],
+    step1: ['name', 'releaseType', 'description', 'releaseDate', 'cabDate'],
     step2: ['startDate', 'devFinishDate', 'refreshDate'],
     step3: ['regressionDeployDate', 'regressionStartDate', 'regressionEndDate'],
     step4: [
@@ -104,7 +104,7 @@ export class CreateReleaseComponent implements OnInit {
 
     this.release = {
       name: '',
-      type: '',
+      releaseType: '',
       description: '',
       releaseDate: '',
       startDate: '',
@@ -155,7 +155,9 @@ export class CreateReleaseComponent implements OnInit {
         description: new FormControl(this.release.description, [
           Validators.required
         ]),
-        type: new FormControl(this.release.type, [Validators.required]),
+        releaseType: new FormControl(this.release.releaseType, 
+          [Validators.required
+          ]),
         releaseDate: new FormControl(this.release.releaseDate, [
           Validators.required
         ]),
@@ -232,7 +234,7 @@ export class CreateReleaseComponent implements OnInit {
   
 
     
-    this.createForm.controls['type'].valueChanges.subscribe(type => {
+    this.createForm.controls['releaseType'].valueChanges.subscribe(type => {
       if (type == 'ER') {
         this.createForm.controls['cabDate'].setValidators([
           Validators.required
@@ -279,7 +281,8 @@ export class CreateReleaseComponent implements OnInit {
             if (attr != '_id' && res_release[attr] != undefined) {
               if (attr == 'projects') {
                 let vd = res_release[attr][0]['versionDetails'];
-                this.release['name'] = vd.name;
+                this.release['name'] = vd.name;                
+
                 // let type = ''
                 // if((vd.name).indexOf('OOC')>-1){
                 //   type = 'OOC'
@@ -291,7 +294,9 @@ export class CreateReleaseComponent implements OnInit {
                 // this.release.type = type;
                 this.release['description'] = vd.description;
                 this.release.startDate = vd.startDate;
-              } else {
+              } else if(attr =='deploymentChampion'){
+                this.release.deploymentChampion = res_release[attr];
+              }else {
                 try {
                   this.release[attr] = res_release[attr].substring(0, 10);
                 } catch (e) {}
