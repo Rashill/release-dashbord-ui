@@ -41,6 +41,8 @@ import { ShowIfAdminDirective } from './directives/showIfAdmin.directive';
 import { VisModule } from 'ngx-vis';
 import { TableModule } from 'ngx-easy-table';
 import { FormWizardModule } from 'angular-wizard-form';
+import { AngularFileUploaderModule } from "angular-file-uploader";
+
 
 import { AuthComponent } from './components/auth/auth.component';
 import { CreateReleaseComponent } from './components/release/create/create.component';
@@ -50,6 +52,7 @@ import { TeamComponent } from './components/team/team.component';
 import { UsersComponent } from './components/users/users.component';
 import { ChecklistComponent } from './components/checklist/checklist.component';
 import { ForbiddenPageComponent } from './components/forbidden-page/forbidden-page.component';
+import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -76,7 +79,8 @@ export function createTranslateLoader(http: HttpClient) {
     TeamComponent,
     UsersComponent,
     ChecklistComponent,
-    ForbiddenPageComponent
+    ForbiddenPageComponent,
+    FileUploaderComponent
   ],
   imports: [
     NgbModule,
@@ -98,7 +102,8 @@ export function createTranslateLoader(http: HttpClient) {
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    FormWizardModule
+    FormWizardModule,
+    AngularFileUploaderModule
   ],
   providers: [
     ResizeService,

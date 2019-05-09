@@ -29,6 +29,7 @@
     "@swimlane/ngx-datatable": "^14.0.0",
     "@swimlane/ngx-graph": "^5.4.1",
     "angular-calendar": "^0.27.2",
+    "angular-file-uploader": "^5.0.2",
     "angular-tree-component": "^7.0.1",
     "angular-wizard-form": "^0.4.1",
     "angular2-text-mask": "^8.0.4",
