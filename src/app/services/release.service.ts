@@ -37,5 +37,9 @@ export class ReleaseService {
   getChecklists() {
     return forkJoin(this.http.get<any>(environment.baseUrl + '/checklist'));
   }
+
+  getUsers() {
+    return forkJoin(this.http.get<any>(environment.baseUrl + '/user'));
+  }
   
 }

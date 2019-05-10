@@ -12,13 +12,18 @@ import { Checklist } from './Checklist';
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FormWizardModule } from 'angular-wizard-form';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {Observable} from 'rxjs';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+
 
 import { ReleaseService } from '../../../services/release.service';
 import { DateValidator } from './dataValidator.service';
 
+
 @NgModule({
   declarations: [CreateReleaseComponent],
-  imports: [BrowserModule, FormWizardModule]
+  imports: [BrowserModule, FormWizardModule, NgbModule]
 })
 @Component({
   selector: 'ngbd-create-release',
@@ -53,6 +58,8 @@ export class CreateReleaseComponent implements OnInit {
 
   checklist: [];
   checklist_data;
+
+  usersList;
 
   //either create or update
   mode: string = 'Create';
@@ -129,6 +136,7 @@ export class CreateReleaseComponent implements OnInit {
     };
 
     this.checklist_data = {};
+
 
     this.initFormGroup();
 
@@ -212,20 +220,36 @@ export class CreateReleaseComponent implements OnInit {
     );
     //end of form gorup init.
 
+    // load the users 
+    this.releaseService.getUsers().subscribe(
+      res => {
+         this.usersList =  res[0];
+      },
+      error => {
+      }
+    );
 
     // load the checklist to create the html controls
     this.releaseService.getChecklists().subscribe(
       res => {
         let checklist =  res[0];
+        this.steps.step5 = [];
         for(let check of checklist){
-          // init. controls for the checklist
-          this.steps.step5 = [];
+          // init. controls for the checklist and assignee
           this.createForm.addControl(
             check['_id'], new FormControl('',
             [Validators.required]
             ) 
           );
           this.steps.step5.push(check['_id']);
+
+          this.createForm.addControl(
+            'assignee-'+check['_id'], new FormControl('',
+            [Validators.required]
+            ) 
+          );
+          this.steps.step5.push('assignee-'+check['_id']);
+
           this.checklist_data[check['_id']] = {
             "checklistId": check['_id'], 
             "dueDate": '', 
@@ -237,8 +261,6 @@ export class CreateReleaseComponent implements OnInit {
       error => {
       }
     );
-  
-
     
     this.createForm.controls['releaseType'].valueChanges.subscribe(type => {
       if (type == 'ER') {
@@ -450,6 +472,7 @@ export class CreateReleaseComponent implements OnInit {
    * @param step e.g. step1
    */
   isValidStep(step) {
+    return true;
     if (step == 'done') {
       console.log(this.createForm.valid);
       return this.createForm.valid;
@@ -497,4 +520,18 @@ export class CreateReleaseComponent implements OnInit {
       return this.validation_messages[validator];
     }
   }
+
+
+  // --------- related to autocomblite checklist assignee controlse
+  filterAssignee = (text$: Observable<string>) =>
+  text$.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    map(term => term.length < 1 ? this.usersList.slice(0, 10)
+      : this.usersList.filter(v => v.displayName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+  )
+
+  formatter = (x: {displayName: string}) => x.displayName;
+  //----------- end of autocomblite checklist assignee controlse
+
 }

@@ -316,7 +316,7 @@
                 <label for="depchampion">Deployment Champion Email</label>
                 <div class="input-group">
                   <input type="email" class="form-control" formControlName="depchampionEmail"
-                    [(ngModel)]="release.deploymentChampion.email"
+                    [(ngModel)]="release.deploymentChampion.email" placeholder="example@company.com"
                     [className]="!isValid('depchampionEmail')?'form-control is-invalid':'form-control'" />
                   <!-- validation feedback text -->
                   <div class="form-text invalid-feedback" *ngIf="!isValid('depchampionEmail')">
@@ -332,8 +332,9 @@
           <wizard-step [title]="'5: Checklist'" [isValid]="isValidStep('step5')" [showNext]="true">
             <br />
 
-            <div class="row col-md-12">
-              <div class="form-group col-md-6" *ngFor="let check of checklist">
+            <div class="row col-md-12" *ngFor="let check of checklist">
+
+              <div class="form-group col-md-6">
                 <label for="{{check._id}}">Due Notification for {{check.name}}</label>
                 <div class="input-group">
                   <input type="date" class="form-control" formControlName="{{check._id}}"
@@ -345,6 +346,21 @@
                   </div>
                 </div>
               </div>
+
+              <div class="form-group col-md-6">
+                <label>Assignee for {{check.name}}</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" formControlName="assignee-{{check._id}}"
+                  [(ngModel)]="checklist_data[check._id].assignee" [showHint]="false"
+                  [ngbTypeahead]="filterAssignee" [inputFormatter]="formatter" [resultTemplate]="assigneeTmp"
+                  [className]="!isValid('assignee-'+check._id)?'form-control is-invalid':'form-control'" />
+                  <!-- validation feedback text -->
+                  <div class="form-text invalid-feedback" *ngIf="!isValid('assignee-'+check._id)">
+                      {{ getValidationMsg("assignee-"+check._id) }}
+                  </div>
+                </div>
+              </div>
+
             </div>
 
           </wizard-step>
@@ -453,6 +469,14 @@
                   <span class="font-weight-bold">Due Notification for {{check.name}}: </span>
                   <span
                     [className]="!isValid(check._id)?'text-light bg-danger':''">{{checklist_data[check._id].dueDate}}</span>
+                  
+                  <br/>
+                  <span class="font-weight-bold">Assignee for {{check.name}}: </span>
+                    <ng-container 
+                    [ngTemplateOutlet]="assigneeTmp"
+                    [ngTemplateOutletContext]="{result: checklist_data[check._id].assignee, term:''}">
+                  </ng-container>
+
                 </div>
                 <hr />
               </div>
@@ -466,7 +490,14 @@
         </form-wizard>
       </form>
 
-
     </div>
   </div>
 </div>
+
+<!-- Template is used for assignee autocomplete form -->
+<ng-template #assigneeTmp let-r="result" let-t="term">
+  <span *ngIf="r !== undefined">
+    <img [src]="r['avatarUrls']['16x16']" class="mr-1" style="width: 16px">
+    <ngb-highlight [result]="r['displayName']" [term]="t"></ngb-highlight>
+  </span>
+</ng-template>
