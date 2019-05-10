@@ -1,33 +1,100 @@
 <div class="container">
-  <h1 class="text-primary">
-    Release Dashboard
-    <a routerLink="/release/edit/{{ releaseId }}">
-      <small>(Edit)</small>
-    </a>
-  </h1>
+  <div class="row mb-4" *ngIf="release">
+    <h1 class="text-primary col-12">
+      {{ release.projects[0].versionDetails.name }}
+      <a routerLink="/release/edit/{{ releaseId }}">
+        <small
+          ><i class="fa fa-edit" ngbTooltip="Edit" placement="right"></i
+        ></small>
+      </a>
+    </h1>
 
-  <br />
+    <p class="col-12">{{ release.projects[0].versionDetails.description }}</p>
+  </div>
 
-  <div class="row mb-4">
+  <div class="row display-flex mb-4">
     <div class="col-6">
-      <h3 class="text-primary">Release Details</h3>
-      <table class="table table-striped table-light">
-        <tbody>
-          <tr *ngFor="let detail of release">
-            <td style="font-weight: 900;">{{ detail.first }}</td>
-            <td>{{ detail.second }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title text-nowrap mr-2">Release Details</h5>
+        </div>
+        <div class="card-body" *ngIf="release">
+          <!-- <canvas id="canvas">{{ chart }}</canvas> -->
+          <p>
+            <label>Release Date: </label>&nbsp;{{
+              release.projects[0].versionDetails.releaseDate | date
+            }}&nbsp;<span class="badge badge-info"
+              >{{ release.days }} days remaining</span
+            >
+          </p>
+          <p><label>Release Type: </label>&nbsp;{{ release.releaseType }}</p>
+          <p *ngIf="release.cabDate != null">
+            <label>CAB Date: </label>&nbsp;{{ release.cabDate | date }}
+          </p>
+          <p><label>Biztalk: </label>&nbsp;{{ release.biztalk }}</p>
+          <p><label>Sitecore: </label>&nbsp;{{ release.sitecore }}</p>
+          <p>
+            <label>Test Environment: </label>&nbsp;{{ release.testEnvironment }}
+          </p>
+          <p>
+            <label>Deployment Champion: </label>&nbsp;{{
+              release.deploymentChampion.name
+            }}
+          </p>
+          <p>
+            <label>Deployment Champion's Email: </label>&nbsp;<a
+              href="mailto:{{ release.deploymentChampion.email }}"
+              >{{ release.deploymentChampion.email }}</a
+            >
+          </p>
+        </div>
+      </div>
     </div>
 
     <div class="col-6">
       <div class="card">
         <div class="card-header">
-          <h3>Issue Status</h3>
+          <h5 class="card-title text-nowrap mr-2">Issues Status</h5>
         </div>
         <div class="card-body">
           <canvas id="canvas">{{ chart }}</canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4" *ngIf="release">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title text-nowrap mr-2">Release Checklists</h5>
+        </div>
+        <div class="card-body">
+          <!-- <div id="timeline" #visTimeline></div> -->
+          <div class="col" *ngFor="let checklist of release.checklists">
+            <div class="form-check form-check-inline">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [checked]="checklist.value"
+                disabled
+              />
+              <label class="form-check-label">{{ checklist.name }}</label
+              ><br />
+            </div>
+            <p><label>Due date:</label>&nbsp;{{ checklist.dueDate | date }}</p>
+          </div>
+
+          <!-- <div
+            *ngFor="let checklist of release.checklists"
+            [className]="
+              checklist.value == true
+                ? 'alert alert-info'
+                : 'alert alert-danger'
+            "
+          >
+            <label>{{ checklist.name }}</label>
+          </div> -->
         </div>
       </div>
     </div>
@@ -37,7 +104,7 @@
     <div class="col">
       <div class="card">
         <div class="card-header">
-          <h2>Timeline</h2>
+          <h5 class="card-title text-nowrap mr-2">Release Timeline</h5>
         </div>
         <div class="card-body">
           <div id="timeline" #visTimeline></div>
@@ -46,93 +113,139 @@
     </div>
   </div>
 
-  <div class="row mb-4">
-    <div class="col-6">
-      <table class="table table-striped table-light">
-        <tbody>
-          <tr *ngFor="let detail of environment">
-            <td style="font-weight: 900;">{{ detail.first }}</td>
-            <td>{{ detail.second }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="col-6">
-      <table class="table table-striped table-light">
-        <tbody>
-          <tr *ngFor="let detail of release">
-            <td style="font-weight: 900;">{{ detail.first }}</td>
-            <td>{{ detail.second }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="row mb-4" *ngFor="let issues of allIssues">
-    <div class="col-12">
-      <h6>{{ issues.teamName }}</h6>
-    </div>
-
-    <div class="col-4">
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          To Do
-        </div>
-        <ul
-          class="list-group list-group-flush"
-          *ngFor="let issuesName of issues.toDo"
+  <h2 class="text-secondary">Release Issues Board</h2>
+  <hr />
+  <div class="row" *ngIf="release">
+    <div class="col-md-6 pull-right">
+      <div class="form-group">
+        <label for="exampleFormControlSelect1">Select Project</label>
+        <select
+          class="form-control"
+          [(ngModel)]="selectedProjectId"
+          id="selectedProjectId"
         >
-          <li class="list-group-item">
-            <div class="alert alert-info">{{ issuesName }}</div>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="col-4">
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          In Progress
-        </div>
-        <ul
-          class="list-group list-group-flush"
-          *ngFor="let issuesName of issues.inProgress"
-        >
-          <li class="list-group-item">
-            <div class="alert alert-info">{{ issuesName }}</div>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="col-4">
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          Done
-        </div>
-        <ul
-          class="list-group list-group-flush"
-          *ngFor="let issuesName of issues.inProgress"
-        >
-          <li class="list-group-item">
-            <div class="alert alert-info">{{ issuesName }}</div>
-          </li>
-        </ul>
+          <option value="" selected>All</option>
+          <option
+            *ngFor="let project of release.projects"
+            value="{{ project.projectId }}"
+            >{{ project.name }}</option
+          >
+        </select>
       </div>
     </div>
   </div>
 
-  <div class="row mb-4">
-    <h1 class="text-primary">Release Details</h1>
-    <table class="table table-striped table-light">
-      <tbody>
-        <tr *ngFor="let detail of details">
-          <td style="font-weight: 900;">{{ detail.first }}</td>
-          <td>{{ detail.second }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="row mb-4" *ngIf="release">
+    <div class="col-3">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          To Do ({{
+            (
+              issues.toDO.issues
+              | ProjectFilter: { projectId: selectedProjectId }
+            ).length
+          }})
+        </div>
+        <div class="card-body">
+          <a
+            class="btn text-white mb-2"
+            style="background-color: #C13100"
+            *ngFor="
+              let issue of issues.toDO.issues
+                | ProjectFilter: { projectId: selectedProjectId }
+            "
+            href="https://releasedashboard.atlassian.net/browse/{{ issue.key }}"
+            target="_blank"
+            ><p>
+              {{ issue.fields.summary }}
+            </p></a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          In Review ({{
+            (
+              issues.inReview.issues
+              | ProjectFilter: { projectId: selectedProjectId }
+            ).length
+          }})
+        </div>
+        <div class="card-body">
+          <a
+            class="btn text-white mb-2"
+            style="background-color: #FF9900"
+            *ngFor="
+              let issue of issues.inReview.issues
+                | ProjectFilter: { projectId: selectedProjectId }
+            "
+            href="https://releasedashboard.atlassian.net/browse/{{ issue.key }}"
+            target="_blank"
+            ><p>
+              {{ issue.fields.summary }}
+            </p></a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          In Progress ({{
+            (
+              issues.inProgress.issues
+              | ProjectFilter: { projectId: selectedProjectId }
+            ).length
+          }})
+        </div>
+        <div class="card-body">
+          <a
+            class="btn text-white mb-2"
+            style="background-color: #3e95cd"
+            *ngFor="
+              let issue of issues.inProgress.issues
+                | ProjectFilter: { projectId: selectedProjectId }
+            "
+            href="https://releasedashboard.atlassian.net/browse/{{ issue.key }}"
+            target="_blank"
+            ><p>
+              {{ issue.fields.summary }}
+            </p></a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          Done ({{
+            (
+              issues.done.issues
+              | ProjectFilter: { projectId: selectedProjectId }
+            ).length
+          }})
+        </div>
+        <div class="card-body">
+          <a
+            class="btn text-white mb-2"
+            style="background-color: #3cba9f"
+            *ngFor="
+              let issue of issues.done.issues
+                | ProjectFilter: { projectId: selectedProjectId }
+            "
+            href="https://releasedashboard.atlassian.net/browse/{{ issue.key }}"
+            target="_blank"
+            ><p>
+              {{ issue.fields.summary }}
+            </p></a
+          >
+        </div>
+      </div>
+    </div>
   </div>
 </div>

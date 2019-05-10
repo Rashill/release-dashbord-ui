@@ -22,15 +22,15 @@ export class ReleaseService {
     return forkJoin(this.http.get<any>(environment.baseUrl + '/release'));
   }
 
-  getRelease(url) {
+  getRelease(releaseId) {
     return forkJoin(
-      this.http.get<any>(environment.baseUrl + url)
+      this.http.get<any>(environment.baseUrl + '/release/' + releaseId)
     );
   }
 
   updateRelease(releaseId, release) {
     return forkJoin(
-      this.http.put<any>(environment.baseUrl + '/release/'+releaseId, release)
+      this.http.put<any>(environment.baseUrl + '/release/' + releaseId, release)
     );
   }
 
