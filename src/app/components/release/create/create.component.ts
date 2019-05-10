@@ -255,11 +255,7 @@ export class CreateReleaseComponent implements OnInit {
       },
       error => {}
     );
-<<<<<<< HEAD
     
-=======
-
->>>>>>> dev
     this.createForm.controls['releaseType'].valueChanges.subscribe(type => {
       if (type == 'ER') {
         this.createForm.controls['cabDate'].setValidators([
