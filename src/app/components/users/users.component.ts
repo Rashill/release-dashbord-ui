@@ -19,6 +19,14 @@ export class UsersComponent implements OnInit {
 
   fields = [
     {
+      key: 'avatarUrls',
+      title: 'Avatar',
+      cellTemplate: 'imageTpl:avatarUrls.16x16',
+      visible: true,
+      update: false,
+      create: false
+    },
+    {
       key: '_id',
       title: '_id',
       visible: false,
@@ -47,14 +55,6 @@ export class UsersComponent implements OnInit {
       update: true,
       create: false,
       required: true
-    },
-    {
-      key: 'avatarUrls',
-      title: 'Avatar',
-      cellTemplate: 'imageTpl:avatarUrls.16x16',
-      visible: true,
-      update: false,
-      create: false
     }
   ];
 

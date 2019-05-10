@@ -6,7 +6,7 @@ import {
   FormControl,
   Validators
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Project } from './Project';
 import { Checklist } from './Checklist';
 import { throwError } from 'rxjs';
@@ -32,7 +32,7 @@ import { DateValidator } from './dataValidator.service';
 })
 export class CreateReleaseComponent implements OnInit {
   release: {
-    name: string,
+    name: string;
     releaseType: String;
     description: string;
     releaseDate: string;
@@ -50,10 +50,10 @@ export class CreateReleaseComponent implements OnInit {
     devSupport: string;
     projects: Array<Project>;
     deploymentChampion: {
-      name: string,
-      email: string
-    },
-    checklists: Array<Checklist>
+      name: string;
+      email: string;
+    };
+    checklists: Array<Checklist>;
   };
 
   checklist: [];
@@ -63,7 +63,7 @@ export class CreateReleaseComponent implements OnInit {
 
   //either create or update
   mode: string = 'Create';
-  releaseId: string = '';
+  releaseId: string;
   isCompleted: boolean = false;
 
   createForm: FormGroup;
@@ -87,26 +87,21 @@ export class CreateReleaseComponent implements OnInit {
     step5: []
   };
 
-  validation_messages = { 
-    'required': 'This is required field', 
-    'dateInvalid': 'Date invalid', 
-    'email': 'Invalid email format'
+  validation_messages = {
+    required: 'This is required field',
+    dateInvalid: 'Date invalid',
+    email: 'Invalid email format'
   };
 
-
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
     private releaseService: ReleaseService
   ) {}
 
   ngOnInit() {
-    // this.releaseId = '5cbfad638fc519175a4c7d66'
-    let url_splitted = this.router.url.split('/');
-
-    if (url_splitted.length == 4) {
-      this.releaseId = url_splitted[3];
-    }
+    this.releaseId = this.route.snapshot.paramMap.get('id');
 
     this.error = false;
 
@@ -165,9 +160,9 @@ export class CreateReleaseComponent implements OnInit {
         description: new FormControl(this.release.description, [
           Validators.required
         ]),
-        releaseType: new FormControl(this.release.releaseType, 
-          [Validators.required
-          ]),
+        releaseType: new FormControl(this.release.releaseType, [
+          Validators.required
+        ]),
         releaseDate: new FormControl(this.release.releaseDate, [
           Validators.required
         ]),
@@ -209,9 +204,10 @@ export class CreateReleaseComponent implements OnInit {
         depchampionName: new FormControl(this.release.deploymentChampion.name, [
           Validators.required
         ]),
-        depchampionEmail: new FormControl(this.release.deploymentChampion.email, [
-          Validators.required, Validators.email
-        ])
+        depchampionEmail: new FormControl(
+          this.release.deploymentChampion.email,
+          [Validators.required, Validators.email]
+        )
       },
       {
         // it validates the dates (check the imported service)
@@ -237,9 +233,8 @@ export class CreateReleaseComponent implements OnInit {
         for(let check of checklist){
           // init. controls for the checklist and assignee
           this.createForm.addControl(
-            check['_id'], new FormControl('',
-            [Validators.required]
-            ) 
+            check['_id'],
+            new FormControl('', [Validators.required])
           );
           this.steps.step5.push(check['_id']);
 
@@ -251,17 +246,20 @@ export class CreateReleaseComponent implements OnInit {
           this.steps.step5.push('assignee-'+check['_id']);
 
           this.checklist_data[check['_id']] = {
-            "checklistId": check['_id'], 
-            "dueDate": '', 
-            "value": false
+            checklistId: check['_id'],
+            dueDate: '',
+            value: false
           };
-        }  
+        }
         this.checklist = checklist;
       },
-      error => {
-      }
+      error => {}
     );
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> dev
     this.createForm.controls['releaseType'].valueChanges.subscribe(type => {
       if (type == 'ER') {
         this.createForm.controls['cabDate'].setValidators([
@@ -293,10 +291,8 @@ export class CreateReleaseComponent implements OnInit {
   }
 
   loadAndFillControls() {
-    let url = '/release/' + this.releaseId;
-    console.log(url);
     this.releaseService
-      .getRelease(url)
+      .getRelease(this.releaseId)
       .pipe(
         map(res => res) // or any other operator
       )
@@ -309,7 +305,7 @@ export class CreateReleaseComponent implements OnInit {
             if (attr != '_id' && res_release[attr] != undefined) {
               if (attr == 'projects') {
                 let vd = res_release[attr][0]['versionDetails'];
-                this.release['name'] = vd.name;                
+                this.release['name'] = vd.name;
 
                 // let type = ''
                 // if((vd.name).indexOf('OOC')>-1){
@@ -322,20 +318,18 @@ export class CreateReleaseComponent implements OnInit {
                 // this.release.type = type;
                 this.release['description'] = vd.description;
                 this.release.startDate = vd.startDate;
-              } else if(attr =='checklists'){
-
+              } else if (attr == 'checklists') {
                 for (var i = 0; i < res_release[attr].length; i++) {
                   let check = res_release[attr][i];
                   this.checklist_data[check['checklistId']] = {
-                    "_id": check['_id'], 
-                    "dueDate": check['dueDate'].substring(0, 10), 
-                    "value": check['value']
+                    _id: check['_id'],
+                    dueDate: check['dueDate'].substring(0, 10),
+                    value: check['value']
                   };
                 }
-                
-              }else if(attr =='deploymentChampion'){
+              } else if (attr == 'deploymentChampion') {
                 this.release.deploymentChampion = res_release[attr];
-              }else {
+              } else {
                 try {
                   this.release[attr] = res_release[attr].substring(0, 10);
                 } catch (e) {}
@@ -380,9 +374,15 @@ export class CreateReleaseComponent implements OnInit {
           for (var i = 0; i < this.checklist.length; i++) {
             let check = this.checklist[i];
             let data = this.checklist_data[check['_id']];
-            this.release.checklists.push(new Checklist(undefined, check['_id'], data['value'], data['dueDate']));
+            this.release.checklists.push(
+              new Checklist(
+                undefined,
+                check['_id'],
+                data['value'],
+                data['dueDate']
+              )
+            );
           }
-      
 
           console.log('Release: ' + this.release);
           console.log('Mode: ' + this.mode);
@@ -421,11 +421,17 @@ export class CreateReleaseComponent implements OnInit {
           this.release.projects.push(new Project(res[0][i].jiraProjectId));
         }
 
-
         for (var i = 0; i < this.checklist.length; i++) {
           let check = this.checklist[i];
           let data = this.checklist_data[check['_id']];
-          this.release.checklists.push(new Checklist(data['_id'], check['_id'], data['value'], data['dueDate']));
+          this.release.checklists.push(
+            new Checklist(
+              data['_id'],
+              check['_id'],
+              data['value'],
+              data['dueDate']
+            )
+          );
         }
 
         this.releaseService
@@ -436,7 +442,7 @@ export class CreateReleaseComponent implements OnInit {
           .subscribe(
             res => {
               console.log('response', res);
-              this.router.navigate(['/release/'+this.releaseId]);
+              this.router.navigate(['/release/' + this.releaseId]);
             },
             error => {
               this.error = true;
