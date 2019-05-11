@@ -1,3 +1,16 @@
-<angular-file-uploader
-      [config]="config">
+<!-- Upload components -->
+<angular-file-uploader [config]="config" (ApiResponse)="uploadResponse($event)">
 </angular-file-uploader>
+
+<hr/>
+
+<!-- Download components -->
+<div>
+      <button type="button" class="btn btn-info" (click)="downloadAbs(downloadModal)">Download</button>
+</div>
+
+<!-- Download Modal -->
+<ng-template #downloadModal let-modal>
+      <div [innerHtml]="innerData"></div>
+</ng-template>
+<!-- end of Download Modal-->

@@ -351,7 +351,7 @@
                 <label>Assignee for {{check.name}}</label>
                 <div class="input-group">
                   <input type="text" class="form-control" formControlName="assignee-{{check._id}}"
-                  [(ngModel)]="checklist_data[check._id].assignee" [showHint]="false"
+                  [(ngModel)]="checklist_data[check._id].assignee" [showHint]="false" [editable]="false"
                   [ngbTypeahead]="filterAssignee" [inputFormatter]="formatter" [resultTemplate]="assigneeTmp"
                   [className]="!isValid('assignee-'+check._id)?'form-control is-invalid':'form-control'" />
                   <!-- validation feedback text -->

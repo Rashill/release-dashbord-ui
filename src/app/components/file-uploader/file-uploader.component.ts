@@ -1,6 +1,10 @@
-import { Component, OnInit, NgModule } from '@angular/core';
-import { AngularFileUploaderModule } from "angular-file-uploader";
+import { Component, OnInit, NgModule, ViewChild, TemplateRef } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { AngularFileUploaderModule } from "angular-file-uploader";
+import { ReleaseService } from '../../services/release.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-file-uploader',
@@ -10,42 +14,62 @@ import { environment } from '../../../environments/environment';
 
 @NgModule({
   imports: [
-      AngularFileUploaderModule,
+    AngularFileUploaderModule
   ]
 })
 
 export class FileUploaderComponent implements OnInit {
 
+  ngOnInit() {
+  }
+
+  /** Upload code related */
   config = {
     multiple: false,
     formatsAllowed: ".html,.htm",
     //maxSize: "1",
-    uploadAPI:  {
-      url: environment.baseUrl+"/file",
-      headers: {
-        "Content-Type" : "text/plain;charset=UTF-8",
-        "Authorization" : 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiI1Y2JmZTE3OTdkZDZmYTVkNTRlYmI1ODIiLCJhY2Nlc3NfdG9rZW4iOiJMWlMxZ1BzZGUyRllxbjI4OEFFVTNFektJbVNQNk5SbiIsImlhdCI6MTU1NjA3OTAwN30.bjWAVC6Pmk9GG9SCjDbGiv7jYgzN1XpOjjYZN_n5HxI',
-        "Access-Control-Allow-Origin" : "*"  
+    uploadAPI: {
+      url: environment.baseUrl + "/file"
+    }
+  };
+  
+  response;
+
+  uploadResponse(event) {
+    if (event.status == 200) {
+      this.response = JSON.parse(event.response);
+    } else {
+      console.error(event.statusText);
+    }
+  }
+  /** End of Upload code */
+
+
+  /** Download code related */
+  @ViewChild('downloadModal') downloadModal: TemplateRef<any>;
+  innerData: SafeHtml;
+
+  constructor(
+    private modalService: NgbModal,
+    private releaseService: ReleaseService,
+    private sanitizer: DomSanitizer
+  ) { }
+
+  downloadAbs(modal) {
+    this.releaseService.downloadFile(this.response['_id']).subscribe(
+      res => {
+        this.openModal(res, modal);
+      },
+      error => {
+        this.openModal(error, modal);
       }
-    }/*,
-    theme: "attachPin",
-    hideProgressBar: false,
-    hideResetBtn: false,
-    hideSelectBtn: false,
-    replaceTexts: {
-      selectFileBtn: 'Select HTML file',
-      resetBtn: 'Reset',
-      uploadBtn: 'Upload',
-      dragNDropBox: 'Drag N Drop',
-      attachPinBtn: 'Attach Files...',
-      afterUploadMsg_success: 'Successfully Uploaded !',
-      afterUploadMsg_error: 'Upload Failed !'
-    }*/
-};
+    );
+  }
 
-  constructor() { }
 
-  ngOnInit() {
+  openModal(data, modal) {
+    this.innerData = this.sanitizer.bypassSecurityTrustHtml(data.error.text);
+    this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title', centered: true });
   }
 
 }

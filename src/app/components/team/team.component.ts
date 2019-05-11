@@ -49,12 +49,14 @@ export class TeamComponent implements OnInit {
       create: false
     },
     {
-      key: 'description',
-      title: 'Description',
-      description: 'Team name as appears in JIRA',
+      key: 'email',
+      title: 'Email',
+      type: 'email',
+      validator: 'email',
       visible: true,
       update: true,
-      create: true
+      create: true,
+      required: true
     }
   ];
 

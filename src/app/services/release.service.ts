@@ -41,5 +41,10 @@ export class ReleaseService {
   getUsers() {
     return forkJoin(this.http.get<any>(environment.baseUrl + '/user'));
   }
+
+  downloadFile(_id) {
+    console.log('file: '+_id);
+    return forkJoin(this.http.get<any>(environment.baseUrl + '/file/'+ _id));
+  }
   
 }
