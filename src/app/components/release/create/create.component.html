@@ -303,7 +303,10 @@
                 <label for="depchampion">Deployment Champion</label>
                 <div class="input-group">
                   <input type="text" class="form-control" formControlName="depchampionName"
-                    [(ngModel)]="release.deploymentChampion.name" placeholder="James"
+                    [(ngModel)]="deploymentChampion_name" placeholder="James"
+                    (ngModelChange)="championValueChanged($event)"
+                    [showHint]="false"
+                    [ngbTypeahead]="filterAssignee" [inputFormatter]="formatter" [resultTemplate]="assigneeTmp"
                     [className]="!isValid('depchampionName')?'form-control is-invalid':'form-control'" />
                   <!-- validation feedback text -->
                   <div class="form-text invalid-feedback" *ngIf="!isValid('depchampionName')">
@@ -311,19 +314,7 @@
                   </div>
                 </div>
               </div>
-
-              <div class="form-group col-md-6">
-                <label for="depchampion">Deployment Champion Email</label>
-                <div class="input-group">
-                  <input type="email" class="form-control" formControlName="depchampionEmail"
-                    [(ngModel)]="release.deploymentChampion.email" placeholder="example@company.com"
-                    [className]="!isValid('depchampionEmail')?'form-control is-invalid':'form-control'" />
-                  <!-- validation feedback text -->
-                  <div class="form-text invalid-feedback" *ngIf="!isValid('depchampionEmail')">
-                    {{getValidationMsg('depchampionEmail')}}
-                  </div>
-                </div>
-              </div>
+              
             </div>
 
           </wizard-step>
@@ -461,11 +452,9 @@
                 </div>
 
                 <div><span class="font-weight-bold">Deployment Champion: </span><span
-                    [className]="!isValid('depchampionName')?'text-light bg-danger':''">{{release.deploymentChampion.name}}</span>
+                    [className]="!isValid('depchampionName')?'text-light bg-danger':''">{{deploymentChampion_name}}</span>
                 </div>
-                <div><span class="font-weight-bold">Deployment Champion Email: </span><span
-                    [className]="!isValid('depchampionName')?'text-light bg-danger':''">{{release.deploymentChampion.email}}</span>
-                </div>
+ 
                 <hr />
                 <div *ngFor="let check of checklist">
                   <span class="font-weight-bold">Due Notification for {{check.name}}: </span>

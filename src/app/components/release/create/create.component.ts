@@ -49,15 +49,14 @@ export class CreateReleaseComponent implements OnInit {
     biztalk: string;
     devSupport: string;
     projects: Array<Project>;
-    deploymentChampion: {
-      name: string;
-      email: string;
-    };
+    deploymentChampion: string;
     checklists: Array<Checklist>;
   };
 
   checklist: [];
   checklist_data;
+  //this is needed to store champion_name
+  deploymentChampion_name;
 
   usersList;
 
@@ -81,8 +80,7 @@ export class CreateReleaseComponent implements OnInit {
       'sitecore',
       'biztalk',
       'devSupport',
-      'depchampionName',
-      'depchampionEmail'
+      'depchampionName'
     ],
     step5: []
   };
@@ -121,17 +119,14 @@ export class CreateReleaseComponent implements OnInit {
       regEnvironment: '',
       sitecore: '',
       biztalk: '',
-      deploymentChampion: {
-        name: '',
-        email: ''
-      },
+      deploymentChampion: '',
       devSupport: '',
       projects: Array(),
       checklists: Array()
     };
 
     this.checklist_data = {};
-
+    this.deploymentChampion_name = '';
 
     this.initFormGroup();
 
@@ -201,13 +196,9 @@ export class CreateReleaseComponent implements OnInit {
         devSupport: new FormControl(this.release.devSupport, [
           Validators.required
         ]),
-        depchampionName: new FormControl(this.release.deploymentChampion.name, [
+        depchampionName: new FormControl(this.release.deploymentChampion, [
           Validators.required
-        ]),
-        depchampionEmail: new FormControl(
-          this.release.deploymentChampion.email,
-          [Validators.required, Validators.email]
-        )
+        ])
       },
       {
         // it validates the dates (check the imported service)
@@ -302,18 +293,9 @@ export class CreateReleaseComponent implements OnInit {
               if (attr == 'projects') {
                 let vd = res_release[attr][0]['versionDetails'];
                 this.release['name'] = vd.name;
-
-                // let type = ''
-                // if((vd.name).indexOf('OOC')>-1){
-                //   type = 'OOC'
-                // }else if((vd.name).indexOf('ER')>-1){
-                //   type = 'ER'
-                // }else if((vd.name).indexOf('Hot Fix')>-1){
-                //   type = 'Hot Fix'
-                // }
-                // this.release.type = type;
                 this.release['description'] = vd.description;
                 this.release.startDate = vd.startDate;
+                //this.championValueChanged()
               } else if (attr == 'checklists') {
                 for (var i = 0; i < res_release[attr].length; i++) {
                   let check = res_release[attr][i];
@@ -477,7 +459,7 @@ export class CreateReleaseComponent implements OnInit {
    * @param step e.g. step1
    */
   isValidStep(step) {
-   // return true;
+    //return true;
     if (step == 'done') {
       return this.createForm.valid;
     }
@@ -500,7 +482,6 @@ export class CreateReleaseComponent implements OnInit {
               this.errorMessage = this.getValidationMsg(key);
             }
           }
-          //result = result && !(this.createForm.controls[key].errors && !this.createForm.controls[key].errors.dateInvalid);//this.createForm.controls[key].valid;
         }
       }
     });
@@ -549,6 +530,18 @@ export class CreateReleaseComponent implements OnInit {
       this.checklist_data[_id].contactPerson_id = event._id;
       this.checklist_data[_id].contactPerson = event.displayName;
     }
-
   }
+
+  /**
+   * It responds to deployment champion control change.
+   * It changes the value of a control form [Object] to displayName andd update the deplymentChampion
+   * @param event the asigned user object
+   */
+  championValueChanged(event){
+    if(event._id !== undefined && event.displayName !== undefined){
+      this.release.deploymentChampion = event._id;
+      this.deploymentChampion_name = event.displayName;
+    }
+  }
+
 }
