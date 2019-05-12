@@ -6,7 +6,20 @@
 
 <!-- Download components -->
 <div>
-      <button type="button" class="btn btn-info" (click)="downloadAbs(downloadModal)">Download</button>
+      <button type="button" class="btn btn-primary" (click)="downloadAbs(downloadModal,'modal')">
+            <span *ngIf="!loading">Download in modal</span>
+            <span *ngIf="loading">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Downloading...
+            </span>
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="downloadAbs(downloadModal, 'window')">
+            <span *ngIf="!loading">Download in window</span>
+            <span *ngIf="loading">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Downloading...
+            </span>
+      </button>
 </div>
 
 <!-- Download Modal -->

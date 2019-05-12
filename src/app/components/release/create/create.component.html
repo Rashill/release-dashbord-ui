@@ -350,13 +350,15 @@
               <div class="form-group col-md-6">
                 <label>Assignee for {{check.name}}</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" formControlName="assignee-{{check._id}}"
-                  [(ngModel)]="checklist_data[check._id].assignee" [showHint]="false" [editable]="false"
-                  [ngbTypeahead]="filterAssignee" [inputFormatter]="formatter" [resultTemplate]="assigneeTmp"
-                  [className]="!isValid('assignee-'+check._id)?'form-control is-invalid':'form-control'" />
+                  <input type="text" class="form-control" formControlName="contactPerson-{{check._id}}"
+                     [(ngModel)]="checklist_data[check._id].contactPerson"
+                     (ngModelChange)="valueChanged($event, check._id)"
+                     [showHint]="false"
+                    [ngbTypeahead]="filterAssignee" [inputFormatter]="formatter" [resultTemplate]="assigneeTmp"
+                    [className]="!isValid('contactPerson-'+check._id)?'form-control is-invalid':'form-control'" />
                   <!-- validation feedback text -->
-                  <div class="form-text invalid-feedback" *ngIf="!isValid('assignee-'+check._id)">
-                      {{ getValidationMsg("assignee-"+check._id) }}
+                  <div class="form-text invalid-feedback" *ngIf="!isValid('contactPerson-'+check._id)">
+                      {{ getValidationMsg("contactPerson-"+check._id) }}
                   </div>
                 </div>
               </div>
@@ -472,10 +474,13 @@
                   
                   <br/>
                   <span class="font-weight-bold">Assignee for {{check.name}}: </span>
-                    <ng-container 
+                  <span
+                  [className]="!isValid('contactPerson'+check._id)?'text-light bg-danger':''">{{checklist_data[check._id].contactPerson}}</span>
+                
+                   <!-- <ng-container 
                     [ngTemplateOutlet]="assigneeTmp"
-                    [ngTemplateOutletContext]="{result: checklist_data[check._id].assignee, term:''}">
-                  </ng-container>
+                    [ngTemplateOutletContext]="{result: checklist_data[check._id].contactPerson, term:''}">
+                  </ng-container>-->
 
                 </div>
                 <hr />

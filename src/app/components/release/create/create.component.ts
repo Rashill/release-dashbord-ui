@@ -239,11 +239,11 @@ export class CreateReleaseComponent implements OnInit {
           this.steps.step5.push(check['_id']);
 
           this.createForm.addControl(
-            'assignee-'+check['_id'], new FormControl('',
+            'contactPerson-'+check['_id'], new FormControl('',
             [Validators.required]
             ) 
           );
-          this.steps.step5.push('assignee-'+check['_id']);
+          this.steps.step5.push('contactPerson-'+check['_id']);
 
           this.checklist_data[check['_id']] = {
             checklistId: check['_id'],
@@ -320,7 +320,8 @@ export class CreateReleaseComponent implements OnInit {
                   this.checklist_data[check['checklistId']] = {
                     _id: check['_id'],
                     dueDate: check['dueDate'].substring(0, 10),
-                    value: check['value']
+                    value: check['value'],
+                    contactPerson: check['contactPerson']
                   };
                 }
               } else if (attr == 'deploymentChampion') {
@@ -375,7 +376,8 @@ export class CreateReleaseComponent implements OnInit {
                 undefined,
                 check['_id'],
                 data['value'],
-                data['dueDate']
+                data['dueDate'],
+                data['contactPerson_id']
               )
             );
           }
@@ -425,7 +427,8 @@ export class CreateReleaseComponent implements OnInit {
               data['_id'],
               check['_id'],
               data['value'],
-              data['dueDate']
+              data['dueDate'],
+              data['contactPerson_id']
             )
           );
         }
@@ -474,9 +477,8 @@ export class CreateReleaseComponent implements OnInit {
    * @param step e.g. step1
    */
   isValidStep(step) {
-    return true;
+   // return true;
     if (step == 'done') {
-      console.log(this.createForm.valid);
       return this.createForm.valid;
     }
 
@@ -533,7 +535,20 @@ export class CreateReleaseComponent implements OnInit {
       : this.usersList.filter(v => v.displayName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
   )
 
-  formatter = (x: {displayName: string}) => x.displayName;
+  formatter = (x: {displayName: string}) => x;
   //----------- end of autocomblite checklist assignee controlse
 
+  /**
+   * It responds to assignee controls change.
+   * It changes the value of a control from [Object] to displayName and update the contactPerson_id
+   * @param event the assigned user object
+   * @param _id check id
+   */
+  valueChanged(event, _id){
+    if(event._id !== undefined && event.displayName !== undefined){
+      this.checklist_data[_id].contactPerson_id = event._id;
+      this.checklist_data[_id].contactPerson = event.displayName;
+    }
+
+  }
 }

@@ -34,6 +34,7 @@ export class FileUploaderComponent implements OnInit {
   };
   
   response;
+  loading = false;
 
   uploadResponse(event) {
     if (event.status == 200) {
@@ -55,21 +56,39 @@ export class FileUploaderComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) { }
 
-  downloadAbs(modal) {
-    this.releaseService.downloadFile(this.response['_id']).subscribe(
+  downloadAbs(modal, mode) {//this.response['_id']
+    this.loading = true;
+    this.releaseService.downloadFile('5cd778946970de0c5a2dbd00').subscribe(
       res => {
-        this.openModal(res, modal);
+        this.open(res, modal, mode);
       },
       error => {
-        this.openModal(error, modal);
+        this.open(error, modal, mode);
       }
     );
+  }
+
+  open(data, modal, mode){
+    this.loading = false;
+    if(mode == 'modal'){
+      this.openModal(data, modal);
+    }else{
+      this.openWindow(data);
+    }
   }
 
 
   openModal(data, modal) {
     this.innerData = this.sanitizer.bypassSecurityTrustHtml(data.error.text);
-    this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title', centered: true });
+    this.modalService.open(modal, { centered: true, size: 'lg' });
+  }
+
+  openWindow(data){
+    let html = window.open('data', 'Downolad',"scrollbars=1,resizable=1");
+    html.document.open()
+    html.document.write(data.error.text)
+    html.document.close()
+
   }
 
 }
