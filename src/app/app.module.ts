@@ -57,7 +57,7 @@ import { ForbiddenPageComponent } from './components/forbidden-page/forbidden-pa
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 
 import { ProjectIssuesPipe } from './pipes/issue.pipe';
-import { VersioningComponent } from './components/versioning/versioning.component';
+import { VersioningComponent } from './components/release/versioning/versioning.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true

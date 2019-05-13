@@ -1,5 +1,4 @@
 import { Component, OnInit, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import {
   FormBuilder,
   FormGroup,
@@ -9,12 +8,6 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Project } from '../create/Project';
-import { Checklist } from '../create/Checklist';
-import { FormWizardModule } from 'angular-wizard-form';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {Observable} from 'rxjs';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import { ReleaseService } from '../../../services/release.service';
 
 
