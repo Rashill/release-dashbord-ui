@@ -58,6 +58,27 @@
             </div>
           </div>
         </div>
+
+OR
+        <hr />
+        <div class="row col-md-12">
+          <div class="form-group col-md-12">
+            <label for="sitecore">Copy and Paste from CSV file</label>
+            <div class="input-group">
+              <input type="text" class="form-control" formControlName="csv"
+                [(ngModel)]="csv" placeholder="5.02.23.0, 40.3.4.0, 0.2.9.9" [className]="
+                    !isValid('csv')
+                      ? 'form-control is-invalid'
+                      : 'form-control'
+                  " />
+              <!-- validation feedback text -->
+              <div class="form-text invalid-feedback" *ngIf="!isValid('csv')">
+                {{ getValidationMsg('csv') }}
+              </div>
+            </div>
+          </div>
+        </div>
+
       </form>
 
     </div>

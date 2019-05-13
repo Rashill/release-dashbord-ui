@@ -3,8 +3,10 @@ import {
   FormBuilder,
   FormGroup,
   FormControl,
-  Validators
+  Validators,
+  AbstractControl
 } from '@angular/forms';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -25,6 +27,7 @@ export class VersioningComponent implements OnInit {
     };
   };
 
+  csv: string;
 
   //either create or update
   mode: string = 'Create';
@@ -35,7 +38,8 @@ export class VersioningComponent implements OnInit {
   validation_messages = {
     required: 'This is required field',
     dateInvalid: 'Date invalid',
-    email: 'Invalid email format'
+    email: 'Invalid email format',
+    csv: 'Invalid CSV format'
   };
 
   constructor(
@@ -57,6 +61,8 @@ export class VersioningComponent implements OnInit {
       }
     };
 
+    this.csv = '';
+
     this.initFormGroup();
 
     if (this.releaseId.length > 0) {
@@ -71,17 +77,37 @@ export class VersioningComponent implements OnInit {
       this.verForm = this.formBuilder.group(
         {
           sitecore: new FormControl(this.release.versioning.sitecore, [
-          //  Validators.required
+            Validators.required
           ]),
           SPA: new FormControl(this.release.versioning.SPA, [
-          //  Validators.required
+            Validators.required
           ]),
           biztalkWCF: new FormControl(this.release.versioning.biztalkWCF, [
-          //  Validators.required
+            Validators.required
+          ]),
+          csv: new FormControl(this.csv, [
+            //  Validators.required,
+              CSVValidator.csv
           ])
         }
       );
       //end of form gorup init.
+
+
+      this.verForm.controls['csv'].valueChanges.subscribe(value => {
+        if (value.length == 0) {
+          this.verForm.controls['sitecore'].enable();
+          this.verForm.controls['SPA'].enable();
+          this.verForm.controls['biztalkWCF'].enable();
+        } else {
+          this.verForm.controls['sitecore'].disable();
+          this.verForm.controls['SPA'].disable();
+          this.verForm.controls['biztalkWCF'].disable();
+          this.updateFromCSV();
+        }
+        this.verForm.updateValueAndValidity();
+      });
+
     }
 
     loadAndFillControls() {
@@ -133,6 +159,14 @@ export class VersioningComponent implements OnInit {
   }
 
 
+  updateFromCSV(){
+    var cells = this.csv.split(",");
+    this.release.versioning.sitecore = cells[0];
+    this.release.versioning.SPA = cells[1];
+    this.release.versioning.biztalkWCF = cells[2];
+  }
+
+
     /**
    * This is used to draw error flag in the invalid control
    * @param key control name
@@ -166,4 +200,16 @@ export class VersioningComponent implements OnInit {
   }
 
 
+}
+
+
+export class CSVValidator{
+  static csv(control: AbstractControl) {
+    let val = control.value;
+    var cells = val.split(",");
+    if(cells.length  !== 3 && val.length!==0){
+      return {'csv': true};
+    }
+    return null;
+  }
 }
