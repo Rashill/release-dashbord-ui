@@ -57,6 +57,7 @@ import { ForbiddenPageComponent } from './components/forbidden-page/forbidden-pa
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 
 import { ProjectIssuesPipe } from './pipes/issue.pipe';
+import { VersioningComponent } from './components/versioning/versioning.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -85,7 +86,8 @@ export function createTranslateLoader(http: HttpClient) {
     ChecklistComponent,
     ForbiddenPageComponent,
     FileUploaderComponent,
-    ProjectIssuesPipe
+    ProjectIssuesPipe,
+    VersioningComponent
   ],
   imports: [
     NgbModule,

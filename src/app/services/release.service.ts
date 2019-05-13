@@ -34,6 +34,12 @@ export class ReleaseService {
     );
   }
 
+  editRelease(releaseId, release) {
+    return forkJoin(
+      this.http.patch<any>(environment.baseUrl + '/release/' + releaseId, release)
+    );
+  }
+
   getChecklists() {
     return forkJoin(this.http.get<any>(environment.baseUrl + '/checklist'));
   }

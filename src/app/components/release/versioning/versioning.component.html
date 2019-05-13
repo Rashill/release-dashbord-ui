@@ -1,0 +1,65 @@
+<div class="container mb-5">
+  <div class="card mx-auto">
+    <div class="card-body">
+      <div class="card-title text-center mb-5">
+        <h2>Release Versioning</h2>
+      </div>
+      <form novalidate [formGroup]="verForm" (ngSubmit)="onSubmit()">
+        <button type="button" class="btn btn-primary" (click)="onSubmit()">
+          Submit
+        </button>
+        <hr />
+        <div class="row col-md-12">
+          <div class="form-group col-md-4">
+            <label for="sitecore">SiteCore</label>
+            <div class="input-group">
+              <input type="text" class="form-control" formControlName="sitecore"
+                [(ngModel)]="release.versioning.sitecore" placeholder="5.02.23.0" [className]="
+                    !isValid('sitecore')
+                      ? 'form-control is-invalid'
+                      : 'form-control'
+                  " />
+              <!-- validation feedback text -->
+              <div class="form-text invalid-feedback" *ngIf="!isValid('sitecore')">
+                {{ getValidationMsg('sitecore') }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="SPA">SPA</label>
+            <div class="input-group">
+              <input type="text" class="form-control" formControlName="SPA" [(ngModel)]="release.versioning.SPA"
+                placeholder="40.3.4.0" [className]="
+                      !isValid('SPA')
+                        ? 'form-control is-invalid'
+                        : 'form-control'
+                    " />
+              <!-- validation feedback text -->
+              <div class="form-text invalid-feedback" *ngIf="!isValid('SPA')">
+                {{ getValidationMsg('SPA') }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="biztalkWCF">Biz Talk</label>
+            <div class="input-group">
+              <input type="text" class="form-control" formControlName="biztalkWCF"
+                [(ngModel)]="release.versioning.biztalkWCF" placeholder="0.2.9.9" [className]="
+                    !isValid('biztalkWCF')
+                      ? 'form-control is-invalid'
+                      : 'form-control'
+                  " />
+              <!-- validation feedback text -->
+              <div class="form-text invalid-feedback" *ngIf="!isValid('biztalkWCF')">
+                {{ getValidationMsg('biztalkWCF') }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>

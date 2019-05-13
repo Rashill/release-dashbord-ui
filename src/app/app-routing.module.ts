@@ -16,6 +16,7 @@ import { ChecklistComponent } from './components/checklist/checklist.component';
 import { AuthGuard } from '../guards/auth.guard';
 import { AdminGuard } from '../guards/admin.guard';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
+import { VersioningComponent } from './components/release/versioning/versioning.component';
 
 const appRoutes: Routes = [
   {
@@ -60,6 +61,11 @@ const appRoutes: Routes = [
       { 
         path: 'upload',
         component: FileUploaderComponent,
+        canActivate: [AdminGuard]
+      },
+      { 
+        path: 'versioning/:id',
+        component: VersioningComponent,
         canActivate: [AdminGuard]
       }
     ]
