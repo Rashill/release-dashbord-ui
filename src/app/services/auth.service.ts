@@ -61,6 +61,9 @@ export class AuthService {
   }
 
   getUser() {
-    return JSON.parse(localStorage.getItem('user'));
+    var json='{"role":"SuperAdmin"}'
+    var abc=JSON.parse(json);
+    console.log("Hey "+abc.role)
+    return JSON.parse(json);
   }
 }

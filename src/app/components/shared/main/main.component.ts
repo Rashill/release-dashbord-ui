@@ -101,7 +101,7 @@ export class MainComponent implements OnInit {
   ) {
     this.onResize();
 
-    this.user = authService.getUser();
+    // this.user = authService.getUser();
 
     if (authService.getUser() && authService.getUser().role === 'User') {
       this.isMenuClosed = true;
