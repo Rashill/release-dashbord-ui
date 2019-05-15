@@ -20,6 +20,12 @@
             ><i class="badge badge-info" ngbTooltip="GeneratePDF" placement="right">Generate PDF</i
           ></small>
         </button>
+        <span class="mb-3 mr-3"></span>
+        <button (click)="genDOC()">
+        <small
+            ><i class="badge badge-info" ngbTooltip="GenerateNotes" placement="right">Release Notes</i
+          ></small>
+        </button>
       </h1>
   
       <p class="col-12">{{ release.projects[0].versionDetails.description }}</p>
@@ -169,9 +175,11 @@
               "
               href="https://releasedashboard.atlassian.net/browse/{{ issue.key }}"
               target="_blank"
-              ><p>
+              >
+              <p>
                 {{ issue.fields.summary }}
-              </p></a
+              </p>
+              </a
             >
           </div>
         </div>
@@ -261,6 +269,7 @@
         </div>
       </div>
     </div>
+ 
 
     <!-- Versioning table-->
     <div class="row" *ngIf="release">
@@ -289,5 +298,4 @@
         </div>
     </div>
     <!-- End of Versioning table-->
-
-  </div>
+</div>
