@@ -9,6 +9,9 @@ import { ReleaseService } from '../../services/release.service';
 import { ProjectService } from '../../services/project.service';
 import { ChecklistService } from '../../services/checklist.service';
 import { Chart } from 'chart.js';
+import * as jsPDF from 'jspdf'
+import html2canvas from 'html2canvas';
+
 @Component({
   selector: 'app-release-dashboard',
   templateUrl: './release.component.html',
@@ -54,6 +57,24 @@ export class ViewReleaseComponent implements OnInit {
     this.timeline = new Timeline(this.tlContainer, this.data, {});
     this.timeline.setOptions(this.options);
     this.timeline.setGroups(this.groups);
+  }
+
+  genPDF()
+  {
+  console.log("Hi I am here")
+  var data = document.getElementById('dashboard');
+    html2canvas(data).then(canvas => {
+      // Few necessary setting options
+      var imgWidth = 220;
+      var pageHeight = 500;
+      var imgHeight = canvas.height * imgWidth / canvas.width;
+      var heightLeft = imgHeight;
+      const contentDataURL = canvas.toDataURL('image/png')
+      var pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+      var position = 0;
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
+      pdf.save('dashboard.pdf'); // Generated PDF
+  });
   }
 
   ngOnInit() {
