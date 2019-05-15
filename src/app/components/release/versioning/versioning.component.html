@@ -4,11 +4,26 @@
       <div class="card-title text-center mb-5">
         <h2>Release Versioning</h2>
       </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="col-12">
+            <button type="button" class="btn  btn-primary px-4 mb-3 mr-1" (click)="onSubmit()">
+              <span *ngIf="!submitting">Submit</span>
+              <span *ngIf="submitting">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Submitting...
+              </span>
+            </button>
+            <button (click)="exportToCSV()" id="add-row-button" class="btn  btn-primary px-4 mb-3 mr-1">Export to
+              CSV</button>
+          </div>
+          <hr />
+        </div>
+      </div>
+
+
       <form novalidate [formGroup]="verForm" (ngSubmit)="onSubmit()">
-        <button type="button" class="btn btn-primary" (click)="onSubmit()">
-          Submit
-        </button>
-        <hr />
         <div class="row col-md-12">
           <div class="form-group col-md-4">
             <label for="sitecore">SiteCore</label>
@@ -59,14 +74,14 @@
           </div>
         </div>
 
-OR
+        OR
         <hr />
         <div class="row col-md-12">
           <div class="form-group col-md-12">
             <label for="sitecore">Copy and Paste from CSV file</label>
             <div class="input-group">
-              <input type="text" class="form-control" formControlName="csv"
-                [(ngModel)]="csv" placeholder="5.02.23.0, 40.3.4.0, 0.2.9.9" [className]="
+              <input type="text" class="form-control" formControlName="csv" [(ngModel)]="csv"
+                placeholder="5.02.23.0, 40.3.4.0, 0.2.9.9" [className]="
                     !isValid('csv')
                       ? 'form-control is-invalid'
                       : 'form-control'

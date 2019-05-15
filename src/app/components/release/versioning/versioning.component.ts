@@ -20,6 +20,7 @@ import { ReleaseService } from '../../../services/release.service';
 })
 export class VersioningComponent implements OnInit {
   release: {
+    name: string;
     versioning: {
       sitecore: string;
       SPA: String;
@@ -28,6 +29,7 @@ export class VersioningComponent implements OnInit {
   };
 
   csv: string;
+  submitting: boolean;
 
   //either create or update
   mode: string = 'Create';
@@ -51,9 +53,9 @@ export class VersioningComponent implements OnInit {
 
   ngOnInit() {
     this.releaseId = this.route.snapshot.paramMap.get('id');
-    console.log(this.releaseId);
 
     this.release = {
+      name: '',
       versioning: {
         sitecore: '',
         SPA: '',
@@ -62,6 +64,7 @@ export class VersioningComponent implements OnInit {
     };
 
     this.csv = '';
+    this.submitting = false;
 
     this.initFormGroup();
 
@@ -118,10 +121,10 @@ export class VersioningComponent implements OnInit {
         )
         .subscribe(
           res => {
-            console.log(res);
             if(res[0].versioning != undefined){
               this.release.versioning = res[0].versioning;
             }
+            this.release.name = res[0]['projects'][0]['versionDetails']['name'];
           },
           error => {
             return throwError(error); // Angular 5/RxJS 5.5
@@ -141,8 +144,7 @@ export class VersioningComponent implements OnInit {
 
 
   update() {
-    console.log('Update......');
-    console.log(this.release);
+      this.submitting = true;
       this.releaseService
         .editRelease(this.releaseId, {"versioning": this.release.versioning})
         .pipe(
@@ -150,9 +152,11 @@ export class VersioningComponent implements OnInit {
         )
         .subscribe(
           res => {
+            this.submitting = false;
             this.router.navigate(['/release/' + this.releaseId]);
           },
           error => {
+            this.submitting = false;
             return throwError(error); // Angular 5/RxJS 5.5
           }
         );
@@ -199,6 +203,31 @@ export class VersioningComponent implements OnInit {
     }
   }
 
+  
+  /**
+   * Export to CSV function ()
+   * It deals with json data
+   */
+  exportToCSV() {
+    const rows = this.release.versioning;
+    let csvContent = 'data:text/csv;charset=utf-8,';
+    let dataString = '';
+    const x: any[] = [];
+    const keys = Object.keys(this.release.versioning);
+    keys.forEach((key, index) => {
+      x.push(this.release.versioning[key]);
+    });
+
+    csvContent += keys + '\n';
+    csvContent += x.join(',');
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', this.release.name +'-versioning.csv');
+
+    link.click();
+  }
 
 }
 
