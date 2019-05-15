@@ -285,9 +285,12 @@
               <div class="form-group col-md-6">
                 <label for="devSupport">Dev Support</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" formControlName="devSupport" [(ngModel)]="release.devSupport"
-                    placeholder="James" [className]="
-                    !isValid('devSupport')
+                  <input type="text" class="form-control" formControlName="devSupport"
+                    [(ngModel)]="displayLabel.devSupport" placeholder="James"
+                    (ngModelChange)="displayValueChanged($event, 'devSupport')"
+                    [showHint]="false"
+                    [ngbTypeahead]="filterAssignee" [inputFormatter]="formatter" [resultTemplate]="assigneeTmp"
+                    [className]="!isValid('devSupport')
                       ? 'form-control is-invalid'
                       : 'form-control'
                   " />
@@ -303,8 +306,8 @@
                 <label for="depchampion">Deployment Champion</label>
                 <div class="input-group">
                   <input type="text" class="form-control" formControlName="depchampionName"
-                    [(ngModel)]="deploymentChampion_name" placeholder="James"
-                    (ngModelChange)="championValueChanged($event)"
+                    [(ngModel)]="displayLabel.deploymentChampion" placeholder="James"
+                    (ngModelChange)="displayValueChanged($event, 'deploymentChampion')"
                     [showHint]="false"
                     [ngbTypeahead]="filterAssignee" [inputFormatter]="formatter" [resultTemplate]="assigneeTmp"
                     [className]="!isValid('depchampionName')?'form-control is-invalid':'form-control'" />
@@ -329,7 +332,7 @@
                 <label for="{{check._id}}">Due Notification for {{check.name}}</label>
                 <div class="input-group">
                   <input type="date" class="form-control" formControlName="{{check._id}}"
-                    [(ngModel)]="checklist_data[check._id].dueDate"
+                    [(ngModel)]="displayLabel.checklist[check._id].dueDate"
                     [className]="!isValid(check._id)?'form-control is-invalid':'form-control'" />
                   <!-- validation feedback text -->
                   <div class="form-text invalid-feedback" *ngIf="!isValid(check._id)">
@@ -342,7 +345,7 @@
                 <label>Assignee for {{check.name}}</label>
                 <div class="input-group">
                   <input type="text" class="form-control" formControlName="contactPerson-{{check._id}}"
-                     [(ngModel)]="checklist_data[check._id].contactPerson"
+                     [(ngModel)]="displayLabel.checklist[check._id].contactPerson"
                      (ngModelChange)="valueChanged($event, check._id)"
                      [showHint]="false"
                     [ngbTypeahead]="filterAssignee" [inputFormatter]="formatter" [resultTemplate]="assigneeTmp"
@@ -448,23 +451,23 @@
                 <div>
                   <span class="font-weight-bold">Dev Support: </span><span [className]="
                       !isValid('devSupport') ? 'text-light bg-danger' : ''
-                    ">{{ release.devSupport }}</span>
+                    ">{{ displayLabel.devSupport }}</span>
                 </div>
 
                 <div><span class="font-weight-bold">Deployment Champion: </span><span
-                    [className]="!isValid('depchampionName')?'text-light bg-danger':''">{{deploymentChampion_name}}</span>
+                    [className]="!isValid('depchampionName')?'text-light bg-danger':''">{{displayLabel.deploymentChampion}}</span>
                 </div>
  
                 <hr />
                 <div *ngFor="let check of checklist">
                   <span class="font-weight-bold">Due Notification for {{check.name}}: </span>
                   <span
-                    [className]="!isValid(check._id)?'text-light bg-danger':''">{{checklist_data[check._id].dueDate}}</span>
+                    [className]="!isValid(check._id)?'text-light bg-danger':''">{{displayLabel.checklist[check._id].dueDate}}</span>
                   
                   <br/>
                   <span class="font-weight-bold">Assignee for {{check.name}}: </span>
                   <span
-                  [className]="!isValid('contactPerson'+check._id)?'text-light bg-danger':''">{{checklist_data[check._id].contactPerson}}</span>
+                  [className]="!isValid('contactPerson'+check._id)?'text-light bg-danger':''">{{displayLabel.checklist[check._id].contactPerson}}</span>
                 
                    <!-- <ng-container 
                     [ngTemplateOutlet]="assigneeTmp"

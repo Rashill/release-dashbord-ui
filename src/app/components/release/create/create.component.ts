@@ -54,9 +54,16 @@ export class CreateReleaseComponent implements OnInit {
   };
 
   checklist: [];
-  checklist_data;
+
+  //these line contines input label which mapped to id
   //this is needed to store champion_name
-  deploymentChampion_name;
+  //this is needed to store devSupport_name
+  displayLabel:{
+    checklist;
+    deploymentChampion;
+    devSupport;
+  }
+
 
   usersList;
 
@@ -125,8 +132,11 @@ export class CreateReleaseComponent implements OnInit {
       checklists: Array()
     };
 
-    this.checklist_data = {};
-    this.deploymentChampion_name = '';
+    this.displayLabel = {
+      checklist: {},//schema: 58778kjkdfbkjlsfd: {contactPerson:'5778jksdjfnjksd7', dueDate: ''}
+      deploymentChampion : '',
+      devSupport: ''
+    }
 
     this.initFormGroup();
 
@@ -236,7 +246,7 @@ export class CreateReleaseComponent implements OnInit {
           );
           this.steps.step5.push('contactPerson-'+check['_id']);
 
-          this.checklist_data[check['_id']] = {
+          this.displayLabel.checklist[check['_id']] = {
             checklistId: check['_id'],
             dueDate: '',
             value: false
@@ -295,19 +305,20 @@ export class CreateReleaseComponent implements OnInit {
                 this.release['name'] = vd.name;
                 this.release['description'] = vd.description;
                 this.release.startDate = vd.startDate;
-                //this.championValueChanged()
               } else if (attr == 'checklists') {
                 for (var i = 0; i < res_release[attr].length; i++) {
                   let check = res_release[attr][i];
-                  this.checklist_data[check['checklistId']] = {
+                  this.displayLabel.checklist[check['checklistId']] = {
                     _id: check['_id'],
                     dueDate: check['dueDate'].substring(0, 10),
                     value: check['value'],
-                    contactPerson: check['contactPerson']
+                    contactPerson_id: check['contactPerson'],
+                    contactPerson: this.getUserDiplayNameById(check['contactPerson'])
                   };
                 }
-              } else if (attr == 'deploymentChampion') {
-                this.release.deploymentChampion = res_release[attr];
+              } else if (attr == 'deploymentChampion' || attr == 'devSupport') {
+                this.release[attr] = res_release[attr];
+                this.displayLabel[attr] = this.getUserDiplayNameById(res_release[attr]);
               } else {
                 try {
                   this.release[attr] = res_release[attr].substring(0, 10);
@@ -352,13 +363,14 @@ export class CreateReleaseComponent implements OnInit {
 
           for (var i = 0; i < this.checklist.length; i++) {
             let check = this.checklist[i];
-            let data = this.checklist_data[check['_id']];
+            let data = this.displayLabel.checklist[check['_id']];
             this.release.checklists.push(
               new Checklist(
                 undefined,
                 check['_id'],
                 data['value'],
                 data['dueDate'],
+                //set the value of contactPerson_id not the displayName "contactPerson"
                 data['contactPerson_id']
               )
             );
@@ -403,20 +415,24 @@ export class CreateReleaseComponent implements OnInit {
 
         for (var i = 0; i < this.checklist.length; i++) {
           let check = this.checklist[i];
-          let data = this.checklist_data[check['_id']];
+          let data = this.displayLabel.checklist[check['_id']];
           this.release.checklists.push(
             new Checklist(
               data['_id'],
               check['_id'],
               data['value'],
               data['dueDate'],
+              //set the value of contactPerson_id not the displayName "contactPerson"
               data['contactPerson_id']
             )
           );
         }
 
+        console.log('update release...');
+        console.log(this.release);
+
         this.releaseService
-          .createRelease(this.release)
+          .updateRelease(this.releaseId, this.release)
           .pipe(
             map(res => res) // or any other operator
           )
@@ -459,7 +475,7 @@ export class CreateReleaseComponent implements OnInit {
    * @param step e.g. step1
    */
   isValidStep(step) {
-    //return true;
+    return true;
     if (step == 'done') {
       return this.createForm.valid;
     }
@@ -527,21 +543,37 @@ export class CreateReleaseComponent implements OnInit {
    */
   valueChanged(event, _id){
     if(event._id !== undefined && event.displayName !== undefined){
-      this.checklist_data[_id].contactPerson_id = event._id;
-      this.checklist_data[_id].contactPerson = event.displayName;
+      this.displayLabel.checklist[_id].contactPerson_id = event._id;
+      this.displayLabel.checklist[_id].contactPerson = event.displayName;
     }
   }
 
   /**
-   * It responds to deployment champion control change.
-   * It changes the value of a control form [Object] to displayName andd update the deplymentChampion
+   * It responds to deployment champion, devSupport controls change.
+   * It changes the value of a control form [Object] to displayName andd update the displayLabel[attr]
    * @param event the asigned user object
    */
-  championValueChanged(event){
+  displayValueChanged(event, attr){
     if(event._id !== undefined && event.displayName !== undefined){
-      this.release.deploymentChampion = event._id;
-      this.deploymentChampion_name = event.displayName;
+      this.release[attr] = event._id;
+      this.displayLabel[attr] = event.displayName;
     }
   }
+
+  /**
+   * It returns the displayName of a given _id
+   * @param _id contactPerson id
+   */
+  getUserDiplayNameById(_id){
+    let displayName = _id;
+    this.usersList.forEach(el => {
+      if(el._id == _id){
+        displayName = el.displayName;
+        return;
+      }
+    });
+    return displayName;
+  }
+  
 
 }
