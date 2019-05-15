@@ -17,12 +17,69 @@
         <span class="mb-3 mr-3"></span>
         <button (click)="genPDF()">
         <small
-            ><i class="badge badge-info" ngbTooltip="GeneratePDF" placement="right">Generate PDF</i
-          ></small>
-        </button>
-      </h1>
-  
-      <p class="col-12">{{ release.projects[0].versionDetails.description }}</p>
+          ><i class="fa fa-edit" ngbTooltip="Edit" placement="right"></i
+        ></small>
+      </a>
+      <span class="mb-3 mr-3"></span>
+      <a routerLink="/versioning/{{ releaseId }}">
+        <small
+          ><i class="badge badge-info" ngbTooltip="Versioning" placement="right">Ver.</i
+        ></small>
+      </a>
+      <span class="mb-3 mr-3"></span>
+      <button (click)="genPDF()">
+      <small
+          ><i class="badge badge-info" ngbTooltip="GeneratePDF" placement="right">Generate PDF</i
+        ></small>
+      </button>
+      <span class="mb-3 mr-3"></span>
+      <button (click)="genDOC()">
+      <small
+          ><i class="badge badge-info" ngbTooltip="GenerateNotes" placement="right">Release Notes</i
+        ></small>
+      </button>
+    </h1>
+
+    <p class="col-12">{{ release.projects[0].versionDetails.description }}</p>
+  </div>
+
+  <div class="row display-flex mb-4">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title text-nowrap mr-2">Release Details</h5>
+        </div>
+        <div class="card-body" *ngIf="release">
+          <!-- <canvas id="canvas">{{ chart }}</canvas> -->
+          <p>
+            <label>Release Date: </label>&nbsp;{{
+              release.projects[0].versionDetails.releaseDate | date
+            }}&nbsp;<span class="badge badge-info"
+              >{{ release.days }} days remaining</span
+            >
+          </p>
+          <p><label>Release Type: </label>&nbsp;{{ release.releaseType }}</p>
+          <p *ngIf="release.cabDate != null">
+            <label>CAB Date: </label>&nbsp;{{ release.cabDate | date }}
+          </p>
+          <p><label>Biztalk: </label>&nbsp;{{ release.biztalk }}</p>
+          <p><label>Sitecore: </label>&nbsp;{{ release.sitecore }}</p>
+          <p>
+            <label>Test Environment: </label>&nbsp;{{ release.testEnvironment }}
+          </p>
+          <p>
+            <label>Deployment Champion: </label>&nbsp;{{
+              release.deploymentChampion.name
+            }}
+          </p>
+          <p>
+            <label>Deployment Champion's Email: </label>&nbsp;<a
+              href="mailto:{{ release.deploymentChampion.email }}"
+              >{{ release.deploymentChampion.email }}</a
+            >
+          </p>
+        </div>
+      </div>
     </div>
   
     <div class="row display-flex mb-4">
@@ -156,24 +213,15 @@
               (
                 issues.toDO.issues
                 | ProjectFilter: { projectId: selectedProjectId }
-              ).length
-            }})
-          </div>
-          <div class="card-body">
-            <a
-              class="btn text-white mb-2"
-              style="background-color: #C13100"
-              *ngFor="
-                let issue of issues.toDO.issues
-                  | ProjectFilter: { projectId: selectedProjectId }
-              "
-              href="https://releasedashboard.atlassian.net/browse/{{ issue.key }}"
-              target="_blank"
-              ><p>
-                {{ issue.fields.summary }}
-              </p></a
+            "
+            href="https://releasedashboard.atlassian.net/browse/{{ issue.key }}"
+            target="_blank"
             >
-          </div>
+            <p>
+              {{ issue.fields.summary }}
+            </p>
+            </a
+          >
         </div>
       </div>
   
