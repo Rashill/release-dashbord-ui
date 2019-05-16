@@ -85,6 +85,9 @@ export class ViewReleaseComponent implements OnInit {
   upladTestResult(event) {
     if (event.status == 200) {
       let res = JSON.parse(event.response);
+      if(this.release.testResults == undefined){
+        this.release.testResults = [];
+      }
       this.release.testResults.push({ '_id': res['_id'], 'filename': res['filename'] });
       this.releaseService.editRelease(this.releaseId,
         {
