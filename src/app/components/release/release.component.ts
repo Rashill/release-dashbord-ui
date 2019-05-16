@@ -11,6 +11,7 @@ import { ChecklistService } from '../../services/checklist.service';
 import { Chart } from 'chart.js';
 import * as jsPDF from 'jspdf'
 import html2canvas from 'html2canvas';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-release-dashboard',
@@ -42,6 +43,9 @@ export class ViewReleaseComponent implements OnInit {
   issues: any;
   projects: any;
 
+  uploadConfig = {};
+  loading = false;
+
   selectedProjectId = '';
 
   timelineDetails: TimeLineDetails;
@@ -50,7 +54,7 @@ export class ViewReleaseComponent implements OnInit {
     private projectService: ProjectService,
     private checklistService: ChecklistService,
     private releaseService: ReleaseService
-  ) {}
+  ) { }
 
   showTimeLine() {
     this.tlContainer = this.timelineContainer.nativeElement;
@@ -59,10 +63,9 @@ export class ViewReleaseComponent implements OnInit {
     this.timeline.setGroups(this.groups);
   }
 
-  genPDF()
-  {
-  console.log("Hi I am here")
-  var data = document.getElementById('dashboard');
+  genPDF() {
+    console.log("Hi I am here")
+    var data = document.getElementById('dashboard');
     html2canvas(data).then(canvas => {
       // Few necessary setting options
       var imgWidth = 200;
@@ -75,11 +78,63 @@ export class ViewReleaseComponent implements OnInit {
       // pdf.addImage(agency_logo.src, 'PNG', logo_sizes.centered_x, _y, logo_sizes.w, logo_sizes.h);
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
       pdf.save('dashboard.pdf'); // Generated PDF
-  });
+    });
+  }
+
+
+  upladTestResult(event) {
+    if (event.status == 200) {
+      let res = JSON.parse(event.response);
+      this.release.testResults.push({ '_id': res['_id'], 'filename': res['filename'] });
+      this.releaseService.editRelease(this.releaseId,
+        {
+          "testResults": this.release.testResults
+        }).subscribe(res => {
+          console.log(res);
+        });
+    } else {
+      console.error(event.statusText);
+    }
+  }
+
+
+  downloadResult(file) {//this.release.testResults[0]['_id']
+    this.loading = true;
+    this.releaseService.downloadFile(file).subscribe(
+      res => {
+        this.openInWindow(res);
+      },
+      error => {
+        this.openInWindow(error);
+      }
+    );
+  }
+
+  openInWindow(data) {
+    this.loading = false;
+    let html = window.open('data', 'Downolad', "scrollbars=1,resizable=1");
+    html.document.open()
+    html.document.write(data.error.text)
+    html.document.close()
+
   }
 
   ngOnInit() {
     this.releaseId = this.route.snapshot.paramMap.get('id');
+
+    /** Upload code related */
+    this.uploadConfig = {
+      multiple: true,
+      formatsAllowed: ".html,.htm",
+      //maxSize: "1",
+      uploadAPI: {
+        url: environment.baseUrl + "/file"
+      },
+      hideProgressBar: false,
+      hideResetBtn: true,
+      hideSelectBtn: false
+    };
+    /** End of Uplad code */
 
     let ctx = document.getElementById('canvas');
     this.releaseService
@@ -90,7 +145,7 @@ export class ViewReleaseComponent implements OnInit {
       .subscribe(
         res => {
           this.release = res[0];
-
+          console.log(this.release);
           this.release.days = this.calculateDaysDifference(
             new Date(this.release.projects[0].versionDetails.releaseDate)
           );
@@ -222,44 +277,44 @@ export class ViewReleaseComponent implements OnInit {
               ]
             },
             options: {
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                    labels: {
-                        generateLabels: function(chart) {
-                            var data = chart.data;
-                            if (data.labels.length && data.datasets.length) {
-                                return data.labels.map(function(label, i) {
-                                    var meta = chart.getDatasetMeta(0);
-                                    var ds = data.datasets[0];
-                                    var arc = meta.data[i];
-                                    var custom = arc && arc.custom || {};
-                                    var getValueAtIndexOrDefault = Chart.helpers.getValueAtIndexOrDefault;
-                                    var arcOpts = chart.options.elements.arc;
-                                    var fill = custom.backgroundColor ? custom.backgroundColor : getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts.backgroundColor);
-                                    var stroke = custom.borderColor ? custom.borderColor : getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
-                                    var bw = custom.borderWidth ? custom.borderWidth : getValueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  generateLabels: function (chart) {
+                    var data = chart.data;
+                    if (data.labels.length && data.datasets.length) {
+                      return data.labels.map(function (label, i) {
+                        var meta = chart.getDatasetMeta(0);
+                        var ds = data.datasets[0];
+                        var arc = meta.data[i];
+                        var custom = arc && arc.custom || {};
+                        var getValueAtIndexOrDefault = Chart.helpers.getValueAtIndexOrDefault;
+                        var arcOpts = chart.options.elements.arc;
+                        var fill = custom.backgroundColor ? custom.backgroundColor : getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts.backgroundColor);
+                        var stroke = custom.borderColor ? custom.borderColor : getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
+                        var bw = custom.borderWidth ? custom.borderWidth : getValueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
 
-                      // We get the value of the current label
-                      var value = chart.config.data.datasets[arc._datasetIndex].data[arc._index];
+                        // We get the value of the current label
+                        var value = chart.config.data.datasets[arc._datasetIndex].data[arc._index];
 
-                                    return {
-                                        // Instead of `text: label,`
-                                        // We add the value to the string
-                                        text: label + " : " + value,
-                                        fillStyle: fill,
-                                        strokeStyle: stroke,
-                                        lineWidth: bw,
-                                        hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
-                                        index: i
-                                    };
-                                });
-                            } else {
-                                return [];
-                            }
-                        }
+                        return {
+                          // Instead of `text: label,`
+                          // We add the value to the string
+                          text: label + " : " + value,
+                          fillStyle: fill,
+                          strokeStyle: stroke,
+                          lineWidth: bw,
+                          hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
+                          index: i
+                        };
+                      });
+                    } else {
+                      return [];
                     }
+                  }
                 }
+              }
             }
           });
         },

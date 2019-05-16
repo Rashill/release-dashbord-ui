@@ -405,7 +405,12 @@ export class CreateReleaseComponent implements OnInit {
   }
 
   updateRelease() {
-    this.releaseService.getTeam().subscribe(
+    this.releaseService
+      .getTeam()
+      .pipe(
+        map(res => res) // or any other operator
+      )
+      .subscribe(
       res => {
         console.log('response', res);
         console.log(res[0].length);
