@@ -26,6 +26,7 @@
             ><i class="badge badge-info" ngbTooltip="GenerateNotes" placement="right">Release Notes</i
           ></small>
         </button>
+
       </h1>
   
       <p class="col-12">{{ release.projects[0].versionDetails.description }}</p>
@@ -295,6 +296,58 @@
             </div>
           </div>
         </div>
+        <!-- End of Versioning table-->
     </div>
-    <!-- End of Versioning table-->
+    
+    <!-- Upload test result secion-->
+    <div class="row" *ngIf="release">
+      <div class="col-12 col-md-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Upload Testing Result</h5>
+                <!-- Upload components -->
+                <div>
+                    <angular-file-uploader [config]="uploadConfig" (ApiResponse)="upladTestResult($event)">
+                    </angular-file-uploader>
+                </div>
+            </div>
+          </div>
+        </div>
+        <!-- End of Upload result test section -->
+
+        <!-- Download result test section-->
+        <div class="col-12 col-md-6 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Testing Results</h5>
+                  <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">File name</th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor=" let testResult of release.testResults">
+                          <td>{{testResult.filename}}</td>
+                          <td>
+                              <a href="#" (click)="downloadResult(testResult._id)">
+                                <small><i class="badge badge-primary"  ngbTooltip="View Test Result" placement="right">
+                                      <span *ngIf="!loading">View</span>
+                                      <span *ngIf="loading">
+                                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                      </span>
+                                  </i></small>
+                              </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+              </div>
+            </div>
+          </div>
+           <!-- End of Download result test section -->
+      </div>
+         
+
 </div>
