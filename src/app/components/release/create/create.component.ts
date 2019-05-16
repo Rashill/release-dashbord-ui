@@ -12,14 +12,12 @@ import { Checklist } from './Checklist';
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FormWizardModule } from 'angular-wizard-form';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {Observable} from 'rxjs';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ReleaseService } from '../../../services/release.service';
 import { DateValidator } from './dataValidator.service';
-
 
 @NgModule({
   declarations: [CreateReleaseComponent],
@@ -58,12 +56,11 @@ export class CreateReleaseComponent implements OnInit {
   //these line contines input label which mapped to id
   //this is needed to store champion_name
   //this is needed to store devSupport_name
-  displayLabel:{
+  displayLabel: {
     checklist;
     deploymentChampion;
     devSupport;
-  }
-
+  };
 
   usersList;
 
@@ -133,14 +130,14 @@ export class CreateReleaseComponent implements OnInit {
     };
 
     this.displayLabel = {
-      checklist: {},//schema: 58778kjkdfbkjlsfd: {contactPerson:'5778jksdjfnjksd7', dueDate: ''}
-      deploymentChampion : '',
+      checklist: {}, //schema: 58778kjkdfbkjlsfd: {contactPerson:'5778jksdjfnjksd7', dueDate: ''}
+      deploymentChampion: '',
       devSupport: ''
-    }
+    };
 
     this.initFormGroup();
 
-    if (this.releaseId.length > 0) {
+    if (this.releaseId) {
       this.mode = 'Edit';
       this.loadAndFillControls();
     }
@@ -217,21 +214,20 @@ export class CreateReleaseComponent implements OnInit {
     );
     //end of form gorup init.
 
-    // load the users 
+    // load the users
     this.releaseService.getUsers().subscribe(
       res => {
-         this.usersList =  res[0];
+        this.usersList = res[0];
       },
-      error => {
-      }
+      error => {}
     );
 
     // load the checklist to create the html controls
     this.releaseService.getChecklists().subscribe(
       res => {
-        let checklist =  res[0];
+        let checklist = res[0];
         this.steps.step5 = [];
-        for(let check of checklist){
+        for (let check of checklist) {
           // init. controls for the checklist and assignee
           this.createForm.addControl(
             check['_id'],
@@ -240,11 +236,10 @@ export class CreateReleaseComponent implements OnInit {
           this.steps.step5.push(check['_id']);
 
           this.createForm.addControl(
-            'contactPerson-'+check['_id'], new FormControl('',
-            [Validators.required]
-            ) 
+            'contactPerson-' + check['_id'],
+            new FormControl('', [Validators.required])
           );
-          this.steps.step5.push('contactPerson-'+check['_id']);
+          this.steps.step5.push('contactPerson-' + check['_id']);
 
           this.displayLabel.checklist[check['_id']] = {
             checklistId: check['_id'],
@@ -256,7 +251,7 @@ export class CreateReleaseComponent implements OnInit {
       },
       error => {}
     );
-    
+
     this.createForm.controls['releaseType'].valueChanges.subscribe(type => {
       if (type == 'ER') {
         this.createForm.controls['cabDate'].setValidators([
@@ -313,12 +308,16 @@ export class CreateReleaseComponent implements OnInit {
                     dueDate: check['dueDate'].substring(0, 10),
                     value: check['value'],
                     contactPerson_id: check['contactPerson'],
-                    contactPerson: this.getUserDiplayNameById(check['contactPerson'])
+                    contactPerson: this.getUserDiplayNameById(
+                      check['contactPerson']
+                    )
                   };
                 }
               } else if (attr == 'deploymentChampion' || attr == 'devSupport') {
                 this.release[attr] = res_release[attr];
-                this.displayLabel[attr] = this.getUserDiplayNameById(res_release[attr]);
+                this.displayLabel[attr] = this.getUserDiplayNameById(
+                  res_release[attr]
+                );
               } else {
                 try {
                   this.release[attr] = res_release[attr].substring(0, 10);
@@ -411,54 +410,54 @@ export class CreateReleaseComponent implements OnInit {
         map(res => res) // or any other operator
       )
       .subscribe(
-      res => {
-        console.log('response', res);
-        console.log(res[0].length);
-        for (var i = 0; i < res[0].length; i++) {
-          this.release.projects.push(new Project(res[0][i].jiraProjectId));
-        }
+        res => {
+          console.log('response', res);
+          console.log(res[0].length);
+          for (var i = 0; i < res[0].length; i++) {
+            this.release.projects.push(new Project(res[0][i].jiraProjectId));
+          }
 
-        for (var i = 0; i < this.checklist.length; i++) {
-          let check = this.checklist[i];
-          let data = this.displayLabel.checklist[check['_id']];
-          this.release.checklists.push(
-            new Checklist(
-              data['_id'],
-              check['_id'],
-              data['value'],
-              data['dueDate'],
-              //set the value of contactPerson_id not the displayName "contactPerson"
-              data['contactPerson_id']
+          for (var i = 0; i < this.checklist.length; i++) {
+            let check = this.checklist[i];
+            let data = this.displayLabel.checklist[check['_id']];
+            this.release.checklists.push(
+              new Checklist(
+                data['_id'],
+                check['_id'],
+                data['value'],
+                data['dueDate'],
+                //set the value of contactPerson_id not the displayName "contactPerson"
+                data['contactPerson_id']
+              )
+            );
+          }
+
+          console.log('update release...');
+          console.log(this.release);
+
+          this.releaseService
+            .updateRelease(this.releaseId, this.release)
+            .pipe(
+              map(res => res) // or any other operator
             )
-          );
+            .subscribe(
+              res => {
+                console.log('response', res);
+                this.router.navigate(['/release/' + this.releaseId]);
+              },
+              error => {
+                this.error = true;
+                console.error('Error!', error);
+                return throwError(error); // Angular 5/RxJS 5.5
+              }
+            );
+        },
+        error => {
+          this.error = true;
+          console.error('Error!', error);
+          return throwError(error); // Angular 5/RxJS 5.5
         }
-
-        console.log('update release...');
-        console.log(this.release);
-
-        this.releaseService
-          .updateRelease(this.releaseId, this.release)
-          .pipe(
-            map(res => res) // or any other operator
-          )
-          .subscribe(
-            res => {
-              console.log('response', res);
-              this.router.navigate(['/release/' + this.releaseId]);
-            },
-            error => {
-              this.error = true;
-              console.error('Error!', error);
-              return throwError(error); // Angular 5/RxJS 5.5
-            }
-          );
-      },
-      error => {
-        this.error = true;
-        console.error('Error!', error);
-        return throwError(error); // Angular 5/RxJS 5.5
-      }
-    );
+      );
   }
 
   /**
@@ -527,17 +526,24 @@ export class CreateReleaseComponent implements OnInit {
     }
   }
 
-
   // --------- related to autocomblite checklist assignee controlse
   filterAssignee = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    distinctUntilChanged(),
-    map(term => term.length < 1 ? this.usersList.slice(0, 10)
-      : this.usersList.filter(v => v.displayName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-  )
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term =>
+        term.length < 1
+          ? this.usersList.slice(0, 10)
+          : this.usersList
+              .filter(
+                v =>
+                  v.displayName.toLowerCase().indexOf(term.toLowerCase()) > -1
+              )
+              .slice(0, 10)
+      )
+    );
 
-  formatter = (x: {displayName: string}) => x;
+  formatter = (x: { displayName: string }) => x;
   //----------- end of autocomblite checklist assignee controlse
 
   /**
@@ -546,8 +552,8 @@ export class CreateReleaseComponent implements OnInit {
    * @param event the assigned user object
    * @param _id check id
    */
-  valueChanged(event, _id){
-    if(event._id !== undefined && event.displayName !== undefined){
+  valueChanged(event, _id) {
+    if (event._id !== undefined && event.displayName !== undefined) {
       this.displayLabel.checklist[_id].contactPerson_id = event._id;
       this.displayLabel.checklist[_id].contactPerson = event.displayName;
     }
@@ -558,8 +564,8 @@ export class CreateReleaseComponent implements OnInit {
    * It changes the value of a control form [Object] to displayName andd update the displayLabel[attr]
    * @param event the asigned user object
    */
-  displayValueChanged(event, attr){
-    if(event._id !== undefined && event.displayName !== undefined){
+  displayValueChanged(event, attr) {
+    if (event._id !== undefined && event.displayName !== undefined) {
       this.release[attr] = event._id;
       this.displayLabel[attr] = event.displayName;
     }
@@ -569,16 +575,14 @@ export class CreateReleaseComponent implements OnInit {
    * It returns the displayName of a given _id
    * @param _id contactPerson id
    */
-  getUserDiplayNameById(_id){
+  getUserDiplayNameById(_id) {
     let displayName = _id;
     this.usersList.forEach(el => {
-      if(el._id == _id){
+      if (el._id == _id) {
         displayName = el.displayName;
         return;
       }
     });
     return displayName;
   }
-  
-
 }
