@@ -157,7 +157,7 @@ export class ViewReleaseComponent implements OnInit {
     doc.addTable(table);
     doc.addParagraph(new Paragraph().pageBreak())
     doc.addParagraph(new Paragraph("Release Notes").heading1().center());
-    doc.addParagraph(new Paragraph("(January 2019 Enterprise Release for the").heading1().center());
+    doc.addParagraph(new Paragraph("(July 2019 Enterprise Release for the").heading1().center());
     doc.addParagraph(new Paragraph("Digital Delivery Centre)").heading1().center());
     doc.addParagraph(new Paragraph("Introduction"));
     doc.addParagraph(new Paragraph("").addRun(new TextRun("Release notes are an important part of a product release and should be able to provide the reader with the information they need to satisfy their questions. The main question always being – how does it impact my work?").size(32)));
@@ -165,7 +165,32 @@ export class ViewReleaseComponent implements OnInit {
     doc.addParagraph(new Paragraph("").addRun(new TextRun("For all items in this release note set: ").size(32)));
     for(var i=0; i<5;i++)
     doc.addParagraph(new Paragraph());
-    doc.addParagraph(new Paragraph("Release Date: Saturday 19th January 2019").title());
+
+
+    const table1 = new Table(11, 2);
+
+
+    doc.addParagraph(new Paragraph("Release Date:  19th July 2019").title());
+    doc.addParagraph(new Paragraph().pageBreak())
+
+
+    table1.getCell(0, 0).createParagraph(("Title"));
+    table1.getCell(0, 1).createParagraph(("Supporting Technology Changes for Digital Delivery Centre July 2019 Release covering:\n\n\n\n\n\n\n")).addRun(new TextRun("\n\n\n\n\n\n\nPush Notifications for Users\n\n\n\n\n\n\n").bold()).addRun(new TextRun("User Message Filtering\n\n\n\n\n\n\n").bold());
+    table1.getCell(1, 0).createParagraph(("Business Change Owner"));
+    table1.getCell(1, 1).createParagraph(("Tim Anderson"));
+    table1.getCell(2, 0).createParagraph(("Introduction"));
+    table1.getCell(2, 1).createParagraph(("As part of the January 2019 Enterprise Release the Digital Delivery Centre Team will be implementing the following changes.\n\n\n\n\n\n\n")).addRun(new TextRun("\n\n\n\n\n\n\nPush Notifications for Users").bold()).addRun(new TextRun("\n\n\n\n\n\n\nUser Message Filtering\n\n\n\n\n\n\n").bold());
+    table1.getCell(3, 0).createParagraph(("Name of Service or Application"));
+    table1.getCell(3, 1).createParagraph(("")).addRun(new TextRun("\n\n\n\n\n\n\nC4748-July 2019 Digital Enterprise Release – SiteCore/SPA Change")).addRun(new TextRun("\n\n\n\n\n\n\nC4752-July 2019 Digital Enterprise Release – BizTalk Change"));
+    table1.getCell(4, 0).createParagraph(("Changes in this release"));
+    table1.getCell(5, 0).createParagraph(("Known Defects and Limitations"));
+    table1.getCell(6, 0).createParagraph(("Contact information"));
+    table1.getCell(7, 0).createParagraph(("Service Desk ID (if available)"));
+    table1.getCell(8, 0).createParagraph(("Training materials"));
+    table1.getCell(9, 0).createParagraph(("Process Guide"));
+
+
+    doc.addTable(table1);
 
     const packer = new Packer();
 
