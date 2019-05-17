@@ -440,7 +440,7 @@ export class CreateReleaseComponent implements OnInit {
           console.log(JSON.stringify(this.release));
 
           this.releaseService
-            .editRelease(this.releaseId, this.release)
+            .editRelease(this.release)
             .pipe(
               map(res => res) // or any other operator
             )
