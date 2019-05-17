@@ -46,7 +46,7 @@ export class CreateReleaseComponent implements OnInit {
     sitecore: string;
     biztalk: string;
     devSupport: string;
-    projects: Array<Project>;
+    projects: any[];
     deploymentChampion: string;
     checklists: Array<Checklist>;
   };
@@ -145,7 +145,7 @@ export class CreateReleaseComponent implements OnInit {
 
   changeMode() {
     this.mode = this.mode == 'Edit' ? 'Create' : 'Edit';
-    if (this.mode == 'Edit') {
+    if (this.mode === 'Edit') {
       this.loadAndFillControls();
     } else {
       let attrs = Object.keys(this.release);
@@ -375,8 +375,11 @@ export class CreateReleaseComponent implements OnInit {
             );
           }
 
-          console.log('Release: ' + this.release);
+          console.log('Release: ', JSON.stringify(this.release));
           console.log('Mode: ' + this.mode);
+
+          // this.release.devSupport = 'Test';
+          // this.release.deploymentChampion = '5cc2a364e96bd81d60cd00dc';
 
           this.releaseService
             .createRelease(this.release)
@@ -413,9 +416,9 @@ export class CreateReleaseComponent implements OnInit {
         res => {
           console.log('response', res);
           console.log(res[0].length);
-          for (var i = 0; i < res[0].length; i++) {
-            this.release.projects.push(new Project(res[0][i].jiraProjectId));
-          }
+          // for (var i = 0; i < res[0].length; i++) {
+          //   this.release.projects.push(new Project(res[0][i].jiraProjectId));
+          // }
 
           for (var i = 0; i < this.checklist.length; i++) {
             let check = this.checklist[i];
@@ -433,10 +436,11 @@ export class CreateReleaseComponent implements OnInit {
           }
 
           console.log('update release...');
-          console.log(this.release);
+
+          console.log(JSON.stringify(this.release));
 
           this.releaseService
-            .updateRelease(this.releaseId, this.release)
+            .editRelease(this.releaseId, this.release)
             .pipe(
               map(res => res) // or any other operator
             )
@@ -553,7 +557,7 @@ export class CreateReleaseComponent implements OnInit {
    * @param _id check id
    */
   valueChanged(event, _id) {
-    if (event._id !== undefined && event.displayName !== undefined) {
+    if (event && event._id !== undefined && event.displayName !== undefined) {
       this.displayLabel.checklist[_id].contactPerson_id = event._id;
       this.displayLabel.checklist[_id].contactPerson = event.displayName;
     }
