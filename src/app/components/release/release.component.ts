@@ -8,7 +8,15 @@ import { Issues } from './Issues';
 import { ReleaseService } from '../../services/release.service';
 import { ProjectService } from '../../services/project.service';
 import { ChecklistService } from '../../services/checklist.service';
+import { AuthService } from '../../services/auth.service';
+import { Packer, Paragraph, TextRun, Media, Table } from 'docx';
+import { saveAs } from 'file-saver';
 import { Chart } from 'chart.js';
+import * as jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { environment } from '../../../environments/environment';
+import { userInfo } from 'os';
+
 @Component({
   selector: 'app-release-dashboard',
   templateUrl: './release.component.html',
@@ -37,7 +45,11 @@ export class ViewReleaseComponent implements OnInit {
   chart = [];
   release: any;
   issues: any;
-  projects: any;
+  // projects: any;
+  userRole: any;
+
+  uploadConfig = {};
+  loading = false;
 
   selectedProjectId = '';
 
@@ -46,18 +58,29 @@ export class ViewReleaseComponent implements OnInit {
     private route: ActivatedRoute,
     private projectService: ProjectService,
     private checklistService: ChecklistService,
-    private releaseService: ReleaseService
+    private releaseService: ReleaseService,
+    private authService: AuthService
   ) {}
 
-  showTimeLine() {
-    this.tlContainer = this.timelineContainer.nativeElement;
-    this.timeline = new Timeline(this.tlContainer, this.data, {});
-    this.timeline.setOptions(this.options);
-    this.timeline.setGroups(this.groups);
-  }
-
   ngOnInit() {
+    this.userRole = this.authService.getUser().role;
+    console.log('userRoler', this.userRole);
+
     this.releaseId = this.route.snapshot.paramMap.get('id');
+
+    /** Upload code related */
+    this.uploadConfig = {
+      multiple: true,
+      formatsAllowed: '.html,.htm',
+      //maxSize: "1",
+      uploadAPI: {
+        url: environment.baseUrl + '/file'
+      },
+      hideProgressBar: false,
+      hideResetBtn: true,
+      hideSelectBtn: false
+    };
+    /** End of Uplad code */
 
     let ctx = document.getElementById('canvas');
     this.releaseService
@@ -68,7 +91,7 @@ export class ViewReleaseComponent implements OnInit {
       .subscribe(
         res => {
           this.release = res[0];
-
+          console.log(this.release);
           this.release.days = this.calculateDaysDifference(
             new Date(this.release.projects[0].versionDetails.releaseDate)
           );
@@ -188,7 +211,7 @@ export class ViewReleaseComponent implements OnInit {
               labels: ['Done', 'In Progress', 'In Review', 'To Do'],
               datasets: [
                 {
-                  label: 'Population (millions)',
+                  label: 'Issue Status',
                   backgroundColor: ['#3cba9f', '#3e95cd', '#FF9900', '#C13100'],
                   data: [
                     this.issues.done.issues.length,
@@ -198,6 +221,68 @@ export class ViewReleaseComponent implements OnInit {
                   ]
                 }
               ]
+            },
+            options: {
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  generateLabels: function(chart) {
+                    var data = chart.data;
+                    if (data.labels.length && data.datasets.length) {
+                      return data.labels.map(function(label, i) {
+                        var meta = chart.getDatasetMeta(0);
+                        var ds = data.datasets[0];
+                        var arc = meta.data[i];
+                        var custom = (arc && arc.custom) || {};
+                        var getValueAtIndexOrDefault =
+                          Chart.helpers.getValueAtIndexOrDefault;
+                        var arcOpts = chart.options.elements.arc;
+                        var fill = custom.backgroundColor
+                          ? custom.backgroundColor
+                          : getValueAtIndexOrDefault(
+                              ds.backgroundColor,
+                              i,
+                              arcOpts.backgroundColor
+                            );
+                        var stroke = custom.borderColor
+                          ? custom.borderColor
+                          : getValueAtIndexOrDefault(
+                              ds.borderColor,
+                              i,
+                              arcOpts.borderColor
+                            );
+                        var bw = custom.borderWidth
+                          ? custom.borderWidth
+                          : getValueAtIndexOrDefault(
+                              ds.borderWidth,
+                              i,
+                              arcOpts.borderWidth
+                            );
+
+                        // We get the value of the current label
+                        var value =
+                          chart.config.data.datasets[arc._datasetIndex].data[
+                            arc._index
+                          ];
+
+                        return {
+                          // Instead of `text: label,`
+                          // We add the value to the string
+                          text: label + ' : ' + value,
+                          fillStyle: fill,
+                          strokeStyle: stroke,
+                          lineWidth: bw,
+                          hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
+                          index: i
+                        };
+                      });
+                    } else {
+                      return [];
+                    }
+                  }
+                }
+              }
             }
           });
         },
@@ -207,6 +292,216 @@ export class ViewReleaseComponent implements OnInit {
           return throwError(error); // Angular 5/RxJS 5.5
         }
       );
+  }
+
+  updateRelease() {
+    console.log('changed');
+    this.releaseService
+      .editRelease(this.release)
+      .pipe(
+        map(res => res) // or any other operator
+      )
+      .subscribe(
+        res => {
+          console.log('response', res);
+        },
+        error => {
+          this.error = true;
+          console.error('Error!', error);
+          return throwError(error); // Angular 5/RxJS 5.5
+        }
+      );
+  }
+
+  showTimeLine() {
+    this.tlContainer = this.timelineContainer.nativeElement;
+    this.timeline = new Timeline(this.tlContainer, this.data, {});
+    this.timeline.setOptions(this.options);
+    this.timeline.setGroups(this.groups);
+  }
+
+  genPDF() {
+    var data = document.getElementById('dashboard');
+    html2canvas(data).then(canvas => {
+      // Few necessary setting options
+      var imgWidth = 200;
+      var pageHeight = 500;
+      var imgHeight = (canvas.height * imgWidth) / canvas.width;
+      var heightLeft = imgHeight;
+      const contentDataURL = canvas.toDataURL('image/png');
+      var pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+      var position = 0;
+      // pdf.addImage(agency_logo.src, 'PNG', logo_sizes.centered_x, _y, logo_sizes.w, logo_sizes.h);
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.save('dashboard.pdf'); // Generated PDF
+    });
+  }
+
+  upladTestResult(event) {
+    if (event.status == 200) {
+      let res = JSON.parse(event.response);
+      if (this.release.testResults == undefined) {
+        this.release.testResults = [];
+      }
+
+      this.release.testResults.push(res['_id']);
+
+      this.releaseService
+        .patchRelease(this.releaseId, {
+          testResults: this.release.testResults
+        })
+        .subscribe(res => {
+          console.log(res);
+          // this.release = res[0];
+          console.log('after', this.release);
+        });
+    } else {
+      console.error(event.statusText);
+    }
+  }
+
+  downloadResult(file) {
+    //this.release.testResults[0]['_id']
+    this.loading = true;
+    this.releaseService.downloadFile(file).subscribe(
+      res => {
+        this.openInWindow(res);
+      },
+      error => {
+        this.openInWindow(error);
+      }
+    );
+  }
+
+  openInWindow(data) {
+    this.loading = false;
+    let html = window.open('data', 'Downolad', 'scrollbars=1,resizable=1');
+    html.document.open();
+    html.document.write(data.error.text);
+    html.document.close();
+  }
+
+  genDOC() {
+    var docx = require('docx');
+    var doc = new docx.Document();
+    const paragraph = new Paragraph('Technology Release Notes')
+      .title()
+      .center();
+    const paragraph1 = new Paragraph('');
+
+    const institutionText = new TextRun(
+      'January 2019 Enterprise Release: Digital Delivery Centre'
+    ).size(64);
+    // const dateText = new TextRun("Github is the best").tab().bold();
+    paragraph1.addRun(institutionText);
+    // paragraph.addRun(institutionText);
+
+    // paragraph.addRun(dateText);
+
+    doc.addParagraph(paragraph);
+    for (var i = 0; i < 10; i++) doc.addParagraph(new Paragraph());
+    doc.addParagraph(paragraph1);
+    for (var i = 0; i < 20; i++) doc.addParagraph(new Paragraph());
+
+    const table = new Table(4, 2);
+    table.getCell(0, 0).createParagraph('Document ID');
+    table.getCell(1, 0).createParagraph('Version');
+    table.getCell(1, 1).createParagraph('V0.1');
+    table.getCell(2, 0).createParagraph('Version Date');
+    table.getCell(2, 1).createParagraph('Version Date');
+    table.getCell(3, 0).createParagraph('Process');
+    table.getCell(3, 1).createParagraph('Technology Release Notes');
+
+    doc.addTable(table);
+    doc.addParagraph(new Paragraph().pageBreak());
+    doc.addParagraph(new Paragraph('Release Notes').heading1().center());
+    doc.addParagraph(
+      new Paragraph('(July 2019 Enterprise Release for the').heading1().center()
+    );
+    doc.addParagraph(
+      new Paragraph('Digital Delivery Centre)').heading1().center()
+    );
+    doc.addParagraph(new Paragraph('Introduction'));
+    doc.addParagraph(
+      new Paragraph('').addRun(
+        new TextRun(
+          'Release notes are an important part of a product release and should be able to provide the reader with the information they need to satisfy their questions. The main question always being – how does it impact my work?'
+        ).size(32)
+      )
+    );
+    doc.addParagraph(
+      new Paragraph('').addRun(
+        new TextRun(
+          'The release notes on the coming pages outline the Acurity changes included in this release from the Fail and Fix area, and the likely impact on day-to-day business of relevant staff.'
+        ).size(32)
+      )
+    );
+    doc.addParagraph(
+      new Paragraph('').addRun(
+        new TextRun('For all items in this release note set: ').size(32)
+      )
+    );
+    for (var i = 0; i < 5; i++) doc.addParagraph(new Paragraph());
+
+    const table1 = new Table(11, 2);
+
+    doc.addParagraph(new Paragraph('Release Date:  19th July 2019').title());
+    doc.addParagraph(new Paragraph().pageBreak());
+
+    table1.getCell(0, 0).createParagraph('Title');
+    table1
+      .getCell(0, 1)
+      .createParagraph(
+        'Supporting Technology Changes for Digital Delivery Centre July 2019 Release covering:\n\n\n\n\n\n\n'
+      )
+      .addRun(
+        new TextRun(
+          '\n\n\n\n\n\n\nPush Notifications for Users\n\n\n\n\n\n\n'
+        ).bold()
+      )
+      .addRun(new TextRun('User Message Filtering\n\n\n\n\n\n\n').bold());
+    table1.getCell(1, 0).createParagraph('Business Change Owner');
+    table1.getCell(1, 1).createParagraph('Tim Anderson');
+    table1.getCell(2, 0).createParagraph('Introduction');
+    table1
+      .getCell(2, 1)
+      .createParagraph(
+        'As part of the January 2019 Enterprise Release the Digital Delivery Centre Team will be implementing the following changes.\n\n\n\n\n\n\n'
+      )
+      .addRun(new TextRun('\n\n\n\n\n\n\nPush Notifications for Users').bold())
+      .addRun(
+        new TextRun('\n\n\n\n\n\n\nUser Message Filtering\n\n\n\n\n\n\n').bold()
+      );
+    table1.getCell(3, 0).createParagraph('Name of Service or Application');
+    table1
+      .getCell(3, 1)
+      .createParagraph('')
+      .addRun(
+        new TextRun(
+          '\n\n\n\n\n\n\nC4748-July 2019 Digital Enterprise Release – SiteCore/SPA Change'
+        )
+      )
+      .addRun(
+        new TextRun(
+          '\n\n\n\n\n\n\nC4752-July 2019 Digital Enterprise Release – BizTalk Change'
+        )
+      );
+    table1.getCell(4, 0).createParagraph('Changes in this release');
+    table1.getCell(5, 0).createParagraph('Known Defects and Limitations');
+    table1.getCell(6, 0).createParagraph('Contact information');
+    table1.getCell(7, 0).createParagraph('Service Desk ID (if available)');
+    table1.getCell(8, 0).createParagraph('Training materials');
+    table1.getCell(9, 0).createParagraph('Process Guide');
+
+    doc.addTable(table1);
+
+    const packer = new Packer();
+
+    packer.toBlob(doc).then(blob => {
+      console.log(blob);
+      saveAs(blob, 'Release-Notes.docx');
+      console.log('Document created successfully');
+    });
   }
 
   loadTimelineData() {
