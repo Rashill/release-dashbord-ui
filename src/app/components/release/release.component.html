@@ -337,7 +337,8 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Testing Results</h5>
-          <table class="table">
+          <div *ngIf="loading" id="loader"></div>
+          <table *ngIf="!loading" class="table">
             <thead>
               <tr>
                 <th scope="col">Files</th>
@@ -347,16 +348,9 @@
             <tbody>
               <tr *ngFor="let testResult of release.testResults">
                 <td>
-                  <button class="" (click)="downloadResult(testResult)">
+                  <button class="btn-primary btn-sm" (click)="downloadResult(testResult)">
                     <small>
-                      <span *ngIf="!loading">View</span>
-                      <span *ngIf="loading">
-                        <span
-                          class="spinner-border spinner-border-sm"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                      </span>
+                      <span>View</span>
                     </small>
                   </button>
                 </td>
