@@ -100,7 +100,7 @@ export class CreateReleaseComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private releaseService: ReleaseService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.releaseId = this.route.snapshot.paramMap.get('id');
@@ -219,7 +219,7 @@ export class CreateReleaseComponent implements OnInit {
       res => {
         this.usersList = res[0];
       },
-      error => { }
+      error => {}
     );
 
     // load the checklist to create the html controls
@@ -249,7 +249,7 @@ export class CreateReleaseComponent implements OnInit {
         }
         this.checklist = checklist;
       },
-      error => { }
+      error => {}
     );
 
     this.createForm.controls['releaseType'].valueChanges.subscribe(type => {
@@ -280,14 +280,7 @@ export class CreateReleaseComponent implements OnInit {
     buttons.children[0].classList.replace('btn-secondary', 'btn-info');
     buttons.children[1].classList.replace('btn-secondary', 'btn-info');
     buttons.children[2].classList.replace('btn-secondary', 'btn-primary');
-
-    //change overlfow-y styel from auto to visibel (fix dropdown overflow issue)
-    let blocks = document.querySelectorAll('.card-block');
-    blocks.forEach(el => {
-      let block: HTMLElement = <HTMLElement>el;
-      block.style.overflowY = "visible";
-    });
-  } 
+  }
 
   loadAndFillControls() {
     this.releaseService
@@ -328,7 +321,7 @@ export class CreateReleaseComponent implements OnInit {
               } else {
                 try {
                   this.release[attr] = res_release[attr].substring(0, 10);
-                } catch (e) { }
+                } catch (e) {}
               }
             }
           });
@@ -414,35 +407,54 @@ export class CreateReleaseComponent implements OnInit {
   }
 
   updateRelease() {
-
-    for (var i = 0; i < this.checklist.length; i++) {
-      let check = this.checklist[i];
-      let data = this.displayLabel.checklist[check['_id']];
-      this.release.checklists.push(
-        new Checklist(
-          data['_id'],
-          check['_id'],
-          data['value'],
-          data['dueDate'],
-          //set the value of contactPerson_id not the displayName "contactPerson"
-          data['contactPerson_id']
-        )
-      );
-    }
-
-    delete this.release.projects;
-    console.log('update release...');
-    console.log(JSON.stringify(this.release));
-
     this.releaseService
-      .patchRelease(this.releaseId, this.release)
+      .getTeam()
       .pipe(
         map(res => res) // or any other operator
       )
       .subscribe(
         res => {
           console.log('response', res);
-          this.router.navigate(['/release/' + this.releaseId]);
+          console.log(res[0].length);
+          // for (var i = 0; i < res[0].length; i++) {
+          //   this.release.projects.push(new Project(res[0][i].jiraProjectId));
+          // }
+
+          for (var i = 0; i < this.checklist.length; i++) {
+            let check = this.checklist[i];
+            let data = this.displayLabel.checklist[check['_id']];
+            this.release.checklists.push(
+              new Checklist(
+                data['_id'],
+                check['_id'],
+                data['value'],
+                data['dueDate'],
+                //set the value of contactPerson_id not the displayName "contactPerson"
+                data['contactPerson_id']
+              )
+            );
+          }
+
+          console.log('update release...');
+
+          console.log(JSON.stringify(this.release));
+
+          this.releaseService
+            .editRelease(this.release)
+            .pipe(
+              map(res => res) // or any other operator
+            )
+            .subscribe(
+              res => {
+                console.log('response', res);
+                this.router.navigate(['/release/' + this.releaseId]);
+              },
+              error => {
+                this.error = true;
+                console.error('Error!', error);
+                return throwError(error); // Angular 5/RxJS 5.5
+              }
+            );
         },
         error => {
           this.error = true;
@@ -527,11 +539,11 @@ export class CreateReleaseComponent implements OnInit {
         term.length < 1
           ? this.usersList.slice(0, 10)
           : this.usersList
-            .filter(
-              v =>
-                v.displayName.toLowerCase().indexOf(term.toLowerCase()) > -1
-            )
-            .slice(0, 10)
+              .filter(
+                v =>
+                  v.displayName.toLowerCase().indexOf(term.toLowerCase()) > -1
+              )
+              .slice(0, 10)
       )
     );
 

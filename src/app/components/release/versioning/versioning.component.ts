@@ -51,7 +51,6 @@ export class VersioningComponent implements OnInit {
 
   ngOnInit() {
     this.releaseId = this.route.snapshot.paramMap.get('id');
-    console.log(this.releaseId);
 
     this.release = {
       name: '',
@@ -134,7 +133,7 @@ export class VersioningComponent implements OnInit {
   update() {
     this.submitting = true;
     this.releaseService
-      .patchRelease(this.releaseId, this.release)
+      .editRelease(this.release)
       .pipe(
         map(res => res) // or any other operator
       )

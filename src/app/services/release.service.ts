@@ -28,10 +28,10 @@ export class ReleaseService {
     );
   }
 
-  updateRelease(releaseId, release) {
+  updateRelease(release) {
     return forkJoin(
       this.http.put<any>(
-        environment.baseUrl + '/release/' + releaseId,
+        environment.baseUrl + '/release/' + release._id,
         release
       )
     );
@@ -50,7 +50,7 @@ export class ReleaseService {
 
   patchRelease(releaseId, release) {
     console.log('release', release);
-    console.log(releaseId);
+    console.log('editrelease');
     return forkJoin(
       this.http.patch<any>(
         environment.baseUrl + '/release/' + releaseId,
