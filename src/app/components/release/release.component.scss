@@ -97,7 +97,6 @@ label {
   border-color: darkgreen;
 }
 
-
 #loader {
   position: absolute;
   left: 50%;
@@ -113,4 +112,14 @@ label {
   height: 120px;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
+}
+
+table {
+  a {
+    text-decoration: underline;
+    &:hover {
+      cursor: pointer;
+      font-weight: 700;
+    }
+  }
 }

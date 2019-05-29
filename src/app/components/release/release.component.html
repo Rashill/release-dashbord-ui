@@ -7,35 +7,15 @@
           ><i class="fa fa-edit" ngbTooltip="Edit" placement="right"></i
         ></small>
       </a>
-      <span class="mb-3 mr-3"></span>
-      <a routerLink="/versioning/{{ releaseId }}">
-        <small
-          ><i class="badge badge-info" ngbTooltip="Versioning" placement="right"
-            >Ver.</i
-          ></small
-        >
-      </a>
-      <span class="mb-3 mr-3"></span>
-      <button (click)="genPDF()">
-        <small
-          ><i
-            class="badge badge-info"
-            ngbTooltip="GeneratePDF"
-            placement="right"
-            >Generate PDF</i
-          ></small
-        >
+      <!-- <span class="mb-3 mr-3"></span>
+
+      <span class="mb-3 mr-3"></span> -->
+      <button class="btn-primary btn-sm pull-right" (click)="genPDF()">
+        Download PDF
       </button>
       <span class="mb-3 mr-3"></span>
-      <button (click)="genDOC()">
-        <small
-          ><i
-            class="badge badge-info"
-            ngbTooltip="GenerateNotes"
-            placement="right"
-            >Release Notes</i
-          ></small
-        >
+      <button class="btn-primary btn-sm pull-right mr-3" (click)="genDOC()">
+        Download Release Notes
       </button>
     </h1>
 
@@ -43,7 +23,7 @@
   </div>
 
   <div class="row display-flex mb-4">
-    <div class="col-6">
+    <div class="col-md-6">
       <div class="card">
         <div class="card-header">
           <h5 class="card-title text-nowrap mr-2">Release Details</h5>
@@ -66,22 +46,59 @@
           <p>
             <label>Test Environment: </label>&nbsp;{{ release.testEnvironment }}
           </p>
-          <p>
-            <label>Deployment Champion: </label>&nbsp;{{
-              release.deploymentChampion.name
-            }}
-          </p>
-          <p>
-            <label>Deployment Champion's Email: </label>&nbsp;<a
-              href="mailto:{{ release.deploymentChampion.email }}"
-              >{{ release.deploymentChampion.email }}</a
-            >
-          </p>
+
+          <hr class="mt-3" />
+
+          <div class="row">
+            <div class="col-9">
+              <p><label>Deployment Champion</label></p>
+              <p>{{ release.deploymentChampionUserDetails.displayName }}</p>
+              <p>
+                <a
+                  href="mailto:{{
+                    release.deploymentChampionUserDetails.emailAddress
+                  }}"
+                  >{{ release.deploymentChampionUserDetails.emailAddress }}</a
+                >
+              </p>
+            </div>
+            <div class="col-3">
+              <img
+                class="img-fluid"
+                [src]="
+                  release.deploymentChampionUserDetails['avatarUrls']['48x48']
+                "
+              />
+            </div>
+          </div>
+
+          <hr class="mt-3" />
+
+          <div class="row">
+            <div class="col-9">
+              <p><label>Development Support</label></p>
+              <p>{{ release.devSupportUserDetails.displayName }}</p>
+              <p>
+                <a
+                  href="mailto:{{ release.devSupportUserDetails.emailAddress }}"
+                  >{{ release.devSupportUserDetails.emailAddress }}</a
+                >
+              </p>
+            </div>
+            <div class="col-3">
+              <img
+                class="img-fluid"
+                [src]="release.devSupportUserDetails['avatarUrls']['48x48']"
+              />
+            </div>
+          </div>
+
+          <hr class="mt-3" />
         </div>
       </div>
     </div>
 
-    <div class="col-6">
+    <div class="col-md-6" *ngIf="chart">
       <div class="card">
         <div class="card-header">
           <h5 class="card-title text-nowrap mr-2">Issues Status</h5>
@@ -101,23 +118,68 @@
         </div>
         <div class="card-body">
           <!-- <div id="timeline" #visTimeline></div> -->
-          <div class="col" *ngFor="let checklist of release.checklists">
-            <div class="form-check form-check-inline">
-              <input
-                type="checkbox"
-                class="form-check-input"
-                [checked]="checklist.value"
-                [disabled]="userRole != 'SuperAdmin'"
-                [(ngModel)]="checklist.value"
-                (ngModelChange)="updateRelease()"
-              />
-              <label class="form-check-label">{{ checklist.name }}</label
-              ><br />
-            </div>
-            <p><label>Due date:</label>&nbsp;{{ checklist.dueDate | date }}</p>
-          </div>
+          <div *ngFor="let checklist of release.checklists">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-check form-check-inline">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    [checked]="checklist.value"
+                    [disabled]="userRole != 'SuperAdmin'"
+                    [(ngModel)]="checklist.value"
+                    (ngModelChange)="updateRelease()"
+                  />
+                  <label class="form-check-label">{{ checklist.name }}</label
+                  ><br />
+                </div>
+                <p>
+                  <label>Due date:</label>&nbsp;{{ checklist.dueDate | date }}
+                </p>
+              </div>
 
-          <!-- <div
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-9">
+                    <p>
+                      <label>{{ checklist.name }} Contact Person</label>
+                    </p>
+                    <p>{{ checklist.contactPersonUserDetails.displayName }}</p>
+                    <p>
+                      <a
+                        href="mailto:{{
+                          checklist.contactPersonUserDetails.emailAddress
+                        }}"
+                        >{{
+                          checklist.contactPersonUserDetails.emailAddress
+                        }}</a
+                      >
+                    </p>
+                  </div>
+                  <div class="col-3">
+                    <img
+                      class="img-fluid"
+                      [src]="
+                        checklist.contactPersonUserDetails['avatarUrls'][
+                          '48x48'
+                        ]
+                      "
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr
+              class="mt-3"
+              *ngIf="
+                release.checklists.indexOf(checklist) !=
+                release.checklists.length - 1
+              "
+            />
+          </div>
+        </div>
+
+        <!-- <div
               *ngFor="let checklist of release.checklists"
               [className]="
                 checklist.value == true
@@ -127,7 +189,6 @@
             >
               <label>{{ checklist.name }}</label>
             </div> -->
-        </div>
       </div>
     </div>
   </div>
@@ -145,54 +206,77 @@
     </div>
   </div>
 
-  <h2 class="text-secondary">Release Issues Board</h2>
-  <hr />
-  <div class="row" *ngIf="release">
-    <div class="col-md-6 pull-right">
-      <div class="form-group">
-        <label for="exampleFormControlSelect1">Select Project</label>
-        <select
-          class="form-control"
-          [(ngModel)]="selectedProjectId"
-          id="selectedProjectId"
-        >
-          <option value="" selected>All</option>
-          <option
-            *ngFor="let project of release.projects"
-            value="{{ project.projectId }}"
-            >{{ project.name }}</option
+  <div
+    *ngIf="
+      release &&
+      issues &&
+      (issues.toDO.issues.length > 0 ||
+        issues.inReview.issues.length > 0 ||
+        issues.inProgress.issues.length > 0 ||
+        issues.done.issues.length > 0)
+    "
+  >
+    <h2 class="text-secondary">Release Issues Board</h2>
+    <hr />
+    <div class="row" *ngIf="release">
+      <div class="col-md-6 pull-right">
+        <div class="form-group">
+          <label for="exampleFormControlSelect1">Select Project</label>
+          <select
+            class="form-control"
+            [(ngModel)]="selectedProjectId"
+            id="selectedProjectId"
           >
-        </select>
+            <option value="" selected>All</option>
+            <option
+              *ngFor="let project of release.projects"
+              value="{{ project.projectId }}"
+              >{{ project.name }}</option
+            >
+          </select>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="row mb-4" *ngIf="release">
-    <div class="col-3">
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          To Do ({{
-            (
-              issues.toDO.issues
-              | ProjectFilter: { projectId: selectedProjectId }
-            ).length
-          }})
-        </div>
-        <div class="card-body">
-          <a
-            class="btn text-white mb-2"
-            style="background-color: #C13100"
-            *ngFor="
-              let issue of issues.toDO.issues
+    <div
+      class="row mb-4"
+      *ngIf="
+        release &&
+        issues &&
+        (issues.toDO.issues.length > 0 ||
+          issues.inReview.issues.length > 0 ||
+          issues.inProgress.issues.length > 0 ||
+          issues.done.issues.length > 0)
+      "
+    >
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            To Do ({{
+              (
+                issues.toDO.issues
                 | ProjectFilter: { projectId: selectedProjectId }
-            "
-            href="https://releasedashboard.atlassian.net/browse/{{ issue.key }}"
-            target="_blank"
-          >
-            <p>
-              {{ issue.fields.summary }}
-            </p>
-          </a>
+              ).length
+            }})
+          </div>
+          <div class="card-body">
+            <a
+              class="btn text-white mb-2"
+              style="background-color: #C13100"
+              *ngFor="
+                let issue of issues.toDO.issues
+                  | ProjectFilter: { projectId: selectedProjectId }
+              "
+              href="https://releasedashboard.atlassian.net/browse/{{
+                issue.key
+              }}"
+              target="_blank"
+            >
+              <p>
+                {{ issue.fields.summary }}
+              </p>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -283,12 +367,23 @@
   </div>
 
   <!-- Versioning table-->
-  <div class="row" *ngIf="release">
+  <div
+    class="row"
+    *ngIf="release && (release.versionning > 0 || userRole == 'SuperAdmin')"
+  >
     <div class="col-12 col-md-6 mb-3">
       <div class="card">
-        <div class="card-body">
+        <div class="card-header">
           <h5 class="card-title">Release Versioning</h5>
-          <table class="table">
+          <label
+            class="btn btn-primary"
+            routerLink="/versioning/{{ releaseId }}"
+          >
+            Add Version Details
+          </label>
+        </div>
+        <div class="card-body">
+          <table class="table" *ngIf="release.versioning">
             <thead>
               <tr>
                 <th scope="col">Sitecore</th>
@@ -304,9 +399,6 @@
               </tr>
             </tbody>
           </table>
-          <div *ngIf="!release.versioning" class="text-center">
-            No such data
-          </div>
         </div>
       </div>
     </div>
@@ -314,18 +406,60 @@
   </div>
 
   <!-- Upload test result secion-->
-  <div class="row" *ngIf="release">
+  <div
+    class="row"
+    *ngIf="
+      release && (release.testResults.length > 0 || userRole == 'SuperAdmin')
+    "
+  >
     <div class="col-12 col-md-6 mb-3">
       <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Release Test Results</h5>
+        </div>
         <div class="card-body">
-          <h5 class="card-title">Upload Testing Result</h5>
+          <div *ngIf="loading" id="loader"></div>
+
           <!-- Upload components -->
-          <div>
+          <div class="row mb-3" *ngIf="userRole == 'SuperAdmin'">
             <angular-file-uploader
               [config]="uploadConfig"
-              (ApiResponse)="upladTestResult($event)"
+              (ApiResponse)="uploadTestResult($event)"
             >
             </angular-file-uploader>
+          </div>
+
+          <div class="row">
+            <table
+              *ngIf="!loading && release.testResults.length > 0"
+              class="table"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">Filename</th>
+                  <th scope="col">Upload Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let testResult of release.testResults">
+                  <td>
+                    <a (click)="downloadResult(testResult)">{{
+                      testResult.filename
+                    }}</a>
+                  </td>
+                  <td>{{ testResult.uploadDate | date }}</td>
+                  <td>
+                    <button
+                      class="btn btn-danger"
+                      (click)="deleteTestResult(testResult)"
+                    >
+                      <span class="fa fa-close"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -333,7 +467,7 @@
     <!-- End of Upload result test section -->
 
     <!-- Download result test section-->
-    <div class="col-12 col-md-6 mb-3">
+    <!-- <div class="col-12 col-md-6 mb-3">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Testing Results</h5>
@@ -348,7 +482,10 @@
             <tbody>
               <tr *ngFor="let testResult of release.testResults">
                 <td>
-                  <button class="btn-primary btn-sm" (click)="downloadResult(testResult)">
+                  <button
+                    class="btn-primary btn-sm"
+                    (click)="downloadResult(testResult)"
+                  >
                     <small>
                       <span>View</span>
                     </small>
@@ -363,7 +500,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- End of Download result test section -->
   </div>
 </div>
