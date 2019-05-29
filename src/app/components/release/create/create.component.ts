@@ -471,7 +471,7 @@ export class CreateReleaseComponent implements OnInit {
    * @param step e.g. step1
    */
   isValidStep(step) {
-    return true;
+    //return true;
     if (step == 'done') {
       return this.createForm.valid;
     }
