@@ -47,7 +47,7 @@ export class MainComponent implements OnInit {
       iconClass: 'material-icons',
       iconCode: 'person',
       routerUrl: '/user'
-    },
+    }
     // {
     //   title: 'Admin panel',
     //   iconClass: 'material-icons',
@@ -67,17 +67,17 @@ export class MainComponent implements OnInit {
     //     }
     //   ]
     // },
-    {
-      title: 'Release Settings',
-      iconClass: 'material-icons',
-      iconCode: 'settings',
-      children: [
-        {
-          title: 'Create New Release',
-          routerUrl: '/release/create'
-        }
-      ]
-    }
+    // {
+    //   title: 'Release Settings',
+    //   iconClass: 'material-icons',
+    //   iconCode: 'settings',
+    //   children: [
+    //     {
+    //       title: 'Create New Release',
+    //       routerUrl: '/release/create'
+    //     }
+    //   ]
+    // }
   ];
 
   isSmallMenuMode = false;
