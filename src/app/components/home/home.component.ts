@@ -105,7 +105,6 @@ export class HomeComponent {
           // this.router.navigate(['/']);
 
           res[0].forEach(release => {
-            this.loaded = true;
             console.log('release.releaseDate', release.releaseDate);
             console.log('date', Date.parse(release.releaseDate));
             this.events.push({
@@ -118,6 +117,8 @@ export class HomeComponent {
 
             console.log('this.events', this.events);
           });
+
+          this.loaded = true;
         },
         error => {
           this.error = true;
