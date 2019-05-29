@@ -401,6 +401,7 @@ export class CreateReleaseComponent implements OnInit {
               error => {
                 this.error = true;
                 console.error('Error!', error);
+                this.errorMessage = 'Error was rised by the server';//error.message;
                 return throwError(error); // Angular 5/RxJS 5.5
               }
             );
@@ -408,6 +409,7 @@ export class CreateReleaseComponent implements OnInit {
         error => {
           this.error = true;
           console.error('Error!', error);
+          this.errorMessage = error.message;
           return throwError(error); // Angular 5/RxJS 5.5
         }
       );
@@ -447,6 +449,7 @@ export class CreateReleaseComponent implements OnInit {
         error => {
           this.error = true;
           console.error('Error!', error);
+          this.errorMessage = 'Error was rised by the server';//error.message;
           return throwError(error); // Angular 5/RxJS 5.5
         }
       );
@@ -471,7 +474,6 @@ export class CreateReleaseComponent implements OnInit {
    * @param step e.g. step1
    */
   isValidStep(step) {
-    //return true;
     if (step == 'done') {
       return this.createForm.valid;
     }

@@ -20,52 +20,54 @@ export class InputControlService {
   createFormGroup(record: {}, fields: any[]) {
     let group: any = {};
     fields.forEach(attr => {  
-      let validator = '';
+      let validators = [];
       if (attr['required']){
-         validator = 'required';
+         validators.push(Validators.required);
       } 
        
-      validator = attr['validator'] ? attr['validator'].split('(')[0] : validator;
+      let validator = attr['validator'] ? attr['validator'].split('(')[0] : '';
       switch (validator) {
         case 'required': {
-          group[attr['key']] = new FormControl(record[attr['key']] || '', Validators.required);
+          validators.push(Validators.required);
           break;
         } case 'requiredTrue': {
-          group[attr['key']] = new FormControl(record[attr['key']] || '', Validators.requiredTrue);
+          validators.push(Validators.requiredTrue);
           break;
         } case 'min': {
           let parm = (attr['validator'].split('(')[1]).split(')')[0];
-          group[attr['key']] = new FormControl(record[attr['key']] || '', 
-          [ Validators.min(parm), NumbericValidator.numeric ]);
+          validators.push(Validators.min(parm));
+          validators.push(NumbericValidator.numeric);
           break;
         } case 'max': {
           let parm = (attr['validator'].split('(')[1]).split(')')[0];
-          group[attr['key']] = new FormControl(record[attr['key']] || '',
-          [ Validators.max(parm), NumbericValidator.numeric ]);
+          validators.push(Validators.max(parm));
+          validators.push(NumbericValidator.numeric);
           break;
         } case 'minLength': {
           let parm = (attr['validator'].split('(')[1]).split(')')[0];
-          group[attr['key']] = new FormControl(record[attr['key']] || '', Validators.minLength(parm));
+          validators.push(Validators.minLength(parm));
           break;
         } case 'maxLength': {
           let parm = (attr['validator'].split('(')[1]).split(')')[0];
-          group[attr['key']] = new FormControl(record[attr['key']] || '', Validators.maxLength(parm));
+          validators.push(Validators.maxLength(parm));
           break;
         } case 'email': {
-          group[attr['key']] = new FormControl(record[attr['key']] || '', Validators.email);
+          validators.push(Validators.email);
           break;
         } case 'pattern': {
           let parm = (attr['validator'].split('(')[1]).split(')')[0];
-          group[attr['key']] = new FormControl(record[attr['key']] || '', Validators.pattern(parm));
+          validators.push(Validators.pattern(parm));
           break;
         } case 'number': {
-          group[attr['key']] = new FormControl(record[attr['key']] || '', NumbericValidator.numeric);
+          validators.push(NumbericValidator.numeric);
           break;
         } default: { // no validation
-          group[attr['key']] = new FormControl(record[attr['key']] || '');
           break;
         }
       }
+      //add the validators and create a form control
+      group[attr['key']] = new FormControl(record[attr['key']] || '', validators);
+
     });
     return new FormGroup(group);
   }
