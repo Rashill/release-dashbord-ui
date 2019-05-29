@@ -6,7 +6,6 @@
       </div>
 
       <div class="alert alert-danger" *ngIf="error">
-        You have entered wrong details
         {{ errorMessage }}
       </div>
 
@@ -440,6 +439,7 @@
                     [showHint]="false"
                     [ngbTypeahead]="filterAssignee"
                     [inputFormatter]="formatter"
+                    [editable]="false"
                     [resultTemplate]="assigneeTmp"
                     [className]="
                       !isValid('devSupport')
@@ -473,6 +473,7 @@
                     [ngbTypeahead]="filterAssignee"
                     [inputFormatter]="formatter"
                     [resultTemplate]="assigneeTmp"
+                    [editable]="false"
                     [className]="
                       !isValid('depchampionName')
                         ? 'form-control is-invalid'
@@ -541,6 +542,7 @@
                       [ngbTypeahead]="filterAssignee"
                       [inputFormatter]="formatter"
                       [resultTemplate]="assigneeTmp"
+                      [editable]="false"
                       [className]="
                         !isValid('contactPerson-' + check._id)
                           ? 'form-control is-invalid'
@@ -773,6 +775,10 @@
               <div *ngSwitchCase="true">
                 <br />
                 <h4>The form has been submitted...</h4>
+                <div class="alert alert-warning" *ngIf="!error">
+                  Waiting for server response
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </div>
               </div>
             </div>
           </wizard-step>
