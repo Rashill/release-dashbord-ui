@@ -66,7 +66,7 @@
               <img
                 class="img-fluid"
                 [src]="
-                  release.deploymentChampionUserDetails['avatarUrls']['48x48']
+                  release.deploymentChampionUserDetails['avatarUrls']['16x16']
                 "
               />
             </div>
@@ -88,7 +88,7 @@
             <div class="col-3">
               <img
                 class="img-fluid"
-                [src]="release.devSupportUserDetails['avatarUrls']['48x48']"
+                [src]="release.devSupportUserDetails['avatarUrls']['16x16']"
               />
             </div>
           </div>
@@ -98,12 +98,12 @@
       </div>
     </div>
 
-    <div class="col-md-6" *ngIf="chart">
-      <div class="card">
-        <div class="card-header">
+    <div class="col-md-6">
+      <div class="card card-block d-flex">
+        <div class="card-header ">
           <h5 class="card-title text-nowrap mr-2">Issues Status</h5>
         </div>
-        <div class="card-body">
+        <div class="card-body align-items-center d-flex justify-content-center">
           <canvas id="canvas">{{ chart }}</canvas>
         </div>
       </div>
@@ -161,7 +161,7 @@
                       class="img-fluid"
                       [src]="
                         checklist.contactPersonUserDetails['avatarUrls'][
-                          '48x48'
+                          '16x16'
                         ]
                       "
                     />
@@ -279,195 +279,198 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-3">
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          In Review ({{
-            (
-              issues.inReview.issues
-              | ProjectFilter: { projectId: selectedProjectId }
-            ).length
-          }})
-        </div>
-        <div class="card-body">
-          <a
-            class="btn text-white mb-2"
-            style="background-color: #FF9900"
-            *ngFor="
-              let issue of issues.inReview.issues
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            In Review ({{
+              (
+                issues.inReview.issues
                 | ProjectFilter: { projectId: selectedProjectId }
-            "
-            href="https://releasedashboard.atlassian.net/browse/{{ issue.key }}"
-            target="_blank"
-            ><p>
-              {{ issue.fields.summary }}
-            </p></a
-          >
-        </div>
-      </div>
-    </div>
-
-    <div class="col-3">
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          In Progress ({{
-            (
-              issues.inProgress.issues
-              | ProjectFilter: { projectId: selectedProjectId }
-            ).length
-          }})
-        </div>
-        <div class="card-body">
-          <a
-            class="btn text-white mb-2"
-            style="background-color: #3e95cd"
-            *ngFor="
-              let issue of issues.inProgress.issues
-                | ProjectFilter: { projectId: selectedProjectId }
-            "
-            href="https://releasedashboard.atlassian.net/browse/{{ issue.key }}"
-            target="_blank"
-            ><p>
-              {{ issue.fields.summary }}
-            </p></a
-          >
-        </div>
-      </div>
-    </div>
-
-    <div class="col-3">
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          Done ({{
-            (
-              issues.done.issues
-              | ProjectFilter: { projectId: selectedProjectId }
-            ).length
-          }})
-        </div>
-        <div class="card-body">
-          <a
-            class="btn text-white mb-2"
-            style="background-color: #3cba9f"
-            *ngFor="
-              let issue of issues.done.issues
-                | ProjectFilter: { projectId: selectedProjectId }
-            "
-            href="https://releasedashboard.atlassian.net/browse/{{ issue.key }}"
-            target="_blank"
-            ><p>
-              {{ issue.fields.summary }}
-            </p></a
-          >
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Versioning table-->
-  <div
-    class="row"
-    *ngIf="release && (release.versionning > 0 || userRole == 'SuperAdmin')"
-  >
-    <div class="col-12 col-md-6 mb-3">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">Release Versioning</h5>
-          <label
-            class="btn-sm btn-primary"
-            routerLink="/versioning/{{ releaseId }}"
-          >
-            Add Version Details
-          </label>
-        </div>
-        <div class="card-body">
-          <table class="table" *ngIf="release.versioning">
-            <thead>
-              <tr>
-                <th scope="col">Sitecore</th>
-                <th scope="col">SPA</th>
-                <th scope="col">BiztalkWCF</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngIf="release.versioning">
-                <td>{{ release.versioning.sitecore }}</td>
-                <td>{{ release.versioning.SPA }}</td>
-                <td>{{ release.versioning.biztalkWCF }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- End of Versioning table-->
-  </div>
-
-  <!-- Upload test result secion-->
-  <div
-    class="row"
-    *ngIf="
-      release && (release.testResults.length > 0 || userRole == 'SuperAdmin')
-    "
-  >
-    <div class="col-12 col-md-6 mb-3">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">Release Test Results</h5>
-        </div>
-        <div class="card-body">
-          <div *ngIf="loading" id="loader"></div>
-
-          <!-- Upload components -->
-          <div class="row mb-3" *ngIf="userRole == 'SuperAdmin'">
-            <angular-file-uploader
-              [config]="uploadConfig"
-              (ApiResponse)="uploadTestResult($event)"
-            >
-            </angular-file-uploader>
+              ).length
+            }})
           </div>
-
-          <div class="row">
-            <table
-              *ngIf="!loading && release.testResults.length > 0"
-              class="table"
+          <div class="card-body">
+            <a
+              class="btn text-white mb-2"
+              style="background-color: #FF9900"
+              *ngFor="
+                let issue of issues.inReview.issues
+                  | ProjectFilter: { projectId: selectedProjectId }
+              "
+              href="https://releasedashboard.atlassian.net/browse/{{
+                issue.key
+              }}"
+              target="_blank"
+              ><p>
+                {{ issue.fields.summary }}
+              </p></a
             >
+          </div>
+        </div>
+      </div>
+
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            In Progress ({{
+              (
+                issues.inProgress.issues
+                | ProjectFilter: { projectId: selectedProjectId }
+              ).length
+            }})
+          </div>
+          <div class="card-body">
+            <a
+              class="btn text-white mb-2"
+              style="background-color: #3e95cd"
+              *ngFor="
+                let issue of issues.inProgress.issues
+                  | ProjectFilter: { projectId: selectedProjectId }
+              "
+              href="https://releasedashboard.atlassian.net/browse/{{
+                issue.key
+              }}"
+              target="_blank"
+              ><p>
+                {{ issue.fields.summary }}
+              </p></a
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            Done ({{
+              (
+                issues.done.issues
+                | ProjectFilter: { projectId: selectedProjectId }
+              ).length
+            }})
+          </div>
+          <div class="card-body">
+            <a
+              class="btn text-white mb-2"
+              style="background-color: #3cba9f"
+              *ngFor="
+                let issue of issues.done.issues
+                  | ProjectFilter: { projectId: selectedProjectId }
+              "
+              href="https://releasedashboard.atlassian.net/browse/{{
+                issue.key
+              }}"
+              target="_blank"
+              ><p>
+                {{ issue.fields.summary }}
+              </p></a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Versioning table-->
+    <div class="row">
+      <div
+        class="col-12 col-md-6 mb-3"
+        *ngIf="release && (release.versionning > 0 || userRole == 'SuperAdmin')"
+      >
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Release Versioning</h5>
+            <label
+              class="btn-sm btn-primary"
+              routerLink="/versioning/{{ releaseId }}"
+            >
+              Add Version Details
+            </label>
+          </div>
+          <div class="card-body">
+            <table class="table" *ngIf="release.versioning">
               <thead>
                 <tr>
-                  <th scope="col">Filename</th>
-                  <th scope="col">Upload Date</th>
-                  <th></th>
+                  <th scope="col">Sitecore</th>
+                  <th scope="col">SPA</th>
+                  <th scope="col">BiztalkWCF</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let testResult of release.testResults">
-                  <td>
-                    <a (click)="downloadResult(testResult)">{{
-                      testResult.filename
-                    }}</a>
-                  </td>
-                  <td>{{ testResult.uploadDate | date }}</td>
-                  <td>
-                    <button
-                      class="btn btn-danger"
-                      (click)="deleteTestResult(testResult)"
-                    >
-                      <span class="fa fa-close"></span>
-                    </button>
-                  </td>
+                <tr *ngIf="release.versioning">
+                  <td>{{ release.versioning.sitecore }}</td>
+                  <td>{{ release.versioning.SPA }}</td>
+                  <td>{{ release.versioning.biztalkWCF }}</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
-    </div>
-    <!-- End of Upload result test section -->
+      <!-- End of Versioning table-->
 
-    <!-- Download result test section-->
-    <!-- <div class="col-12 col-md-6 mb-3">
+      <div
+        class="col-12 col-md-6 mb-3"
+        *ngIf="
+          release &&
+          (release.testResults.length > 0 || userRole == 'SuperAdmin')
+        "
+      >
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Release Test Results</h5>
+          </div>
+          <div class="card-body">
+            <div *ngIf="loading" id="loader"></div>
+
+            <!-- Upload components -->
+            <div class="row mb-3" *ngIf="userRole == 'SuperAdmin'">
+              <angular-file-uploader
+                [config]="uploadConfig"
+                (ApiResponse)="uploadTestResult($event)"
+              >
+              </angular-file-uploader>
+            </div>
+
+            <div class="row">
+              <table
+                *ngIf="!loading && release.testResults.length > 0"
+                class="table"
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Filename</th>
+                    <th scope="col">Upload Date</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let testResult of release.testResults">
+                    <td>
+                      <a (click)="downloadResult(testResult)">{{
+                        testResult.filename
+                      }}</a>
+                    </td>
+                    <td>{{ testResult.uploadDate | date }}</td>
+                    <td>
+                      <button
+                        class="btn btn-danger"
+                        (click)="deleteTestResult(testResult)"
+                      >
+                        <span class="fa fa-close"></span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End of Upload result test section -->
+
+      <!-- Download result test section-->
+      <!-- <div class="col-12 col-md-6 mb-3">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Testing Results</h5>
@@ -501,6 +504,7 @@
         </div>
       </div>
     </div> -->
-    <!-- End of Download result test section -->
+      <!-- End of Download result test section -->
+    </div>
   </div>
 </div>
