@@ -351,9 +351,14 @@ export class ViewReleaseComponent implements OnInit {
           testResults: this.release.testResults
         })
         .subscribe(res => {
-          console.log(res);
+          console.log('upres', res);
+          location.reload();
           // this.release = res[0];
-          console.log('after', this.release);
+          // for (let i = 0; i < this.release.testResults; i++) {
+          //   // if (this.release.testResults[i].fileId == res[0].f)
+          // }
+
+          // console.log('after', this.release);
         });
     } else {
       console.error(event.statusText);
@@ -377,7 +382,6 @@ export class ViewReleaseComponent implements OnInit {
   }
 
   downloadResult(file) {
-    //this.release.testResults[0]['_id']
     this.loading = true;
     this.releaseService.downloadFile(file.fileId).subscribe(
       res => {
