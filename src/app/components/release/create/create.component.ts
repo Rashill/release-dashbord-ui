@@ -100,7 +100,7 @@ export class CreateReleaseComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private releaseService: ReleaseService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.releaseId = this.route.snapshot.paramMap.get('id');
@@ -219,7 +219,7 @@ export class CreateReleaseComponent implements OnInit {
       res => {
         this.usersList = res[0];
       },
-      error => { }
+      error => {}
     );
 
     // load the checklist to create the html controls
@@ -249,7 +249,7 @@ export class CreateReleaseComponent implements OnInit {
         }
         this.checklist = checklist;
       },
-      error => { }
+      error => {}
     );
 
     this.createForm.controls['releaseType'].valueChanges.subscribe(type => {
@@ -285,9 +285,9 @@ export class CreateReleaseComponent implements OnInit {
     let blocks = document.querySelectorAll('.card-block');
     blocks.forEach(el => {
       let block: HTMLElement = <HTMLElement>el;
-      block.style.overflowY = "visible";
+      block.style.overflowY = 'visible';
     });
-  } 
+  }
 
   loadAndFillControls() {
     this.releaseService
@@ -328,7 +328,7 @@ export class CreateReleaseComponent implements OnInit {
               } else {
                 try {
                   this.release[attr] = res_release[attr].substring(0, 10);
-                } catch (e) { }
+                } catch (e) {}
               }
             }
           });
@@ -396,12 +396,12 @@ export class CreateReleaseComponent implements OnInit {
             .subscribe(
               res => {
                 console.log('response', res);
-                this.router.navigate(['/']);
+                this.router.navigate(['/release/' + res[0]._id]);
               },
               error => {
                 this.error = true;
                 console.error('Error!', error);
-                this.errorMessage = 'Error was rised by the server';//error.message;
+                this.errorMessage = 'Error was rised by the server'; //error.message;
                 return throwError(error); // Angular 5/RxJS 5.5
               }
             );
@@ -416,7 +416,6 @@ export class CreateReleaseComponent implements OnInit {
   }
 
   updateRelease() {
-
     for (var i = 0; i < this.checklist.length; i++) {
       let check = this.checklist[i];
       let data = this.displayLabel.checklist[check['_id']];
@@ -449,7 +448,7 @@ export class CreateReleaseComponent implements OnInit {
         error => {
           this.error = true;
           console.error('Error!', error);
-          this.errorMessage = 'Error was rised by the server';//error.message;
+          this.errorMessage = 'Error was rised by the server'; //error.message;
           return throwError(error); // Angular 5/RxJS 5.5
         }
       );
@@ -529,11 +528,11 @@ export class CreateReleaseComponent implements OnInit {
         term.length < 1
           ? this.usersList.slice(0, 10)
           : this.usersList
-            .filter(
-              v =>
-                v.displayName.toLowerCase().indexOf(term.toLowerCase()) > -1
-            )
-            .slice(0, 10)
+              .filter(
+                v =>
+                  v.displayName.toLowerCase().indexOf(term.toLowerCase()) > -1
+              )
+              .slice(0, 10)
       )
     );
 
