@@ -508,6 +508,7 @@
                   >
                   <div class="input-group">
                     <input
+                      id="due-{{check.name}}"
                       type="date"
                       class="form-control"
                       formControlName="{{ check._id }}"
@@ -531,6 +532,7 @@
                   <label>Assignee for {{ check.name }}</label>
                   <div class="input-group">
                     <input
+                      id="contactPerson-{{check.name}}"
                       type="text"
                       class="form-control"
                       formControlName="contactPerson-{{ check._id }}"
