@@ -29,10 +29,12 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { LoaderInterceptor } from './interceptors/loader.interceptor';
 
 import { HomeComponent } from './components/home/home.component';
 import { AuthGuard } from '../guards/auth.guard';
 
+import { LoaderService } from './services/loader.service';
 import { AuthService } from './services/auth.service';
 import { ReleaseService } from './services/release.service';
 import { ProjectService } from './services/project.service';
@@ -43,8 +45,8 @@ import { ShowIfAdminDirective } from './directives/showIfAdmin.directive';
 import { VisModule } from 'ngx-vis';
 import { TableModule } from 'ngx-easy-table';
 import { FormWizardModule } from 'angular-wizard-form';
-import { AngularFileUploaderModule } from "angular-file-uploader";
-
+import { AngularFileUploaderModule } from 'angular-file-uploader';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AuthComponent } from './components/auth/auth.component';
 import { CreateReleaseComponent } from './components/release/create/create.component';
@@ -58,6 +60,7 @@ import { FileUploaderComponent } from './components/file-uploader/file-uploader.
 
 import { ProjectIssuesPipe } from './pipes/issue.pipe';
 import { VersioningComponent } from './components/release/versioning/versioning.component';
+import { LoaderComponent } from './components/shared/loader/loader.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -87,7 +90,8 @@ export function createTranslateLoader(http: HttpClient) {
     ForbiddenPageComponent,
     FileUploaderComponent,
     ProjectIssuesPipe,
-    VersioningComponent
+    VersioningComponent,
+    LoaderComponent
   ],
   imports: [
     NgbModule,
@@ -110,9 +114,12 @@ export function createTranslateLoader(http: HttpClient) {
       useFactory: adapterFactory
     }),
     FormWizardModule,
-    AngularFileUploaderModule
+    AngularFileUploaderModule,
+    MatProgressSpinnerModule
   ],
   providers: [
+    LoaderService,
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     ResizeService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
