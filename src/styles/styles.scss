@@ -20,10 +20,9 @@
 @import 'components/tooltip';
 @import 'components/progress';
 @import 'utils/utils';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
-@include all-utils()
-
-html {
+@include all-utils() html {
   height: 100%;
 }
 body {

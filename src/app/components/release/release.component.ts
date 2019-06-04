@@ -337,14 +337,14 @@ export class ViewReleaseComponent implements OnInit {
     });
   }
 
-  upladTestResult(event) {
-    if (event.status == 200) {
+  uploadTestResult(event) {
+    if (event.status === 200) {
       let res = JSON.parse(event.response);
-      if (this.release.testResults == undefined) {
+      if (this.release.testResults === undefined) {
         this.release.testResults = [];
       }
 
-      this.release.testResults.push(res['_id']);
+      this.release.testResults.push({ fileId: res['_id'] });
 
       this.releaseService
         .patchRelease(this.releaseId, {
@@ -360,10 +360,26 @@ export class ViewReleaseComponent implements OnInit {
     }
   }
 
+  deleteTestResult(testResult) {
+    this.release.testResults.splice(
+      this.release.testResults.indexOf(testResult),
+      1
+    );
+    this.releaseService
+      .patchRelease(this.releaseId, {
+        testResults: this.release.testResults
+      })
+      .subscribe(res => {
+        console.log(res);
+        // this.release = res[0];
+        console.log('after', this.release);
+      });
+  }
+
   downloadResult(file) {
     //this.release.testResults[0]['_id']
     this.loading = true;
-    this.releaseService.downloadFile(file).subscribe(
+    this.releaseService.downloadFile(file.fileId).subscribe(
       res => {
         this.openInWindow(res);
       },

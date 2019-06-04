@@ -32,8 +32,9 @@ export function DateValidator(s: string) {
 
       // if one of the controls is disabled
       if (f.disabled || t.disabled) {
-        f.setErrors(null);
-        t.setErrors(null);
+        //setting these null will remove any other validations e.g. required
+        //f.setErrors(null);
+        //t.setErrors(null);
         continue;
       }
 
