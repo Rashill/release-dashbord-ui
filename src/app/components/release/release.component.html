@@ -371,8 +371,10 @@
       </div>
     </div>
 
-    <!-- Versioning table-->
+
+    <!-- Row of upload/download tesing results and versioning -->
     <div class="row">
+      <!-- Versioning table-->
       <div
         class="col-12 col-md-6 mb-3"
         *ngIf="release && (release.versionning > 0 || userRole == 'SuperAdmin')"
@@ -409,19 +411,16 @@
       </div>
       <!-- End of Versioning table-->
 
+      <!-- Upload/download Test results components -->
       <div
         class="col-12 col-md-6 mb-3"
-        *ngIf="
-          release &&
-          (release.testResults.length > 0 || userRole == 'SuperAdmin')
-        "
       >
         <div class="card">
           <div class="card-header">
             <h5 class="card-title">Release Test Results</h5>
           </div>
           <div class="card-body">
-            <div *ngIf="loading" id="loader"></div>
+            <!--<div *ngIf="loading" id="loader"></div>-->
 
             <!-- Upload components -->
             <div class="row mb-3" *ngIf="userRole == 'SuperAdmin'">
@@ -434,7 +433,7 @@
 
             <div class="row">
               <table
-                *ngIf="!loading && release.testResults.length > 0"
+                *ngIf="release && release.testResults && !loading && release.testResults.length > 0"
                 class="table"
               >
                 <thead>
@@ -467,44 +466,70 @@
           </div>
         </div>
       </div>
-      <!-- End of Upload result test section -->
+      <!-- End of Upload/download result test section -->
+    </div>
+    <!-- End of upload/download tesing results and versioning row -->
 
-      <!-- Download result test section-->
-      <!-- <div class="col-12 col-md-6 mb-3">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Testing Results</h5>
-          <div *ngIf="loading" id="loader"></div>
-          <table *ngIf="!loading" class="table">
-            <thead>
-              <tr>
-                <th scope="col">Files</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let testResult of release.testResults">
-                <td>
-                  <button
-                    class="btn-primary btn-sm"
-                    (click)="downloadResult(testResult)"
-                  >
-                    <small>
-                      <span>View</span>
-                    </small>
-                  </button>
-                </td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <div *ngIf="!release.testResults" class="text-center">
-            No such data
+
+    <!-- Row of upload/download tips-->
+    <div class="row">
+      <!-- Tips file upload/download section -->
+      <div
+        class="col-12 col-md-6 mb-3"
+      >
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Release Tips</h5>
+          </div>
+          <div class="card-body">
+
+            <!-- Upload components -->
+            <div class="row mb-3" *ngIf="userRole == 'SuperAdmin'">
+              <angular-file-uploader
+                [config]="uploadTipsConfig"
+                (ApiResponse)="uploadTips($event)"
+              >
+              </angular-file-uploader>
+            </div>
+
+            <div class="row">
+              <table
+                *ngIf="release && release.tips && release.tips.length > 0"
+                class="table"
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Filename</th>
+                    <th scope="col">Upload Date</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let tip of release.tips">
+                    <td>
+                      <a (click)="downloadTip(tip)">{{
+                        tip.filename
+                      }}</a>
+                    </td>
+                    <td>{{ tip.uploadDate | date }}</td>
+                    <td>
+                      <button
+                        class="btn btn-danger"
+                        (click)="deleteTip(tip)"
+                      >
+                        <span class="fa fa-close"></span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div> -->
-      <!-- End of Download result test section -->
+      <!-- End of Upload/downlaod tips section -->
     </div>
+    <!-- End of upload/downlaod tips row-->
+    
   </div>
 </div>

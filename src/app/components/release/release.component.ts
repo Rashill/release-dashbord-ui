@@ -51,6 +51,9 @@ export class ViewReleaseComponent implements OnInit {
   uploadConfig = {};
   loading = false;
 
+  uploadTipsConfig = {};
+  tipsLoading = false;
+
   selectedProjectId = '';
 
   timelineDetails: TimeLineDetails;
@@ -72,7 +75,6 @@ export class ViewReleaseComponent implements OnInit {
     this.uploadConfig = {
       multiple: true,
       formatsAllowed: '.html,.htm',
-      //maxSize: "1",
       uploadAPI: {
         url: environment.baseUrl + '/file'
       },
@@ -80,7 +82,18 @@ export class ViewReleaseComponent implements OnInit {
       hideResetBtn: true,
       hideSelectBtn: false
     };
-    /** End of Uplad code */
+
+    this.uploadTipsConfig ={
+      multiple: true,
+      formatsAllowed: '.txt',
+      uploadAPI: {
+        url: environment.baseUrl + '/file'
+      },
+      hideProgressBar: false,
+      hideResetBtn: true,
+      hideSelectBtn: false
+    };
+    /** End of Upload code */
 
     let ctx = document.getElementById('canvas');
     this.releaseService
@@ -353,12 +366,6 @@ export class ViewReleaseComponent implements OnInit {
         .subscribe(res => {
           console.log('upres', res);
           location.reload();
-          // this.release = res[0];
-          // for (let i = 0; i < this.release.testResults; i++) {
-          //   // if (this.release.testResults[i].fileId == res[0].f)
-          // }
-
-          // console.log('after', this.release);
         });
     } else {
       console.error(event.statusText);
@@ -382,6 +389,57 @@ export class ViewReleaseComponent implements OnInit {
   }
 
   downloadResult(file) {
+    this.loading = true;
+    this.releaseService.downloadFile(file.fileId).subscribe(
+      res => {
+        this.openInWindow(res);
+      },
+      error => {
+        this.openInWindow(error);
+      }
+    );
+  }
+
+
+  uploadTips(event) {
+    if (event.status === 200) {
+      let res = JSON.parse(event.response);
+      if (this.release.tips === undefined) {
+        this.release.tips = [];
+      }
+
+      this.release.tips.push({ fileId: res['_id'] });
+
+      this.releaseService
+        .patchRelease(this.releaseId, {
+          tips: this.release.tips
+        })
+        .subscribe(res => {
+          console.log('upres', res);
+          location.reload();
+        });
+    } else {
+      console.error(event.statusText);
+    }
+  }
+
+  deleteTip(tip) {
+    this.release.tips.splice(
+      this.release.tips.indexOf(tip),
+      1
+    );
+    this.releaseService
+      .patchRelease(this.releaseId, {
+        tips: this.release.tips
+      })
+      .subscribe(res => {
+        console.log(res);
+        // this.release = res[0];
+        console.log('after', this.release);
+      });
+  }
+
+  downloadTip(file) {
     this.loading = true;
     this.releaseService.downloadFile(file.fileId).subscribe(
       res => {
