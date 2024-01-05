@@ -1,7 +1,8 @@
 <!--
---- Readme.md Snippet without images Start ---
+&lt;--- Readme.md Snippet without images Start ---&gt;
 ## Tech Stack
 rashil-gopee/release-dashbord-ui is built on the following main stack:
+
 - [Instapage](https://instapage.com) – Landing Pages
 - [Rollbar](https://rollbar.com/) – Exception Monitoring
 - [Jasmine](http://jasmine.github.io/) – Javascript Testing Framework
@@ -21,11 +22,13 @@ rashil-gopee/release-dashbord-ui is built on the following main stack:
 - [date-fns](https://date-fns.org/) – Javascript Utilities & Libraries
 
 Full tech stack [here](/techstack.md)
---- Readme.md Snippet without images End ---
 
---- Readme.md Snippet with images Start ---
+&lt;--- Readme.md Snippet without images End ---&gt;
+
+&lt;--- Readme.md Snippet with images Start ---&gt;
 ## Tech Stack
 rashil-gopee/release-dashbord-ui is built on the following main stack:
+
 - <img width='25' height='25' src='https://img.stackshare.io/service/80/Instapage_Icon_Circular_Icon.jpg' alt='Instapage'/> [Instapage](https://instapage.com) – Landing Pages
 - <img width='25' height='25' src='https://img.stackshare.io/service/328/default_3147629185038a15dd41907749544023633da1ea.png' alt='Rollbar'/> [Rollbar](https://rollbar.com/) – Exception Monitoring
 - <img width='25' height='25' src='https://img.stackshare.io/service/831/7c0b595409af531b9cdeb07f8c513e8b.png' alt='Jasmine'/> [Jasmine](http://jasmine.github.io/) – Javascript Testing Framework
@@ -45,14 +48,15 @@ rashil-gopee/release-dashbord-ui is built on the following main stack:
 - <img width='25' height='25' src='https://img.stackshare.io/service/10865/default_5551fb8853689f607a2bc0d5a09355d5a3d52bf0.png' alt='date-fns'/> [date-fns](https://date-fns.org/) – Javascript Utilities & Libraries
 
 Full tech stack [here](/techstack.md)
---- Readme.md Snippet with images End ---
+
+&lt;--- Readme.md Snippet with images End ---&gt;
 -->
 <div align="center">
 
 # Tech Stack File
 ![](https://img.stackshare.io/repo.svg "repo") [rashil-gopee/release-dashbord-ui](https://github.com/rashil-gopee/release-dashbord-ui)![](https://img.stackshare.io/public_badge.svg "public")
 <br/><br/>
-|63<br/>Tools used|11/10/23 <br/>Report generated|
+|63<br/>Tools used|01/05/24 <br/>Report generated|
 |------|------|
 </div>
 
@@ -288,4 +292,4 @@ Full tech stack [here](/techstack.md)
 <br/>
 <div align='center'>
 
-Generated via [Stack File](https://github.com/apps/stack-file)
+Generated via [Stack File](https://github.com/marketplace/stack-file)
